@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Словесный помогатор</title>
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="icon" type="image/png" href="/img/globe.png" />
+    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>-->
+    <!--    <script src="js/main.js"></script>-->
+</head>
+<body>
+<div class="user_pane">
+    <div class="dropdown">
+        <button id="dropdown_btn" th:text="${student_name}"></button>
+        <div class="dropdown-content">
+<!--            <a href="#">Мой профиль</a>-->
+            <a href="/logout">Выход</a>
+        </div>
+    </div>
+</div>
+<h1 class="caption">Словесный помогатор</h1>
+<div class="description">Приложение, призванное помочь в изучении иностранных языков</div>
+<div class="lang_pane">
+    <div class="select_lang_pane"><span>Мой язык: </span><div class="selected_lang" id="my_lang">Русский</div></div>
+    <div class="select_lang_pane"><span>Я изучаю: </span><div class="selected_lang" id="study_lang">Suomi</div></div>
+</div>
+<div class="content">
+    <div class="nav_bar">
+        <!--            todo Заменить на комбобокс, в котором последний элемент -
+                        ссылка на страничку нового словаря, а прочие - выбор уже существующего -->
+<!--        <a href="new_dictionary" class="nav">Новый словарь</a>-->
+        <!--            <select>-->
+        <!--                <option>-->
+        <!--                    <a href="new_dictionary" class="nav">Новый словарь</a>-->
+        <!--                </option>-->
+        <!--            </select>-->
+<!--        <a href="new_translation" class="nav">Новый перевод</a>-->
+    </div>
+</div>
+</body>
+</html>

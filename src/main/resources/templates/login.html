@@ -1,0 +1,33 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Словесный помогатор</title>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/css/login.css">
+  <link rel="icon" type="image/png" href="/img/globe.png" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="/js/login.js"></script>
+</head>
+<body>
+<div class="container">
+  <h1 class="caption">Словесный помогатор</h1>
+  <div class="description">Представьтесь, пожалуйста</div>
+
+  <form class="form-signin" method="post" action="/auth/login">
+    <div class="form_row">
+      <label for="username" autofocus>Логин</label>
+      <input type="text" id="username" class="form-control" name="username" required>
+    </div>
+    <div class="form_row">
+      <label for="password">Пароль</label>
+      <input type="password" id="password" class="form-control" name="password" required>
+    </div>
+    <div class="message_pane"><span id="message"></span></div>
+    <div class="options_pane">
+      <button class="ok" type="submit">Войти</button>
+    </div>
+
+  </form>
+</div>
+</body>
+</html>

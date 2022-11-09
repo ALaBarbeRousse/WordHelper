@@ -1,0 +1,16 @@
+body {
+    background-color: #fafaf7;
+    font-family: sans-serif;
+}
+
+div.entry_pane {
+    text-align: center;
+    margin-top: 24px;
+}
+a.entry {
+    margin: 12px;
+}
+
+#user_label {
+    cursor: pointer;
+}

@@ -1,0 +1,83 @@
+body {
+    background-color: #fafaf7;
+    font-family: sans-serif;
+}
+
+hr.caption_line {
+    color: black;
+}
+
+div.lang_pane {
+    /*border: 1px solid lightgrey;*/
+    /*width: 60%;*/
+    margin: 12px auto;
+    display: block ruby;
+    text-align: center;
+}
+div.select_lang_pane {
+    margin: 12px 60px;
+    /*border: 1px solid red;*/
+}
+.selected_lang {
+    font-size: large;
+    cursor: pointer;
+}
+
+div.content {
+    border-top: 1px solid black;
+    margin: 0 auto;
+    width: 80%;
+    padding: 12px;
+}
+
+a.nav {
+    color: #30302e;
+    border: 1px solid #8f8f89;
+    margin: 12px;
+    background-color: #eeeee4;
+    padding: 4px;
+    text-decoration: none;
+    border-radius: 4px;
+}
+a.nav:hover {
+    background-color: #d6d6cd;
+}
+a.nav:active {
+    background-color: #bebeb6;
+}
+
+div.nav_bar {
+    /*border: 1px solid red;*/
+}
+
+div.action_pane {
+    border: 1px solid #d3d3d3;
+    height: 28px;
+    margin: 48px;
+    display: block ruby;
+    text-align: right;
+    vertical-align: center;
+    border-radius: 4px;
+}
+
+div.button {
+    border: 1px solid black;
+    border-radius: 4px;
+    height: 24px;
+    width: 76px;
+    margin: 2px 12px;
+    font-size: smaller;
+    text-align: center;
+    background-color: #eeeee4;
+    cursor: pointer;
+}
+div.button:hover {
+    background-color: #d6d6cd;
+}
+div.button:active {
+    background-color: #bebeb6;
+}
+
+#user_label {
+    cursor: pointer;
+}

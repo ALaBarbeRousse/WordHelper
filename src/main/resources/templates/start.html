@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Словесный помогатор</title>
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/start.css">
+    <link rel="icon" type="image/png" href="/img/globe.png" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="/js/start.js"></script>
+</head>
+<body>
+<div class="user_pane">
+    <div class="dropdown">
+        <button id="dropdown_btn" th:text="${student_name}"></button>
+        <div class="dropdown-content">
+<!--            <a href="#">Мой профиль</a>-->
+            <a href="/logout">Выход</a>
+        </div>
+    </div>
+</div>
+<h1 class="caption">Словесный помогатор</h1>
+<div class="description">Для начала работы войдите или зарегистрируйтесь</div>
+<div class="entry_pane">
+    <a class="entry" href="main">Вход</a>
+    <a class="entry" href="register">Регистрация</a>
+</div>
+</body>
+</html>

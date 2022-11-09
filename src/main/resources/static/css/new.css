@@ -1,0 +1,32 @@
+div.area-container {
+    /*border: 1px solid aquamarine;*/
+    display: inline-flex;
+}
+div.area-envelope {
+    text-align:center;
+}
+
+div.inline-div {
+    /*border: 1px solid red;*/
+    display: inline-block;
+    margin-top: 12px;
+}
+
+div.inline-separator {
+    /*border: 1px solid deeppink;*/
+    width: 128px;
+}
+
+textarea.inline-area {
+    /*border: 1px solid blue;*/
+    /*resize: none;*/
+    height: 128px;
+    width: 412px;
+    display: block;
+    margin-top: 8px;
+}
+
+label.column_caption {
+    margin-bottom: 4px;
+}
+

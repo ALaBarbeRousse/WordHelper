@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Словесный помогатор</title>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/css/register.css">
+  <link rel="icon" type="image/png" href="/img/globe.png" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="/js/register.js"></script>
+</head>
+<body>
+  <h1 class="caption">Словесный помогатор</h1>
+  <div class="description">Регистрация нового пользователя</div>
+  <div class="reg_form">
+    <div class="reg_row">
+      <label for="name">Имя</label>
+      <input id="name" type="text"/>
+    </div>
+    <div class="reg_row">
+      <label for="login">Логин</label>
+      <input id="login" type="text"/>
+    </div>
+    <div class="reg_row">
+      <label for="pwd">Пароль</label>
+      <input id="pwd" type="password"/>
+    </div>
+    <div class="message_pane"><span id="message"></span></div>
+    <div class="options_pane">
+      <button onclick="history.back()">Отмена</button>
+      <button class="ok" id="ok_btn">OK</button>
+    </div>
+  </div>
+</body>
+</html>

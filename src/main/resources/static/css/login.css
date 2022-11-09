@@ -1,0 +1,31 @@
+body {
+    background-color: #fafaf7;
+    font-family: sans-serif;
+}
+
+form.form-signin {
+    border: 1px solid #bebeb6;
+    width: 420px;
+    margin: 24px auto;
+}
+
+div.form_row {
+    padding: 12px;
+    display: grid;
+}
+
+div.options_pane {
+    display: block ruby;
+    text-align: center;
+    padding: 6px 36px;
+}
+
+div.message_pane {
+    min-height: 24px;
+    color: red;
+    margin: 0 12px;
+    font-size: smaller;
+}
+#message {
+    display: none;
+}
