@@ -1,5 +1,28 @@
+function fillInLangList() {
+    /* todo */
+    $.ajax({
+        type: 'GET',
+        url: 'api/language',
+        contentType:"application/json; charset=utf-8",
+        success: function (data) {
+            $.each(data, function (index, value) {
+                $('#lang_list').append($('<option />').val(value.name).text(value.name));
+            });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            $("#message").text('Не удалось получить список языков');
+            $("#message").fadeIn(10);
+            setTimeout(function() {
+                $('#message').fadeOut(3000);
+            }, 5000);
+        }
+    });
+}
+
 $(document).ready(function() {
     $('#name').focus();
+
+    fillInLangList();
 
     $("#ok_btn").on("click", function () {
         gatherDataAndSend();
@@ -17,6 +40,7 @@ function gatherDataAndSend() {
     obj.name = $("#name").val();
     obj.login = $("#login").val();
     obj.password = $("#pwd").val();
+    obj.language = $("#lang").val();
 
     $.ajax({
         type: 'POST',

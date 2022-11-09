@@ -22,7 +22,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/", "/css/common.css", "/img/globe.png").permitAll()   // Start page
                 .antMatchers(HttpMethod.GET, "/", "/css/start.css", "/js/start.js").permitAll()   // Start page
-                .antMatchers(HttpMethod.GET, "/register", "/css/register.css", "/js/register.js").permitAll() // Register page
+                .antMatchers(HttpMethod.GET, "/register", "/css/register.css", "/js/register.js", "/api/language").permitAll() // Register page
                 .antMatchers(HttpMethod.POST, "/api/student").permitAll()  // Register a student
                 .antMatchers(HttpMethod.GET, "/auth/login", "/css/login.css", "/js/login.js").permitAll()   // Login page
                 .anyRequest().authenticated()

@@ -3,7 +3,8 @@ div.user_pane {
     height: 24px;
     margin-top: 36px;
     text-align: right;
-    padding: 6px 36px;
+    padding: 6px 72px;
+    display: block ruby;
 }
 
 h1.caption {

@@ -1,22 +1,26 @@
 package helper.web;
 
+import helper.api.service.StudentService;
 import helper.model.Student;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
+@RequiredArgsConstructor
 public class PageController {
+    private final StudentService studentService;
     @GetMapping
     public String getStartPage(Model model) {
-        model.addAttribute("student_name", getStudentName());
+        setPersonalAttributes(model);
         return "start";
     }
 
     @GetMapping("/main")
     public String getMainPage(Model model) {
-        model.addAttribute("student_name", getStudentName());
+        setPersonalAttributes(model);
         return "main";
     }
 
@@ -30,12 +34,7 @@ public class PageController {
         return "login";
     }
 
-    private String getStudentName() {
-        Object pr = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (pr instanceof Student) {
-            return ((Student) pr).getName();
-        } else {
-            return null;
-        }
+    private void setPersonalAttributes(Model model) {
+        studentService.setPersonalAttributes(model);
     }
 }

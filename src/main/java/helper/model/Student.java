@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Collection;
 import java.util.Date;
@@ -56,8 +58,12 @@ public class Student implements UserDetails {
     @Column(name = "modified", nullable = false)
     private Date modified;
 
+    @ManyToOne
+    @JoinColumn(name = "language_id")
+    private Language language;
+
     public StudentDTO toDTO() {
-        return new StudentDTO(id, name, login, created, modified);
+        return new StudentDTO(id, name, login, created, modified, language);
     }
 
     @Override

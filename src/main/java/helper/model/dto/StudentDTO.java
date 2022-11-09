@@ -1,5 +1,6 @@
 package helper.model.dto;
 
+import helper.model.Language;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -13,4 +14,5 @@ public class StudentDTO {
     private String login;
     private Date created;
     private Date modified;
+    private Language language;
 }
