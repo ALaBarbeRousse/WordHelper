@@ -3,26 +3,31 @@ package helper.api.service;
 import helper.api.jpa.LanguageRepository;
 import helper.model.Language;
 import helper.model.dto.LanguageCreateDTO;
-import helper.model.dto.LanguageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class LanguageService {
     private final LanguageRepository languageRepository;
+
     /**
-     * TODO
+     * Getting all existing languages
      * @return List of all found languages
      */
     public List<Language> getAllLanguages() {
         return languageRepository.findAll();
     }
 
+    public Optional<Language> findLanguageByName(String name) {
+        return languageRepository.findLanguageByName(name);
+    }
+
     /**
-     * TODO
+     * Creating a new language
      * @param dto = creation DTO for new language
      * @return DTO of created language
      */

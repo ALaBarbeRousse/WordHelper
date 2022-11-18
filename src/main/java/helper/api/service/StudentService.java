@@ -29,7 +29,6 @@ import static java.lang.String.format;
 @Slf4j
 public class StudentService {
     private final StudentRepository studentRepository;
-    private final LanguageRepository languageRepository;    // todo Вынести в сервис
     private final LanguageService languageService;
     private final PasswordEncoder encoder;
 
@@ -47,7 +46,7 @@ public class StudentService {
         }
 
         /* Check whether selected language exists. If not, then create */
-        Language language = languageRepository.findLanguageByName(dto.getLanguage())
+        Language language = languageService.findLanguageByName(dto.getLanguage())
                 .orElse(languageService.createLanguage(new LanguageCreateDTO(dto.getLanguage())));
 
         try {
@@ -98,6 +97,7 @@ public class StudentService {
         }
     }
 
+    /* Setting attributes for personal page */
     public void setPersonalAttributes(Model model) {
         model.addAttribute("student_name", getStudentName());
         model.addAttribute("my_language", getStudentLanguage());
