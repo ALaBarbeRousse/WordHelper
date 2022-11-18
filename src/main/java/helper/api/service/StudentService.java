@@ -3,6 +3,8 @@ package helper.api.service;
 import helper.api.jpa.LanguageRepository;
 import helper.api.jpa.StudentRepository;
 import helper.model.Language;
+import helper.model.Role;
+import helper.model.Roles;
 import helper.model.Student;
 import helper.model.dto.LanguageCreateDTO;
 import helper.model.dto.StudentCreateDTO;
@@ -17,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import static java.lang.String.format;
 
@@ -31,6 +34,8 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final LanguageService languageService;
     private final PasswordEncoder encoder;
+
+    private final RoleService roleService;
 
     /**
      * New student registration
@@ -47,7 +52,7 @@ public class StudentService {
 
         /* Check whether selected language exists. If not, then create */
         Language language = languageService.findLanguageByName(dto.getLanguage())
-                .orElse(languageService.createLanguage(new LanguageCreateDTO(dto.getLanguage())));
+                .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(dto.getLanguage())));
 
         try {
             Student student = new Student(dto.getName(), dto.getLogin());
@@ -56,6 +61,10 @@ public class StudentService {
             student.setCreated(now);
             student.setModified(now);
             student.setLanguage(language);
+
+            /* Apply the only one role (Student) */
+            Role studentRole = roleService.findRoleByName(Roles.ROLE_STUDENT.getRole().getAuthority());
+            student.setRoles(Set.of(studentRole));
             return studentRepository.save(student);
         } catch (Exception e) {
             log.error("Something went wrong during student registration attempt", e);
