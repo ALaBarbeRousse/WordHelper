@@ -29,7 +29,7 @@ import static java.lang.String.format;
 @Slf4j
 public class StudentService {
     private final StudentRepository studentRepository;
-    private final LanguageRepository languageRepository;
+    private final LanguageRepository languageRepository;    // todo Вынести в сервис
     private final LanguageService languageService;
     private final PasswordEncoder encoder;
 
