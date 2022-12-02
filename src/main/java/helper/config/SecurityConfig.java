@@ -25,6 +25,9 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/register", "/css/register.css", "/js/register.js", "/api/language").permitAll() // Register page
                 .antMatchers(HttpMethod.POST, "/api/student").permitAll()  // Register a student
                 .antMatchers(HttpMethod.GET, "/auth/login", "/css/login.css", "/js/login.js").permitAll()   // Login page
+                .antMatchers(HttpMethod.GET, "/setroles").hasAuthority("Admin") // Set roles page
+                .antMatchers(HttpMethod.GET, "/api/student/data").hasAuthority("Admin")  // Edit student (set roles)
+                .antMatchers(HttpMethod.PUT, "/api/student/data").hasAuthority("Admin")  // Edit student (set roles)
                 .anyRequest().authenticated()
                 .and().formLogin()
                 .loginPage("/auth/login").permitAll()

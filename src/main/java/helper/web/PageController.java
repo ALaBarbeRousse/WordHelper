@@ -1,9 +1,7 @@
 package helper.web;
 
 import helper.api.service.StudentService;
-import helper.model.Student;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +30,12 @@ public class PageController {
     @GetMapping("/auth/login")
     public String getLoginPage() {
         return "login";
+    }
+
+    @GetMapping("/setroles")
+    public String getRolesAddingPage(Model model) {
+        setPersonalAttributes(model);
+        return "roles";
     }
 
     private void setPersonalAttributes(Model model) {

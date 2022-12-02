@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Словесный помогатор</title>
@@ -22,12 +22,21 @@
 </div>
 <h1 class="caption">Словесный помогатор</h1>
 <div class="description">Приложение, призванное помочь в изучении иностранных языков</div>
-<div class="lang_pane">
-<!--    <div class="select_lang_pane"><span>Мой язык: </span><div class="selected_lang" id="my_lang">Русский</div></div>-->
-    <div class="select_lang_pane"><span>Я изучаю: </span><div class="selected_lang" id="study_lang">Suomi</div></div>
-</div>
-<div class="content">
-    <div class="nav_bar">
+
+<fieldset sec:authorize="hasAuthority('Student')">
+    <legend>Язык</legend>
+    <div class="select_lang_pane"><span>Я изучаю: </span><div class="selected_lang" >Suomi</div></div>
+</fieldset>
+
+<fieldset class="user_fieldset" sec:authorize="hasAuthority('Admin')">
+    <legend>Пользователи</legend>
+    <div>
+        <a href="setroles">Редактирование ролей</a>
+    </div>
+</fieldset>
+
+<!--<div class="content">-->
+<!--    <div class="nav_bar">-->
         <!--            todo Заменить на комбобокс, в котором последний элемент -
                         ссылка на страничку нового словаря, а прочие - выбор уже существующего -->
 <!--        <a href="new_dictionary" class="nav">Новый словарь</a>-->
@@ -37,7 +46,7 @@
         <!--                </option>-->
         <!--            </select>-->
 <!--        <a href="new_translation" class="nav">Новый перевод</a>-->
-    </div>
-</div>
+<!--    </div>-->
+<!--</div>-->
 </body>
 </html>

@@ -1,0 +1,42 @@
+input[type="checkbox"] {
+    accent-color: black;
+}
+
+.user_edit_wrapper {
+    margin: 6px 24px;
+}
+
+.user_roles_list {
+    list-style: none;
+    margin: 0 -12px;
+}
+
+.user_roles_list li {
+    margin: 4px 0;
+}
+
+.user_roles_list input{
+    margin: 0 6px ;
+}
+
+li.disabled {
+    color: gray;
+}
+
+div.options_pane {
+    /*border: 1px solid red;*/
+    width: 50%;
+    margin: 0 auto;
+    /*display: block ruby;*/
+    text-align: end;
+    padding: 6px 12px;
+    min-height: 24px;
+}
+
+div.message_pane {
+    min-height: 24px;
+    color: red;
+    margin: 0 auto;
+    font-size: smaller;
+    width: 50%;
+}

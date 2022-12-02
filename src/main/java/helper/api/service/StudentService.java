@@ -1,15 +1,18 @@
 package helper.api.service;
 
-import helper.api.jpa.LanguageRepository;
 import helper.api.jpa.StudentRepository;
 import helper.model.Language;
 import helper.model.Role;
 import helper.model.Roles;
 import helper.model.Student;
 import helper.model.dto.LanguageCreateDTO;
+import helper.model.dto.StudentChangeDataDTO;
 import helper.model.dto.StudentCreateDTO;
+import helper.model.dto.StudentAuthorities;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -64,6 +68,9 @@ public class StudentService {
 
             /* Apply the only one role (Student) */
             Role studentRole = roleService.findRoleByName(Roles.ROLE_STUDENT.getRole().getAuthority());
+//            Role editorRole = roleService.findRoleByName(Roles.ROLE_EDITOR.getRole().getAuthority());
+//            Role adminRole = roleService.findRoleByName(Roles.ROLE_ADMIN.getRole().getAuthority());
+//            student.setRoles(Set.of(studentRole, editorRole, adminRole));
             student.setRoles(Set.of(studentRole));
             return studentRepository.save(student);
         } catch (Exception e) {
@@ -128,5 +135,50 @@ public class StudentService {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Student's name and authorities;
+     * @return List of all found students each with his authorities list
+     */
+    public List<StudentAuthorities> getStudentAuthorities() {
+        return studentRepository.findAll().stream()
+            .map(student -> new StudentAuthorities(
+                    student.getName(),
+                    student.getRoles().stream()
+                        .map(Role::getAuthority)
+                        .collect(Collectors.toList())
+                )).collect(Collectors.toList());
+    }
+
+    /**
+     * Update student's roles.
+     * @param dto - Student's name and authorities info
+     */
+    public void updateStudentData(StudentChangeDataDTO dto) {
+        Student user = studentRepository.findByName(dto.getName())
+                .orElseThrow(() -> new IllegalArgumentException(format("Student '%s' has not been found", dto.getName())));
+
+        /* Prohibition to remove Admin authority */
+        if (isCurrentUser(user) && !dto.getAuthorities().contains("Admin")) {
+            throw new IllegalArgumentException(format("Couldn't remove Admin authority from current user '%s'.", dto.getName()));
+        }
+
+        Set<Role> foundRoles = roleService.findRolesByAuthorities(dto.getAuthorities());
+        user.setRoles(foundRoles);
+        studentRepository.save(user);
+
+        /* Renew authentication if needed */
+        if (isCurrentUser(user)) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), user.getAuthorities())
+            );
+        }
+    }
+
+    private boolean isCurrentUser(Student found) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return principal != null && principal.equals(found);
     }
 }

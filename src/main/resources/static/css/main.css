@@ -1,27 +1,22 @@
-body {
-    background-color: #fafaf7;
-    font-family: sans-serif;
-}
-
 hr.caption_line {
     color: black;
 }
 
-div.lang_pane {
-    /*border: 1px solid lightgrey;*/
-    /*width: 60%;*/
-    margin: 12px auto;
-    display: block ruby;
-    text-align: center;
-}
-div.select_lang_pane {
-    margin: 12px 60px;
-    /*border: 1px solid red;*/
-}
-.selected_lang {
-    font-size: large;
-    cursor: pointer;
-}
+/*div.lang_pane {*/
+/*    !*border: 1px solid lightgrey;*!*/
+/*    !*width: 60%;*!*/
+/*    margin: 12px auto;*/
+/*    display: block ruby;*/
+/*    text-align: center;*/
+/*}*/
+/*div.select_lang_pane {*/
+/*    margin: 12px 60px;*/
+/*    !*border: 1px solid red;*!*/
+/*}*/
+/*.selected_lang {*/
+/*    font-size: large;*/
+/*    cursor: pointer;*/
+/*}*/
 
 div.content {
     border-top: 1px solid black;

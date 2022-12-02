@@ -1,5 +1,4 @@
 function fillInLangList() {
-    /* todo */
     $.ajax({
         type: 'GET',
         url: 'api/language',

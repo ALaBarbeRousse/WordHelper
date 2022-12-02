@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Словесный помогатор</title>
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/roles.css">
+    <link rel="icon" type="image/png" href="/img/globe.png" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="/js/roles.js"></script>
+</head>
+<body>
+<div class="user_pane">
+    <div class="dropdown">
+        <button id="dropdown_btn" th:text="${student_name}"></button>
+        <div class="dropdown-content">
+            <!--            <a href="#">Мой профиль</a>-->
+            <a href="/logout">Выход</a>
+        </div>
+    </div>
+    <div>(Мой язык: <span th:text="${my_language}"></span>)</div>
+</div>
+    <h1 class="caption">Словесный помогатор</h1>
+    <div class="description">Редактирование ролей пользователя</div>
+
+    <fieldset>
+        <legend>Пользователь</legend>
+        <div class="user_edit_wrapper">
+            <label for="user">Выбрать пользователя: </label><input id="user" type="text" list="user_list"/>
+            <datalist id="user_list"></datalist>
+            <ul class="user_roles_list"></ul>
+        </div>
+    </fieldset>
+    <div class="message_pane"><span id="message"></span></div>
+    <div class="options_pane">
+        <button onclick="location.href='/main'">Отмена</button>
+        <button class="ok" id="ok_btn" disabled>OK</button>
+    </div>
+</body>
+</html>
