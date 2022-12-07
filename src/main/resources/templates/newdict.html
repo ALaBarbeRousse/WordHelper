@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Словесный помогатор</title>
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/newdict.css">
+    <link rel="icon" type="image/png" href="/img/globe.png" />
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>-->
+    <script src="/js/newdict.js"></script>
+</head>
+<body>
+    <div class="user_pane">
+        <div class="dropdown">
+            <button id="dropdown_btn" th:text="${student_name}"></button>
+            <div class="dropdown-content">
+                <!--            <a href="#">Мой профиль</a>-->
+                <a href="/logout">Выход</a>
+            </div>
+        </div>
+        <div>(Мой язык: <span th:text="${my_language}"></span>)</div>
+    </div>
+    <h1 class="caption">Словесный помогатор</h1>
+    <div class="description">Новый словарь</div>
+
+    <fieldset>
+        <legend>Создание нового словаря</legend>
+    </fieldset>
+</body>
+</html>

@@ -10,16 +10,16 @@
     <script src="/js/roles.js"></script>
 </head>
 <body>
-<div class="user_pane">
-    <div class="dropdown">
-        <button id="dropdown_btn" th:text="${student_name}"></button>
-        <div class="dropdown-content">
-            <!--            <a href="#">Мой профиль</a>-->
-            <a href="/logout">Выход</a>
+    <div class="user_pane">
+        <div class="dropdown">
+            <button id="dropdown_btn" th:text="${student_name}"></button>
+            <div class="dropdown-content">
+                <!--            <a href="#">Мой профиль</a>-->
+                <a href="/logout">Выход</a>
+            </div>
         </div>
+        <div>(Мой язык: <span th:text="${my_language}"></span>)</div>
     </div>
-    <div>(Мой язык: <span th:text="${my_language}"></span>)</div>
-</div>
     <h1 class="caption">Словесный помогатор</h1>
     <div class="description">Редактирование ролей пользователя</div>
 

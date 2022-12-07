@@ -1,0 +1,60 @@
+/*fieldset {*/
+/*    min-height: 240px;*/
+/*}*/
+
+.lang_select {
+    /*border: 1px solid red;*/
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 5fr 1fr 5fr;
+    margin: 6px;
+    text-align: center;
+}
+
+.lang_select input {
+    margin: 2px auto;
+    max-width: 120px;
+    text-align: center;
+    font-weight: bold;
+}
+
+div.message_pane {
+    /*border: 1px solid orangered;*/
+    min-height: 24px;
+    color: red;
+    margin: 0 auto;
+    font-size: smaller;
+    width: 50%;
+}
+#message {
+    display: none;
+}
+
+div.dict_article {
+    /*border: 1px solid blueviolet;*/
+    /*min-height: 60px;*/
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 5fr 1fr 5fr;
+}
+
+.word_input {
+    margin: 6px;
+}
+
+.options_pane {
+    width: 50%;
+    margin: 0 auto;
+    text-align: end;
+    padding: 6px 12px;
+    min-height: 24px;
+}
+
+#swap_button {
+    background-image: url("../img/swap.png");
+    background-repeat: no-repeat;
+    min-width: 12px;
+    width: 32px;
+    height: 21px;
+    border: none;
+}

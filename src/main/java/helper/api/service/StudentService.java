@@ -68,9 +68,6 @@ public class StudentService {
 
             /* Apply the only one role (Student) */
             Role studentRole = roleService.findRoleByName(Roles.ROLE_STUDENT.getRole().getAuthority());
-//            Role editorRole = roleService.findRoleByName(Roles.ROLE_EDITOR.getRole().getAuthority());
-//            Role adminRole = roleService.findRoleByName(Roles.ROLE_ADMIN.getRole().getAuthority());
-//            student.setRoles(Set.of(studentRole, editorRole, adminRole));
             student.setRoles(Set.of(studentRole));
             return studentRepository.save(student);
         } catch (Exception e) {

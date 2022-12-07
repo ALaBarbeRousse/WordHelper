@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Словесный помогатор</title>
+        <link rel="stylesheet" type="text/css" href="/css/common.css">
+        <link rel="stylesheet" type="text/css" href="/css/word.css">
+        <link rel="icon" type="image/png" href="/img/globe.png" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="/js/word.js"></script>
+    </head>
+    <body>
+        <div class="user_pane">
+            <div class="dropdown">
+                <button id="dropdown_btn" th:text="${student_name}"></button>
+                <div class="dropdown-content">
+                    <!--            <a href="#">Мой профиль</a>-->
+                    <a href="/logout">Выход</a>
+                </div>
+            </div>
+            <div>(Мой язык: <span th:text="${my_language}"></span>)</div>
+        </div>
+        <h1 class="caption">Словесный помогатор</h1>
+        <div class="description">Словарная статья</div>
+
+        <fieldset>
+            <legend>Слово</legend>
+            <div class="lang_select">
+                <label for="lang1">Язык</label>
+                <div><button id="swap_button"></button></div>
+                <label for="lang2">Язык</label>
+                <input id="lang1" type="text" list="lang_list_1"/>
+                <datalist id="lang_list_1"></datalist>
+                <div></div>
+                <input id="lang2" type="text" list="lang_list_2"/>
+                <datalist id="lang_list_2"></datalist>
+            </div>
+            <div class="dict_article">
+                <input class="word_input" id="word1" type="text"/>
+                <div></div>
+                <input class="word_input" id="word2" type="text"/>
+            </div>
+        </fieldset>
+        <div class="message_pane"><span id="message"></span></div>
+        <div class="options_pane">
+            <span id="success"></span>
+            <button onclick="location.href='/main'">Отмена</button>
+            <button class="ok" id="ok_btn" disabled>OK</button>
+        </div>
+    </body>
+</html>

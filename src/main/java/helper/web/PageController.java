@@ -33,9 +33,21 @@ public class PageController {
     }
 
     @GetMapping("/setroles")
-    public String getRolesAddingPage(Model model) {
+    public String getRolesUpdatePage(Model model) {
         setPersonalAttributes(model);
         return "roles";
+    }
+
+    @GetMapping("/newdict")
+    public String getNewDictionaryPage(Model model) {
+        setPersonalAttributes(model);
+        return "newdict";
+    }
+
+    @GetMapping("/word")
+    public String getWordEditPage(Model model) {
+        setPersonalAttributes(model);
+        return "editword";
     }
 
     private void setPersonalAttributes(Model model) {

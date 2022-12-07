@@ -23,12 +23,22 @@
 <h1 class="caption">Словесный помогатор</h1>
 <div class="description">Приложение, призванное помочь в изучении иностранных языков</div>
 
-<fieldset sec:authorize="hasAuthority('Student')">
+<fieldset class="link_panel" sec:authorize="hasAuthority('Student')">
     <legend>Язык</legend>
     <div class="select_lang_pane"><span>Я изучаю: </span><div class="selected_lang" >Suomi</div></div>
 </fieldset>
 
-<fieldset class="user_fieldset" sec:authorize="hasAuthority('Admin')">
+<fieldset class="link_panel" sec:authorize="hasAuthority('Editor')">
+    <legend>Словари</legend>
+<!--    <div>-->
+<!--        <a href="newdict">Новый словарь</a>-->
+<!--    </div>-->
+    <div>
+        <a href="word">Слово</a>
+    </div>
+</fieldset>
+
+<fieldset class="link_panel" sec:authorize="hasAuthority('Admin')">
     <legend>Пользователи</legend>
     <div>
         <a href="setroles">Редактирование ролей</a>

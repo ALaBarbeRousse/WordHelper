@@ -28,6 +28,9 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/setroles").hasAuthority("Admin") // Set roles page
                 .antMatchers(HttpMethod.GET, "/api/student/data").hasAuthority("Admin")  // Edit student (set roles)
                 .antMatchers(HttpMethod.PUT, "/api/student/data").hasAuthority("Admin")  // Edit student (set roles)
+                .antMatchers(HttpMethod.GET, "/newdict").hasAuthority("Editor") // Create dictionary page
+                .antMatchers(HttpMethod.GET, "/word").hasAuthority("Editor") // Edit word page
+                .antMatchers(HttpMethod.POST, "/api/word").hasAuthority("Editor") // Edit word or create a new one
                 .anyRequest().authenticated()
                 .and().formLogin()
                 .loginPage("/auth/login").permitAll()
