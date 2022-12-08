@@ -25,7 +25,13 @@ function loadLanguages() {
         url: 'api/language',
         contentType:"application/json; charset=utf-8",
         success: function (data) {
-            $.each(data, function (index, value) {
+            $.each(data.list, function (index, value) {
+                if(data.usedLanguages[0] === value.id) {
+                    $('#lang1').val(value.name)
+                }
+                if(data.usedLanguages[1] === value.id) {
+                    $('#lang2').val(value.name)
+                }
                 $('#lang_list_1').append($('<option />').val(value.name).text(value.name));
                 $('#lang_list_2').append($('<option />').val(value.name).text(value.name));
             });

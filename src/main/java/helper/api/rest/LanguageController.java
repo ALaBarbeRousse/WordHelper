@@ -4,6 +4,7 @@ import helper.api.service.LanguageService;
 import helper.model.Language;
 import helper.model.dto.LanguageCreateDTO;
 import helper.model.dto.LanguageDTO;
+import helper.model.dto.LanguageListDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,8 +24,12 @@ public class LanguageController {
      * @return List of all found languages
      */
     @GetMapping
-    public List<LanguageDTO> getAllLanguages() {
-        return languageService.getAllLanguages().stream().map(Language::toDTO).collect(Collectors.toList());
+    public LanguageListDTO getAllLanguages() {
+        List<LanguageDTO> langs = languageService.getAllLanguages().stream()
+                .map(Language::toDTO)
+                .collect(Collectors.toList());
+        List<Long> usedLanguages = languageService.findUsedLanguages();
+        return new LanguageListDTO(langs, usedLanguages);
     }
 
     @PostMapping

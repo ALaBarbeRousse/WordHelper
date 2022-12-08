@@ -2,6 +2,7 @@ package helper.model;
 
 
 import helper.model.dto.LanguageDTO;
+import helper.model.dto.LanguageListDTO;
 import lombok.Data;
 
 import javax.persistence.Column;
