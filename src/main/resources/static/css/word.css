@@ -57,4 +57,16 @@ div.dict_article {
     width: 32px;
     height: 21px;
     border: none;
+    outline: none;
+    box-shadow: none;
+}
+#swap_button:hover {
+    box-shadow: 0 0 5px gray;
+}
+#swap_button:active {
+    box-shadow: 0 0 5px black;
+}
+#swap_button:disabled {
+    background-image: url("../img/swap_disabled.png");
+    pointer-events: none;
 }

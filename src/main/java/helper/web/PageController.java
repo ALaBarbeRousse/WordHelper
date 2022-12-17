@@ -50,6 +50,12 @@ public class PageController {
         return "editword";
     }
 
+    @GetMapping("/training")
+    public String getTrainWords(Model model) {
+        setPersonalAttributes(model);
+        return "training";
+    }
+
     private void setPersonalAttributes(Model model) {
         studentService.setPersonalAttributes(model);
     }

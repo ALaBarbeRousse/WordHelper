@@ -1,5 +1,6 @@
 package helper.model;
 
+import helper.model.dto.LanguageChoiceDTO;
 import helper.model.dto.LanguageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -52,5 +53,9 @@ public class LanguageChoice {
 
     public boolean equalsLanguages(String lang1, String lang2) {
         return this.lang1.getName().equals(lang1) && this.lang2.getName().equals(lang2);
+    }
+
+    public LanguageChoiceDTO toDTO() {
+        return new LanguageChoiceDTO(lang1.getName(), lang2.getName());
     }
 }

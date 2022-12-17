@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Словесный помогатор</title>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/css/training.css">
+  <link rel="icon" type="image/png" href="/img/globe.png" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="/js/training.js"></script>
+</head>
+<body>
+<div class="user_pane">
+  <div class="dropdown">
+    <button id="dropdown_btn" th:text="${student_name}"></button>
+    <div class="dropdown-content">
+<!--      <a href="#">Мой профиль</a>-->
+      <a href="/logout">Выход</a>
+    </div>
+  </div>
+</div>
+<h1 class="caption">Словесный помогатор</h1>
+<div class="description">Тренировка</div>
+
+<fieldset>
+  <legend>Настройки</legend>
+  <div class="lang_select">
+    <label for="lang1">Язык</label>
+    <div><button id="swap_button"></button></div>
+    <label for="lang2">Язык</label>
+    <input id="lang1" type="text" list="lang_list_1"/>
+    <datalist id="lang_list_1"></datalist>
+    <div><span id="lang_message"></span></div>
+    <input id="lang2" type="text" list="lang_list_2"/>
+    <datalist id="lang_list_2"></datalist>
+  </div>
+
+  <div class="collection_pane">
+    <label for="collection">Подборка</label>
+    <input id="collection" type="text" list="collection_list"/>
+    <datalist id="collection_list"></datalist>
+    <div><span id="collection_message"></span></div>
+  </div>
+
+  <div class="go_stop_pane">
+    <button id="go_stop_btn"></button>
+  </div>
+</fieldset>
+
+<fieldset id="train_markup">
+  <div></div><div id="to_translate"></div><div></div>
+  <div></div><input id="translation" type="text" disabled="disabled"/><div id="check_result"></div>
+  <div></div><div id="word_message_wrapper"><span id="word_message"></span></div><div></div>
+  <div></div><div><button id="check_btn" disabled="disabled"></button></div><div></div>
+</fieldset>
+</body>
+</html>

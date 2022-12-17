@@ -2,9 +2,11 @@ package helper.api.service;
 
 import helper.api.jpa.StudentRepository;
 import helper.model.Language;
+import helper.model.LanguageChoice;
 import helper.model.Role;
 import helper.model.Roles;
 import helper.model.Student;
+import helper.model.dto.LanguageChoiceDTO;
 import helper.model.dto.LanguageCreateDTO;
 import helper.model.dto.StudentChangeDataDTO;
 import helper.model.dto.StudentCreateDTO;
@@ -38,6 +40,7 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final LanguageService languageService;
     private final PasswordEncoder encoder;
+    private final LanguageChoiceService languageChoiceService;
 
     private final RoleService roleService;
 
@@ -114,6 +117,23 @@ public class StudentService {
     public void setPersonalAttributes(Model model) {
         model.addAttribute("student_name", getStudentName());
         model.addAttribute("my_language", getStudentLanguage());
+        model.addAttribute("language_choice", getLanguageChoice());
+    }
+
+    /**
+     * TODO Надо вернуть пару языков
+     *
+     * @return
+     */
+    private LanguageChoiceDTO getLanguageChoice() {
+        Object pr = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (pr instanceof Student) {
+            return languageChoiceService.findLanguageChoice((Student) pr)
+                    .map(LanguageChoice::toDTO)
+                    .orElse(null);
+        } else {
+            return null;
+        }
     }
 
     private String getStudentLanguage() {

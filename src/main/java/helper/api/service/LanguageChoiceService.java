@@ -18,7 +18,7 @@ public class LanguageChoiceService {
         return repository.findLanguageChoiceByStudent(student);
     }
 
-    public void saveLanguageChoice(LanguageChoice languageChoice) {
-        repository.save(languageChoice);
+    public LanguageChoice saveLanguageChoice(LanguageChoice languageChoice) {
+        return repository.save(languageChoice);
     }
 }

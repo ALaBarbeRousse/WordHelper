@@ -4,6 +4,8 @@ package helper.model;
 import helper.model.dto.LanguageDTO;
 import helper.model.dto.LanguageListDTO;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +16,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "languages")
-@Data
+@Setter
+@Getter
 public class Language {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +29,10 @@ public class Language {
 
     public LanguageDTO toDTO() {
         return new LanguageDTO(id, name);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Language && ((Language)obj).name.equals(name);
     }
 }
