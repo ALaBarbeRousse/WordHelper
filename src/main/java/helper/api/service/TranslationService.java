@@ -45,4 +45,8 @@ public class TranslationService {
 
         return translations.get(random.nextInt(translations.size()));
     }
+
+    public Optional<Translation> findTranslation(Language langFrom, Word word, Language langTo) {
+        return translationRepository.findTranslation(langFrom, langTo, word);
+    }
 }

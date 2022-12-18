@@ -70,3 +70,8 @@ div.dict_article {
     background-image: url("../img/swap_disabled.png");
     pointer-events: none;
 }
+
+.translation_exists {
+    box-shadow: 0 0 15px #FFE311FF;
+    background-color: #FFE311FF;
+}

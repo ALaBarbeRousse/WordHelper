@@ -63,4 +63,29 @@ public class WordService {
                 .orElseGet(() -> new Word(writing, language));
         return wordRepository.save(word);
     }
+
+    public Optional<Word> findWord(String word) {
+        return wordRepository.findWordByWriting(word);
+    }
+
+    public String findTranslation(Language langFrom, String word, Language langTo) {
+        Optional<Word> found = wordRepository.findWordByWriting(word.toLowerCase());
+        if (found.isEmpty()) {
+            return null;
+        }
+
+        Optional<Translation> translationOptional = translationService.findTranslation(langFrom, found.get(), langTo);
+        if (translationOptional.isEmpty()) {
+            return null;
+        }
+
+        Translation tr = translationOptional.get();
+        if (tr.getLanguage1().equals(langTo)) {
+            return tr.getWord1().getWriting();
+        } else if (tr.getLanguage2().equals(langTo)) {
+            return tr.getWord2().getWriting();
+        } else {
+            return null;
+        }
+    }
 }
