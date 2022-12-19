@@ -18,8 +18,13 @@ h1.caption {
     text-align: center;
 }
 
-div.description {
+div.description_env {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 40fr 1fr;
     background-color: #d6d6cd;
+}
+div.description {
     text-align: center;
 }
 

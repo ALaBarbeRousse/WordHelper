@@ -77,8 +77,21 @@ div.dict_article {
 }
 
 div.description_env {
-    border: 1px solid red;
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: 1fr 40fr 1fr;
+}
+#home_btn {
+    background: url("../img/home.png") no-repeat center;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    margin: 2px;
+    cursor: pointer;
+}
+#home_btn:hover {
+    background: url("../img/home_hover.png") no-repeat center;
+}
+#home_btn:active {
+    background: url("../img/home_active.png") no-repeat center;
 }
