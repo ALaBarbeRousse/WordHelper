@@ -18,16 +18,6 @@ h1.caption {
     text-align: center;
 }
 
-div.description_env {
-    display: grid;
-    grid-template-rows: 1fr;
-    grid-template-columns: 1fr 40fr 1fr;
-    background-color: #d6d6cd;
-}
-div.description {
-    text-align: center;
-}
-
 input:focus {
     outline: none;
     box-shadow: 0 0 6px #8f8f89;
@@ -109,4 +99,29 @@ fieldset {
     width: 50%;
     margin: 12px auto;
     border-radius: 6px;
+}
+
+#home_btn {
+    background: url("../img/home.png") no-repeat center;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    margin: 2px;
+    cursor: pointer;
+}
+#home_btn:hover {
+    background: url("../img/home_hover.png") no-repeat center;
+}
+#home_btn:active {
+    background: url("../img/home_active.png") no-repeat center;
+}
+
+div.description_env {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 40fr 1fr;
+    /*background-color: #d6d6cd;*/
+}
+div.description {
+    text-align: center;
 }
