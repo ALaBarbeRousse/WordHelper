@@ -39,3 +39,7 @@ div.message_pane {
     font-size: smaller;
     width: 50%;
 }
+
+div.description_env {
+    background-color: #d6d6cd;
+}
