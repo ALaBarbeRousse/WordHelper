@@ -193,9 +193,3 @@ function paintWord(data) {
     $('#to_translate').text(data.word);
     $('#translation').val("").focus();
 }
-
-function playSound(file) {
-    let audio = new Audio(file);
-    audio.volume = 0.2;
-    audio.play().catch((e)=>{});
-}

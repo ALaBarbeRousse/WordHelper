@@ -163,12 +163,6 @@ function findWord(from, word, to, another) {
     });
 }
 
-function playSound(file) {
-    let audio = new Audio(file);
-    audio.volume = 0.2;
-    audio.play().catch((e)=>{});
-}
-
 function swapWords() {
     let temp = l1.val();
     l1.val(l2.val());
