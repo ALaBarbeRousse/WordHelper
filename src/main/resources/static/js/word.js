@@ -28,7 +28,7 @@ $(document).ready(function() {
         findWord(l2, w2, l1, w1);
     });
 
-    $('#ok_btn').on("click", function () {
+    $('#ok_btn').on('click', function () {
         collectAndSendData();
     });
 
@@ -41,6 +41,10 @@ $(document).ready(function() {
         if (13 === event.which) {
             collectAndSendData();
         }
+    });
+
+    $('#swap_button').on('click', function () {
+        swapWords();
     });
 });
 
@@ -163,4 +167,13 @@ function playSound(file) {
     let audio = new Audio(file);
     audio.volume = 0.2;
     audio.play().catch((e)=>{});
+}
+
+function swapWords() {
+    let temp = l1.val();
+    l1.val(l2.val());
+    l2.val(temp);
+    temp = w1.val();
+    w1.val(w2.val());
+    w2.val(temp);
 }

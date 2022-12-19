@@ -75,3 +75,10 @@ div.dict_article {
     box-shadow: 0 0 15px #FFE311FF;
     background-color: #FFE311FF;
 }
+
+div.description_env {
+    border: 1px solid red;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 40fr 1fr;
+}
