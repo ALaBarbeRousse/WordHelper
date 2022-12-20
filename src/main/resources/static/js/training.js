@@ -1,16 +1,20 @@
 let wordToTranslate = {};
 let nextWordReady = false;
 let animationComplete = true;
-let t;
+
+let t, l1, l2;
+
 $(document).ready(function() {
     t = $('#translation');
+    l1 = $('#lang1');
+    l2 = $('#lang2');
 
     loadLanguages();
     loadCollections();
-    $('#lang1').on('input propertychange', function () {
+    l1.on('input propertychange', function () {
         checkFields();
     });
-    $('#lang2').on('input propertychange', function () {
+    l2.on('input propertychange', function () {
         checkFields();
     });
 
@@ -27,14 +31,18 @@ $(document).ready(function() {
             onCheckButton();
         }
     });
+
+    $('#swap_button').on('click', function () {
+        swapLanguages();
+    });
 });
 
 function getWord() {
     if('visible' === $('#train_markup').css("visibility")) {
         /* Загружаем слово */
         let data = {
-            "lang1": $('#lang1').val().toLowerCase(),
-            "lang2": $('#lang2').val().toLowerCase()
+            "lang1": l1.val().toLowerCase(),
+            "lang2": l2.val().toLowerCase()
         };
         $.ajax({
             type: 'POST',
@@ -73,10 +81,10 @@ function loadLanguages() {
             $.each(data.list, function (index, value) {
                 let capitalized = value.name.charAt(0).toUpperCase() + value.name.slice(1);
                 if(data.usedLanguages[0] === value.id) {
-                    $('#lang1').val(capitalized)
+                    l1.val(capitalized)
                 }
                 if(data.usedLanguages[1] === value.id) {
-                    $('#lang2').val(capitalized)
+                    l2.val(capitalized)
                 }
                 $('#lang_list_1').append($('<option />').val(capitalized).text(capitalized));
                 $('#lang_list_2').append($('<option />').val(capitalized).text(capitalized));
@@ -92,7 +100,7 @@ function loadLanguages() {
 }
 
 function checkFields() {
-    if ($('#lang1').val() && $('#lang2').val()) {
+    if (l1.val() && l2.val()) {
         $('#go_stop_btn').prop("disabled", false);
     } else {
         $('#go_stop_btn').prop("disabled", true);
@@ -102,15 +110,15 @@ function checkFields() {
 function showTrainingMarkup() {
     if('hidden' === $('#train_markup').css("visibility")) {
         $('#swap_button').prop("disabled", true);
-        $('#lang1').prop("disabled", true);
-        $('#lang2').prop("disabled", true);
+        l1.prop("disabled", true);
+        l2.prop("disabled", true);
         $('#collection').prop("disabled", true);
         $('#train_markup').css("visibility", "visible");
         $('#go_stop_btn').css('background-image', 'url("../img/stop.png")');
     } else {
         $('#swap_button').prop("disabled", false);
-        $('#lang1').prop("disabled", false);
-        $('#lang2').prop("disabled", false);
+        l1.prop("disabled", false);
+        l2.prop("disabled", false);
         $('#collection').prop("disabled", false);
         $('#train_markup').css("visibility", "hidden");
         $('#go_stop_btn').css('background-image', 'url("../img/go.png")');
@@ -165,8 +173,8 @@ function sendCheckResult(correct) {
     let result = wordToTranslate;
     result.correct = correct;
     let data = {
-        "lang1": $('#lang1').val().toLowerCase(),
-        "lang2": $('#lang2').val().toLowerCase(),
+        "lang1": l1.val().toLowerCase(),
+        "lang2": l2.val().toLowerCase(),
         "result": result
     };
 
@@ -196,4 +204,10 @@ function paintWord(data) {
     wordToTranslate = data;
     $('#to_translate').text(data.word);
     t.val("").focus();
+}
+
+function swapLanguages() {
+    let temp = l1.val();
+    l1.val(l2.val());
+    l2.val(temp);
 }
