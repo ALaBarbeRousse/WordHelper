@@ -1,7 +1,10 @@
 let wordToTranslate = {};
 let nextWordReady = false;
 let animationComplete = true;
+let t;
 $(document).ready(function() {
+    t = $('#translation');
+
     loadLanguages();
     loadCollections();
     $('#lang1').on('input propertychange', function () {
@@ -19,7 +22,7 @@ $(document).ready(function() {
         onCheckButton();
     });
 
-    $('#translation').keypress(function (event) {
+    t.keypress(function (event) {
         if (13 === event.which) {
             onCheckButton();
         }
@@ -81,7 +84,6 @@ function loadLanguages() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             $("#lang_message").text('Не удалось получить список языков').fadeIn(10);
-            // $("#lang_message").fadeIn(10);
             setTimeout(function() {
                 $('#message').fadeOut(3000);
             }, 5000);
@@ -116,13 +118,13 @@ function showTrainingMarkup() {
 }
 
 function setTrainMarkupEnabled(enabled) {
-    $('#translation').prop("disabled", !enabled);
+    t.prop("disabled", !enabled);
     $('#check_btn').prop("disabled", !enabled);
 }
 
 function onCheckButton() {
     if (!$('#check_btn').prop("disabled")) {
-        showResultCorrect(wordToTranslate.translation === $('#translation').val().toLowerCase());
+        showResultCorrect(wordToTranslate.translation === t.val().toLowerCase());
     }
 }
 
@@ -142,10 +144,12 @@ function showResultCorrect(correct) {
             }
         });
     } else {
+        /* todo Показать правильный перевод */
+        t.val(wordToTranslate.translation);
         playSound('../snd/error.mp3');
         $('#check_result').fadeTo(0, 1, function() {
             $(this).css('background-image', 'url("../img/wrong.png")');
-        }).delay(500).fadeTo(500, 0, function () {
+        }).delay(2500).fadeTo(500, 0, function () {
             $('#check_result').css('background-image', '');
             animationComplete = true;
             if (nextWordReady) {
@@ -191,5 +195,5 @@ function paintWord(data) {
     setTrainMarkupEnabled(true);
     wordToTranslate = data;
     $('#to_translate').text(data.word);
-    $('#translation').val("").focus();
+    t.val("").focus();
 }

@@ -118,6 +118,8 @@ div.go_stop_pane {
 #translation {
     margin: 6px auto;
     width: 95%;
+    text-align: center;
+    font-size: 120%;
 }
 #check_btn {
     background-image: url("../img/send.png");
