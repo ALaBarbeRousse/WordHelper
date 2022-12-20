@@ -25,13 +25,24 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/register", "/css/register.css", "/js/register.js", "/api/language").permitAll() // Register page
                 .antMatchers(HttpMethod.POST, "/api/student").permitAll()  // Register a student
                 .antMatchers(HttpMethod.GET, "/auth/login", "/css/login.css", "/js/login.js").permitAll()   // Login page
+
+                .antMatchers(HttpMethod.GET, "/main", "/css/main.css").authenticated()   // Start page
+
                 .antMatchers(HttpMethod.GET, "/setroles").hasAuthority("Admin") // Set roles page
+                .antMatchers(HttpMethod.GET, "/css/roles.css", "/js/roles.js").hasAuthority("Admin") // Edit student (set roles)
                 .antMatchers(HttpMethod.GET, "/api/student/data").hasAuthority("Admin")  // Edit student (set roles)
                 .antMatchers(HttpMethod.PUT, "/api/student/data").hasAuthority("Admin")  // Edit student (set roles)
-                .antMatchers(HttpMethod.GET, "/newdict").hasAuthority("Editor") // Create dictionary page
-                .antMatchers(HttpMethod.GET, "/word").hasAuthority("Editor") // Edit word page
-                .antMatchers(HttpMethod.POST, "/api/word").hasAuthority("Editor") // Edit word or create a new one
-                .anyRequest().authenticated()
+//
+                .antMatchers(HttpMethod.GET, "/word", "/css/word.css", "/js/word*", "/js/sound.js", "/img/home*", "/img/swap*").hasAuthority("Editor") // Edit word page
+                .antMatchers(HttpMethod.GET, "/img/correct.png", "/snd/success.mp3").hasAuthority("Editor") // Edit word page
+                .antMatchers(HttpMethod.POST, "/api/word", "/api/word/translate").hasAuthority("Editor") // Edit word page
+
+                .antMatchers(HttpMethod.GET, "/training", "/css/training.css", "/js/training.js").hasAuthority("Student") // Training page
+                .antMatchers(HttpMethod.GET, "/img/go.png", "/img/stop.png", "/img/send*").hasAuthority("Student") // Training page
+                .antMatchers(HttpMethod.POST, "/api/training").hasAuthority("Student") // Training page
+
+//                .anyRequest().authenticated()
+                .anyRequest().denyAll()
                 .and().formLogin()
                 .loginPage("/auth/login").permitAll()
                 .and().logout()
