@@ -152,7 +152,6 @@ function showResultCorrect(correct) {
             }
         });
     } else {
-        /* todo Показать правильный перевод */
         t.val(wordToTranslate.translation);
         playSound('../snd/error.mp3');
         $('#check_result').fadeTo(0, 1, function() {
