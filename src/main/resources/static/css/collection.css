@@ -1,0 +1,144 @@
+body {
+    background-color: #D6FFF6;
+}
+
+div.description_env {
+    background-color: #9ee9f6;
+}
+
+button {
+    background-color: #D6FFF6;
+}
+button:hover {
+    background-color: #9ee9f6;
+}
+
+.dropdown-content {
+    background-color: #D6FFF6;
+}
+.dropdown-content a:hover {
+    background-color: #9ee9f6;
+}
+
+#words_collection {
+    margin-top: 18px;
+    max-height: 150px;
+    min-height: 50px;
+    box-shadow: inset 1px 1px 6px lightgray;
+    border: 2px groove lightgray;
+    width: 100%;
+    text-align: center;
+    overflow-y: scroll;
+}
+div.words_pair {
+    border: 1px solid black;
+    border-radius: 6px;
+    width: 50%;
+    margin: 4px auto;
+    padding: 0 4px;
+    text-align: center;
+    cursor: pointer;
+}
+div.words_pair:hover {
+    background: #abcec9 url("../img/delete.png") no-repeat center right;
+}
+div.words_pair:active {
+    background-color: #8ea9a5;
+}
+div.words_pair span {
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+div.name_wrap {
+    text-align: center;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 9fr 10fr 1fr 8fr;
+}
+input#name {
+    width: 240px;
+}
+
+#collection_name {
+    text-align: end;
+    font-size: 100%;
+    padding: 0 4px;
+}
+
+div.new_collection {
+    background: url("../img/new.png") no-repeat center;
+}
+
+div.translation_wrap {
+    min-height: 24px;
+    width: 100%;
+    margin: 12px auto;
+    text-align: center;
+}
+div.translation_wrap div {
+    margin: 6px;
+}
+#translation_search {
+    text-align: end;
+    padding: 0 2px;
+}
+
+#found_translation {
+    border-radius: 2px;
+    border: 2px solid #8f8f89;
+    box-shadow: 0 0 6px #8f8f89;
+    height: 24px;
+    min-width: 25%;
+    display: inline-block;
+    padding: 0 12px;
+    background-color: #d6fff6;
+}
+#found_translation.filled {
+    background-color: #b6ffef !important;
+    cursor: pointer;
+}
+#found_translation.filled:hover {
+    background-color: #9cdccd !important;
+}
+#found_translation.filled:active {
+    background-color: #80b4a7 !important;
+}
+
+#delimiter, .delimiter {
+    background: url("../img/arrows.png") no-repeat center;
+    width: 30px;
+    height: 6px;
+    display: inline-block;
+    margin: 2px 0;
+}
+.hidden {
+    visibility: hidden;
+}
+
+.search_wrap {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.selected_item {
+    box-shadow: inset 0 0 15px gray;
+}
+
+#collection_message {
+    /*border: 1px solid red;*/
+    color: red;
+    font-size: 90%;
+    height: 24px;
+    width: 50%;
+    /*margin: 0 auto;*/
+}
+
+div.actions_wrap {
+    /*border: 1px solid red;*/
+    height: 28px;
+    width: 50%;
+    margin: 0 auto;
+    text-align: end;
+}

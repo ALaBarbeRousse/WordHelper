@@ -18,3 +18,5 @@ spring:
       hibernate:
         format_sql: true
         enable_lazy_load_no_trans: true
+training:
+  amount: 20  # Будем выдавать в одну тренировку именно столько слов. Когда-нибудь можно будет это перенести в личные настройки

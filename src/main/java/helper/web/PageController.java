@@ -56,6 +56,12 @@ public class PageController {
         return "training";
     }
 
+    @GetMapping("/collection")
+    public String getEditCollection(Model model) {
+        setPersonalAttributes(model);
+        return "collection";
+    }
+
     private void setPersonalAttributes(Model model) {
         studentService.setPersonalAttributes(model);
     }

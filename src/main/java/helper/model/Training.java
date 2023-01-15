@@ -36,14 +36,13 @@ public class Training {
     @JoinColumn(name = "lang2")
     private Language language2;
 
+    @ManyToOne
+    @JoinColumn(name = "collection")
+    private Collection collection;
+
     public Training(Student student, Language language1, Language language2) {
         this.student = student;
         this.language1 = language1;
         this.language2 = language2;
     }
-
-    /* todo Сделать подборки */
-//    @ManyToOne
-//    @JoinColumn(name = "collection")
-//    private Collection collection;
 }

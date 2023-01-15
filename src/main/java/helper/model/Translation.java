@@ -1,5 +1,6 @@
 package helper.model;
 
+import helper.model.dto.TranslationDTO;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +22,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "translation")
-public class Translation {
+public class    Translation {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     @Id
@@ -50,5 +51,9 @@ public class Translation {
         this.word1 = word1;
         this.language2 = language2;
         this.word2 = word2;
+    }
+
+    public TranslationDTO toDTO() {
+        return new TranslationDTO(language1.getName(), word1.getWriting(), language2.getName(), word2.getWriting());
     }
 }

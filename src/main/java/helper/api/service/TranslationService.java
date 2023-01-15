@@ -1,5 +1,6 @@
 package helper.api.service;
 
+import helper.model.Collection;
 import helper.model.Language;
 import helper.model.Training;
 import helper.model.Translation;
@@ -33,6 +34,7 @@ public class TranslationService {
         return translationRepository.save(translation);
     }
 
+    /* TODO Сделано крайне неэффективно */
     public Translation getRandomTranslation(Training training) {
         List<Translation> translations = translationRepository.getTranslationsByLanguage1AndLanguage2(
                 training.getLanguage1(),
@@ -48,5 +50,21 @@ public class TranslationService {
 
     public Optional<Translation> findTranslation(Language langFrom, Word word, Language langTo) {
         return translationRepository.findTranslation(langFrom, langTo, word);
+    }
+
+    /**
+     * TODO Берём все переводы из подборки по критериям из training - подборка и пара языков
+     * @param training
+     * @return
+     */
+    public List<Translation> getRandomTranslations(Training training, int amount) {
+        Collection collection = training.getCollection();
+        Language l1 = training.getLanguage1();
+        Language l2 = training.getLanguage2();
+
+        /* todo это без учёта подборки */
+        List<Translation> found = translationRepository.getTranslationsByLanguage1AndLanguage2(l1, l2);
+
+        return List.of();
     }
 }

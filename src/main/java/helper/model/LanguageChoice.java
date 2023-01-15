@@ -51,8 +51,8 @@ public class LanguageChoice {
         return List.of(lang1.toDTO(), lang2.toDTO());
     }
 
-    public boolean equalsLanguages(String lang1, String lang2) {
-        return this.lang1.getName().equals(lang1) && this.lang2.getName().equals(lang2);
+    public boolean equalsLanguages(String l1, String l2) {
+        return this.lang1.getName().equals(l1) && this.lang2.getName().equals(l2);
     }
 
     public LanguageChoiceDTO toDTO() {

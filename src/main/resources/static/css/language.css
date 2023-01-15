@@ -1,0 +1,35 @@
+.lang_select {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-top: 6px;
+    margin-bottom: 18px;
+    text-align: center;
+}
+.lang_select input {
+    margin: 2px auto;
+    max-width: 120px;
+    text-align: center;
+    font-weight: bold;
+}
+
+#swap_button {
+    background-image: url("../img/swap.png");
+    background-repeat: no-repeat;
+    min-width: 12px;
+    width: 32px;
+    height: 21px;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+#swap_button:hover {
+    box-shadow: 0 0 5px gray;
+}
+#swap_button:active {
+    box-shadow: 0 0 5px black;
+}
+#swap_button:disabled {
+    background-image: url("../img/swap_disabled.png");
+    pointer-events: none;
+}

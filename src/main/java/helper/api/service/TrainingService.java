@@ -10,8 +10,11 @@ import helper.model.dto.CheckRequestDTO;
 import helper.model.dto.LanguageCreateDTO;
 import helper.model.dto.TrainingWordDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +23,10 @@ public class TrainingService {
     private final LanguageService languageService;
     private final TrainingRepository trainingRepository;
     private final TranslationService translationService;
+
+    /* Количество слов в выдаваемом списке на тренировку */
+    @Value("${training.amount}")
+    private int amount;
 
     /* TODO */
     public TrainingWordDTO getTrainingWord(String lang1, String lang2) {
@@ -61,7 +68,10 @@ public class TrainingService {
 
             /* TODO Надо выбрать из таблицы переводов случайный (с учётом веса) перевод,
             *   который бы соответствовал выбранным языкам */
-            Translation randomTranslation = translationService.getRandomTranslation(training);
+            /* todo новая мысль - надо возвращать не одно слово, а подобранный список */
+//            List<Translation> translationList = translationService.getRandomTranslations(training, amount);
+
+            Translation randomTranslation = translationService.getRandomTranslation(training);  // todo посмотреть training
             if (
                     lang1.equals(randomTranslation.getLanguage1().getName())
                     && lang2.equals(randomTranslation.getLanguage2().getName())

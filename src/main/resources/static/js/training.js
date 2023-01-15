@@ -50,6 +50,7 @@ function getWord() {
             contentType:"application/json; charset=utf-8",
             data: JSON.stringify(data),
             success: function (data) {
+                // console.log("Ответ: " + JSON.stringify(data));
                 paintWord(data);
             },
             error: function (jqXHR, textStatus, errorThrown) {

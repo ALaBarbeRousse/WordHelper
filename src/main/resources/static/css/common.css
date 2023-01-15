@@ -32,6 +32,7 @@ button {
     background-color: #fafaf7;
     font-size: medium;
     margin-left: 12px;
+    cursor: pointer;
 }
 button:focus {
     outline: none;
@@ -54,6 +55,7 @@ button.ok:active {
 }
 button.ok:disabled, button.ok[disabled] {
     background-color: #d6d6cd;
+    cursor: default;
 }
 
 /*drop-down menu*/

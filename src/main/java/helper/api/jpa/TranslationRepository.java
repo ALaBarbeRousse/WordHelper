@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TranslationRepository extends JpaRepository<Translation, Long> {
+    @Query("SELECT t FROM Translation t WHERE ((t.language1 = ?1 AND t.language2 = ?3) OR (t.language1 = ?3 AND t.language2 = ?1)) AND ((t.word1 = ?2 AND t.word2 = ?4) OR (t.word1 = ?4 AND t.word2 = ?2))")
     Optional<Translation> findTranslationByLanguage1AndWord1AndLanguage2AndWord2(
             Language oneLanguage,
             Word oneWord,

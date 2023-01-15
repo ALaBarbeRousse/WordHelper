@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -87,5 +88,14 @@ public class WordService {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Пытаемся найти подходящие слова. Подходящие - это совпадающие или начинающиеся с word
+     * @param word - search context
+     * @return List of found words
+     */
+    public List<Word> findMatchingWords(String word) {
+        return wordRepository.findByWritingStartingWith(word);
     }
 }

@@ -4,10 +4,12 @@
         <meta charset="UTF-8">
         <title>Словесный помогатор</title>
         <link rel="stylesheet" type="text/css" href="/css/common.css">
-        <link rel="stylesheet" type="text/css" href="/css/word.css">
+        <link rel="stylesheet" type="text/css" href="/css/collection.css">
+        <link rel="stylesheet" type="text/css" href="/css/language.css">
         <link rel="icon" type="image/png" href="/img/globe.png" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-        <script src="/js/word.js"></script>
+        <script src="/js/collection.js"></script>
+        <script src="/js/language.js"></script>
         <script src="/js/sound.js"></script>
     </head>
     <body>
@@ -24,12 +26,12 @@
         <h1 class="caption">Словесный помогатор</h1>
         <div class="description_env">
             <div><button id="home_btn" onclick="location.href='/main'"></button></div>
-            <div class="description">Словарная статья</div>
+            <div class="description">Подборка</div>
             <div></div>
         </div>
 
         <fieldset>
-            <legend>Слово</legend>
+            <legend>Редактирование подборки</legend>
             <div class="lang_select">
                 <label for="lang1">Язык</label>
                 <div><button id="swap_button"></button></div>
@@ -40,15 +42,35 @@
                 <input id="lang2" type="text" list="lang_list_2"/>
                 <datalist id="lang_list_2"></datalist>
             </div>
-            <div class="dict_article">
-                <input class="word_input" id="word1" type="text"/>
-                <div id="result_icon"></div>
-                <input class="word_input" id="word2" type="text"/>
+
+            <div class="name_wrap">
+                <div></div>
+                <div>
+                    <label for="collection_name">Подборка: </label><input id="collection_name" type="text" list="collections_list">
+                    <datalist id="collections_list">
+                    </datalist>
+                </div>
+                <div id="collection_sign"></div>
             </div>
+
+            <div class="translation_wrap">
+                <div>
+                    <label for="translation_search">Поиск перевода: </label>
+                    <input type="text" id="translation_search" list="words_list"/>
+                    <datalist id="words_list"></datalist>
+                </div>
+                <div id="found_translation">
+                    <span id="word1"></span>
+                    <span class="hidden" id="delimiter"></span>
+                    <span id="word2"></span>
+                </div>
+            </div>
+
+            <div id="words_collection" tabindex="-1"></div>
+
+            <div id="collection_message"></div>
         </fieldset>
-        <div class="message_pane"><span id="message"></span></div>
-        <div class="options_pane">
-            <span id="success"></span>
+        <div class="actions_wrap">
             <button onclick="location.href='/main'">Отмена</button>
             <button class="ok" id="ok_btn" disabled>OK</button>
         </div>

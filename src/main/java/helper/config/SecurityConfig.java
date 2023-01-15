@@ -37,10 +37,17 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/img/correct.png", "/snd/success.mp3").hasAuthority("Editor") // Edit word page
                 .antMatchers(HttpMethod.POST, "/api/word", "/api/word/translate").hasAuthority("Editor") // Edit word page
 
-                .antMatchers(HttpMethod.GET, "/training", "/css/training.css", "/js/training.js").hasAuthority("Student") // Training page
+                .antMatchers(HttpMethod.GET, "/training", "/css/training.css", "/css/language.css", "/js/training.js").hasAuthority("Student") // Training page
                 .antMatchers(HttpMethod.GET, "/img/go.png", "/img/stop.png", "/img/send*", "/img/wrong.png").hasAuthority("Student") // Training page
                 .antMatchers(HttpMethod.GET, "/snd/error.mp3").hasAuthority("Student") // Training page
                 .antMatchers(HttpMethod.POST, "/api/training").hasAuthority("Student") // Training page
+
+                .antMatchers(HttpMethod.GET, "/collection", "/css/collection.css", "/js/collection.js", "/js/language.js").hasAuthority("Student") // Collection edit page
+                .antMatchers(HttpMethod.GET, "/img/new.png", "/css/language.css", "/img/arrows.png", "/img/delete.png", "/img/home*").hasAuthority("Student") // Collection edit page
+                .antMatchers(HttpMethod.GET, "/api/collection/names").hasAuthority("Student")   // Getting collection names
+                .antMatchers(HttpMethod.POST, "/api/collection/translation").hasAuthority("Student")   // Searching translation
+                .antMatchers(HttpMethod.POST, "/api/collection").hasAuthority("Student")    // Send a collection
+                .antMatchers(HttpMethod.GET, "/api/collection").hasAuthority("Student")    // Get collection content
 
 //                .anyRequest().authenticated()
                 .anyRequest().denyAll()
