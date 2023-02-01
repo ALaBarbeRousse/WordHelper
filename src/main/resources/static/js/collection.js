@@ -24,7 +24,7 @@ function loadCollectionNames() {
 
 /* Загрузить список слов коллекции */
 function loadCollection(name) {
-    //console.log("loadCollection: " + name);
+    // console.log("loadCollection: " + name);
     $.ajax({
         type: 'GET',
         url: 'api/collection',
@@ -35,7 +35,7 @@ function loadCollection(name) {
         },
         contentType:"application/json; charset=utf-8",
         success: function (data) {
-            // console.log("Получена подборка: " + JSON.stringify(data));
+            // console.log("Получена подборка '" + name + "': " + JSON.stringify(data));
             for (let i = 0; i < data.length; i++) {
                 addToCollection(data[i][0], data[i][1]);
             }
@@ -104,8 +104,9 @@ function showTranslation(word1, word2) {
 }
 
 function onSearchInput() {
-    // console.log("onSearchInput");
     let word = ts.val().toLowerCase();
+
+    console.log("onSearchInput: " + word);
 
     if (ts.val().length < 1) {
         hideTranslation();
@@ -124,6 +125,7 @@ function onSearchInput() {
         contentType:"application/json; charset=utf-8",
         data: JSON.stringify(data),
         success: function (data) {
+            console.log("Слово найдено: " + JSON.stringify(data));
             wl.empty();
             if (data.length === 0) {
                 hideTranslation();

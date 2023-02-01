@@ -31,29 +31,29 @@ public class    Translation {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "language1")
-    private Language language1;
+    @JoinColumn(name = "word_language")
+    private Language wordLanguage;
 
     @ManyToOne
-    @JoinColumn(name = "word1")
-    private Word word1;
+    @JoinColumn(name = "word")
+    private Word word;
 
     @ManyToOne
-    @JoinColumn(name = "language2")
-    private Language language2;
+    @JoinColumn(name = "translation_language")
+    private Language translationLanguage;
 
     @ManyToOne
-    @JoinColumn(name = "word2")
-    private Word word2;
+    @JoinColumn(name = "translation")
+    private Word translation;
 
-    public Translation(Language language1, Word word1, Language language2, Word word2) {
-        this.language1 = language1;
-        this.word1 = word1;
-        this.language2 = language2;
-        this.word2 = word2;
+    public Translation(Language wordLanguage, Word word, Language translationLanguage, Word translation) {
+        this.wordLanguage = wordLanguage;
+        this.word = word;
+        this.translationLanguage = translationLanguage;
+        this.translation = translation;
     }
 
     public TranslationDTO toDTO() {
-        return new TranslationDTO(language1.getName(), word1.getWriting(), language2.getName(), word2.getWriting());
+        return new TranslationDTO(wordLanguage.getName(), word.getWriting(), translationLanguage.getName(), translation.getWriting());
     }
 }

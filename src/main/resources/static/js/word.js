@@ -1,6 +1,6 @@
 let w1, w2, l1, l2, m, words_env;
-let inserted = null;
 let r;
+let wl1, wl2;
 
 $(document).ready(function() {
     loadLanguages();
@@ -12,20 +12,22 @@ $(document).ready(function() {
     m = $('#message');
     words_env = $('div.dict_article');
     r = $('#result_icon')
+    wl1 = $('#word_list_1');
+    wl2 = $('#word_list_2');
 
     l1.on('input propertychange', function () {
-        checkFields();
+        validateFields();
     });
     l2.on('input propertychange', function () {
-        checkFields();
+        validateFields();
     });
     w1.on('input propertychange', function () {
-        checkFields();
-        findWord(l1, w1, l2, w2);
+        validateFields();
+        findWordAndTranslation(l1.val(), w1.val(), l2.val());
     });
     w2.on('input propertychange', function () {
-        checkFields();
-        findWord(l2, w2, l1, w1);
+        validateFields();
+        findWord(l2.val(), w2.val());
     });
 
     $('#ok_btn').on('click', function () {
@@ -74,7 +76,7 @@ function loadLanguages() {
     });
 }
 
-function checkFields() {
+function validateFields() {
     if (l1.val() && l2.val() && w1.val() && w2.val()) {
         $('#ok_btn').prop("disabled", false);
     } else {
@@ -104,7 +106,12 @@ function collectAndSendData() {
                 }).delay(200).fadeTo(200, 0, function () {
                     r.css('background', 'none');
                     /* Удалить слова из полей, передвинуть фокус на первое */
-                    w1.val(''); w1.focus(); w2.val(''); checkFields();
+                    w1.val('');
+                    wl1.empty();
+                    w1.focus();
+                    w2.val('');
+                    wl2.empty();
+                    validateFields();
                 });
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -128,11 +135,54 @@ function showArticleExist(exists) {
     }
 }
 
-function findWord(from, word, to, another) {
+function findWord(language, word) {
+    if (!word.trim()) {
+        wl2.empty();
+        return;
+    }
+
     let data = {
-        "from": from.val(),
-        "word": word.val(),
-        "to": to.val()
+        "from": language,
+        "word": word
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: 'api/word/translate',
+        contentType:"application/json; charset=utf-8",
+        data: JSON.stringify(data),
+        success: function (data) {
+            if (data) {
+                if (data.suspect) {
+                    wl2.empty();
+                    for (let i = 0; i < data.suspect.length; i++) {
+                        wl2.append($('<option />').val(data.suspect[i]).text(data.suspect[i]));
+                    }
+                } else {
+                    wl2.empty();
+                }
+            }
+        },
+        error: function () {
+            m.text('Не удалось получить слово').fadeIn(10);
+            setTimeout(function() {
+                m.fadeOut(3000);
+            }, 5000);
+        }
+    });
+}
+
+function findWordAndTranslation(from, word, to) {
+    if (!word.trim()) {
+        w2.val('');
+        wl1.empty();
+        return;
+    }
+
+    let data = {
+        "from": from,
+        "word": word,
+        "to": to
     };
     $.ajax({
         type: 'POST',
@@ -140,18 +190,25 @@ function findWord(from, word, to, another) {
         contentType:"application/json; charset=utf-8",
         data: JSON.stringify(data),
         success: function (data) {
-            if (data && data.translation) {
-                another.val(data.translation);  // вставили перевод
-                inserted = another;
-                showArticleExist(true);
-                checkFields();
-            } else {
-                if (another === inserted) {
-                    another.val(null);  // Убрали перевод
-                    inserted = null;
+            if (data) {
+                if (data.suspect) {
+                    wl1.empty();
+                    for (let i = 0; i < data.suspect.length; i++) {
+                        wl1.append($('<option />').val(data.suspect[i]).text(data.suspect[i]));
+                    }
+                } else {
+                    wl1.empty();
                 }
-                showArticleExist(false);
-                checkFields();
+
+                if (data.translation) {
+                    w2.val(data.translation);  // вставили перевод
+                    showArticleExist(true);
+                    validateFields();
+                } else {
+                    w2.val(null);  // Убрали перевод
+                    showArticleExist(false);
+                    validateFields();
+                }
             }
         },
         error: function () {

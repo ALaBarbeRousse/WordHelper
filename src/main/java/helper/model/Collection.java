@@ -63,11 +63,11 @@ public class Collection {
 
     public List<TranslationDTO> getContentDTO() {
         return translations.stream()
-            .map(translation -> new TranslationDTO(
-                    translation.getLanguage1().getName(),
-                    translation.getWord1().getWriting(),
-                    translation.getLanguage2().getName(),
-                    translation.getWord2().getWriting()
+                .map(translation -> new TranslationDTO(
+                        translation.getWordLanguage().getName(),
+                        translation.getWord().getWriting(),
+                        translation.getTranslationLanguage().getName(),
+                        translation.getTranslation().getWriting()
                 )).collect(Collectors.toList());
     }
 }

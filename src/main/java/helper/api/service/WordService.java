@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class WordService {
      * @return saved Translation
      */
     @Transactional
-    public Translation saveWordPair(WordArticleEditDTO dto) {
+    public List<Translation> saveWordPair(WordArticleEditDTO dto) {
         /* Проверяем для начала, все ли языки есть. Если нет - создаём */
         Language lang1 = languageService.findLanguageByName(dto.getLang1())
                 .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(dto.getLang1())));
@@ -47,47 +48,32 @@ public class WordService {
         }
 
         /* Сохраняем оба слова */
-        Word word1 = this.saveWord(dto.getWord1().trim().toLowerCase(), lang1);
-        Word word2 = this.saveWord(dto.getWord2().trim().toLowerCase(), lang2);
+        Word word1 = this.getOrSaveWord(dto.getWord1().trim().toLowerCase(), lang1);
+        Word word2 = this.getOrSaveWord(dto.getWord2().trim().toLowerCase(), lang2);
 
-        /* Сохраняем сущность перевода (Translation) */
-        Translation translation = translationService.findTranslation(lang1, word1, lang2, word2)
-            .orElseGet(() -> translationService.findTranslation(lang2, word2, lang1, word1).orElseGet(() ->
-                    new Translation(lang1, word1, lang2, word2)
-                )
-            );
-        return translationService.saveTranslation(translation);
+        /* Сохраняем сущности перевода (Translation) */
+        /* todo Переводов может быть не один */
+        Translation fwdTranslation = translationService.findTranslation(lang1, word1, lang2, word2)
+                .orElseGet(() -> new Translation(lang1, word1, lang2, word2));
+        Translation backTranslation = translationService.findTranslation(lang2, word2, lang1, word1)
+                .orElseGet(() -> new Translation(lang2, word2, lang1, word1));
+        return translationService.saveTranslations(List.of(fwdTranslation, backTranslation));
     }
 
-    private Word saveWord(String writing, Language language) {
-        Word word = wordRepository.findWordByWriting(writing)
-                .orElseGet(() -> new Word(writing, language));
-        return wordRepository.save(word);
+    private Word getOrSaveWord(String writing, Language language) {
+        return wordRepository.findWordByWriting(writing)
+                .orElseGet(() -> wordRepository.save(new Word(writing, language)));
     }
 
     public Optional<Word> findWord(String word) {
         return wordRepository.findWordByWriting(word);
     }
 
-    public String findTranslation(Language langFrom, String word, Language langTo) {
-        Optional<Word> found = wordRepository.findWordByWriting(word.toLowerCase());
-        if (found.isEmpty()) {
-            return null;
-        }
-
-        Optional<Translation> translationOptional = translationService.findTranslation(langFrom, found.get(), langTo);
-        if (translationOptional.isEmpty()) {
-            return null;
-        }
-
-        Translation tr = translationOptional.get();
-        if (tr.getLanguage1().equals(langTo)) {
-            return tr.getWord1().getWriting();
-        } else if (tr.getLanguage2().equals(langTo)) {
-            return tr.getWord2().getWriting();
-        } else {
-            return null;
-        }
+    public Optional<String> findTranslation(Language langFrom, String word, Language langTo) {
+        return wordRepository.findWordByWriting(word.toLowerCase())
+            .flatMap(foundWord -> translationService.findTranslation(langFrom, foundWord, langTo))
+            .map(Translation::getTranslation)
+            .map(Word::getWriting);
     }
 
     /**
@@ -97,5 +83,10 @@ public class WordService {
      */
     public List<Word> findMatchingWords(String word) {
         return wordRepository.findByWritingStartingWith(word);
+    }
+
+    public List<String> findSimilarWords(String word, Language language) {
+        return wordRepository.findByWritingStartingWithAndLanguage(word, language).stream()
+                .map(Word::getWriting).collect(Collectors.toList());
     }
 }

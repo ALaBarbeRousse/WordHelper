@@ -9,11 +9,13 @@ import helper.model.Word;
 import helper.model.dto.CollectionSaveDTO;
 import helper.model.dto.FindTranslationDTO;
 import helper.model.dto.LanguageCreateDTO;
+import helper.model.dto.TranslationDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -52,25 +54,11 @@ public class CollectionService {
             return matchingWords.stream()
                     .map(word -> translationService.findTranslation(lang1.get(), word, lang2.get()).orElse(null))
                     .filter(Objects::nonNull)
+                    .sorted(Comparator.comparing(o -> o.getWord().getWriting()))
                     .collect(Collectors.toList());
         }
 
         return List.of();
-
-
-
-//        Optional<Word> wo = wordService.findWord(dto.getWord());
-//        if (wo.isEmpty()) {
-//            return Optional.empty();
-//        }
-//
-//        Optional<Language> from = languageService.findLanguageByName(dto.getFrom());
-//        Optional<Language> to = languageService.findLanguageByName(dto.getTo());
-//        if (from.isPresent() && to.isPresent()) {
-//            return translationService.findTranslation(from.get(), wo.get(), to.get());
-//        }
-//
-//        return Optional.empty();
     }
 
     public Collection saveCollection(CollectionSaveDTO dto) {
@@ -97,6 +85,8 @@ public class CollectionService {
                                     .orElseThrow(() ->
                                             new IllegalArgumentException(format("Couldn't find word '%s'", words.get(1)))
                                     );
+//                            Optional<Translation> found = translationService.findTranslation(lang1, w1, lang2, w2); // todo
+
                             return translationService.findTranslation(lang1, w1, lang2, w2)
                                     .orElseThrow(() ->
                                             new IllegalArgumentException(format("Couldn't find translation '%s'(%s) -> '%s'(%s)",
@@ -154,9 +144,16 @@ public class CollectionService {
     public List<List<String>> getCollection(String name, String lang1, String lang2) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof Student) {
+//            Optional<Collection> found = collectionRepository.findCollectionByNameAndOwner(name, (Student) principal);
+//            List<TranslationDTO> dtoss = found.map(Collection::getContentDTO).orElse(null);
+//            List<TranslationDTO> sorted = dtoss.stream()
+//                    .sorted(Comparator.comparing(TranslationDTO::getWord1))
+//                    .collect(Collectors.toList());
+
             return collectionRepository.findCollectionByNameAndOwner(name, (Student) principal)
                 .map(Collection::getContentDTO)
                 .map(dtos -> dtos.stream()
+                    .sorted(Comparator.comparing(TranslationDTO::getWord1).reversed() )
                     .map(dto -> {
                         List<String> translationContent = new ArrayList<>();
                         if (dto.getLang1().equalsIgnoreCase(lang1) && dto.getLang2().equalsIgnoreCase(lang2)) {
