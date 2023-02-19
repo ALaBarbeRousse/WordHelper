@@ -8,16 +8,28 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /* TODO */
 public interface TranslationRepository extends JpaRepository<Translation, Long> {
-    Optional<Translation> findTranslationByWordLanguageAndTranslationLanguageAndAndWord(Language langFrom, Language langTo, Word word);
+    Optional<Translation> findTranslationByWordLanguageAndTranslationLanguageAndWord(Language langFrom, Language langTo, Word word);
 
     Optional<Translation> findTranslationByWordLanguageAndWordAndTranslationLanguageAndTranslation(
             Language wordLanguage,
             Word word,
             Language translationLanguage,
             Word translation);
+
+    Optional<Translation> findTranslationByPhysicalId(UUID physicalId);
+
+//    List<Translation> getTranslationsByWordLanguageAndTranslationLanguage(Language wordLanguage, Language translationLanguage);
+    Integer countTranslationByWordLanguageAndTranslationLanguage(Language wordLanguage, Language translationLanguage);
+
+    @Query("SELECT COUNT(t) FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2 AND t NOT IN ?3")
+    Integer countRestrictedTranslations(Language wordLanguage, Language translationLanguage, List<Translation> exclude);
+
+    @Query("SELECT t FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2 AND t NOT IN ?3")
+    List<Translation> getRestrictedTranslations(Language l1, Language l2, List<Translation> exclude);
 
 //    @Query("SELECT t FROM Translation t WHERE ((t.language1 = ?1 AND t.language2 = ?3) OR (t.language1 = ?3 AND t.language2 = ?1)) AND ((t.word1 = ?2 AND t.word2 = ?4) OR (t.word1 = ?4 AND t.word2 = ?2))")
 //    Optional<Translation> findTranslationByLanguage1AndWord1AndLanguage2AndWord2(

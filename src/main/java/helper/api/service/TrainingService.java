@@ -5,16 +5,23 @@ import helper.model.Language;
 import helper.model.LanguageChoice;
 import helper.model.Student;
 import helper.model.Training;
+import helper.model.TrainingResult;
 import helper.model.Translation;
-import helper.model.dto.CheckRequestDTO;
 import helper.model.dto.LanguageCreateDTO;
+import helper.model.dto.TrainingDTO;
+import helper.model.dto.TrainingResultDTO;
 import helper.model.dto.TrainingWordDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,70 +31,140 @@ public class TrainingService {
     private final TrainingRepository trainingRepository;
     private final TranslationService translationService;
 
+    private final TrainingResultService trainingResultService;
+
     /* Количество слов в выдаваемом списке на тренировку */
     @Value("${training.amount}")
     private int amount;
 
-    /* TODO */
-    public TrainingWordDTO getTrainingWord(String lang1, String lang2) {
-        return null;
-//        Object pr = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//
-//        if (pr instanceof Student) {
-//            Student student = (Student) pr;
-//
-//            /* Исправить выбор языка - выбирать надо по тому, какие языки переданы, а не какие записаны */
-//            Language l1 = languageService.findLanguageByName(lang1)
-//                    .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(lang1)));
-//            Language l2 = languageService.findLanguageByName(lang2)
-//                    .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(lang2)));
-//
-//            LanguageChoice languageChoice = languageChoiceService.findLanguageChoice(student)
-//                    .orElseGet(() -> {
-//                        /* Создать новый LanguageChoice */
-//                        Language language1 = languageService.findLanguageByName(lang1)
-//                                .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(lang1)));
-//                        Language language2 = languageService.findLanguageByName(lang2)
-//                                .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(lang2)));
-//                        return languageChoiceService.saveLanguageChoice(new LanguageChoice(student, language1, language2));
-//                    });
-//            /* Если выбор не совпадает с записанным, переписать его. */
-//            if (!languageChoice.equalsLanguages(l1.getName(), l2.getName())) {
-//                languageChoice.setLang1(l1);
-//                languageChoice.setLang2(l2);
-//                languageChoiceService.saveLanguageChoice(languageChoice);
-//            }
-//
-//            /* TODO Это должно использоваться при подборе веса */
-//            Training training = trainingRepository.findTrainingByStudentAndLanguages(
-//                    student,
-//                    languageChoice.getLang1(),
-//                    languageChoice.getLang2()
-//            ).orElseGet(() ->
-//                    trainingRepository.save(new Training(student, languageChoice.getLang1(), languageChoice.getLang2()))
-//            );
-//
-//            /* TODO Надо выбрать из таблицы переводов случайный (с учётом веса) перевод,
-//            *   который бы соответствовал выбранным языкам */
-//            /* todo новая мысль - надо возвращать не одно слово, а подобранный список */
-////            List<Translation> translationList = translationService.getRandomTranslations(training, amount);
-//
-//            Translation randomTranslation = translationService.getRandomTranslation(training);  // todo посмотреть training
-//            if (
-//                    lang1.equals(randomTranslation.getLanguage1().getName())
-//                    && lang2.equals(randomTranslation.getLanguage2().getName())
-//            ) {
-//                return new TrainingWordDTO(randomTranslation.getWord1().getWriting(), randomTranslation.getWord2().getWriting());
-//            } else {
-//                return new TrainingWordDTO(randomTranslation.getWord2().getWriting(), randomTranslation.getWord1().getWriting());
-//            }
-//        } else {
-//            throw new IllegalStateException("Couldn't determine current user");
-//        }
+    @Value("${training.factor.threshold}")
+    private Float threshold;
+
+    public TrainingDTO getWordTraining(String lang1, String lang2) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof Student) {
+            Student student = (Student) principal;
+
+            /* Выбирать надо по тому, какие языки переданы */
+            Language l1 = languageService.findLanguageByName(lang1)
+                    .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(lang1)));
+            Language l2 = languageService.findLanguageByName(lang2)
+                    .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(lang2)));
+
+            LanguageChoice languageChoice = languageChoiceService.findLanguageChoice(student)
+                .orElseGet(() -> {
+                    /* Создать новый LanguageChoice */
+                    Language language1 = languageService.findLanguageByName(lang1)
+                            .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(lang1)));
+                    Language language2 = languageService.findLanguageByName(lang2)
+                            .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(lang2)));
+                    return languageChoiceService.saveLanguageChoice(new LanguageChoice(student, language1, language2));
+                });
+            /* Если выбор не совпадает с записанным, переписать его. */
+            if (!languageChoice.equalsLanguages(lang1, lang2)) {
+                languageChoice.setLang1(l1);
+                languageChoice.setLang2(l2);
+                languageChoiceService.saveLanguageChoice(languageChoice);
+            }
+
+            Training training = trainingRepository.findTrainingByStudentAndLanguage1AndLanguage2(
+                    student,
+                    languageChoice.getLang1(),
+                    languageChoice.getLang2()
+            ).orElseGet(() ->
+                    trainingRepository.save(new Training(student, languageChoice.getLang1(), languageChoice.getLang2()))
+            );
+
+            List<TrainingResult> restrictedTR = getRestrictedTrainingResults(training);
+            List<Translation> trainTranslations =  restrictedTR.stream()
+                    .map(tr -> {
+                        int rounded = Math.round(tr.getWeight());
+                        return Collections.nCopies(rounded, tr.getTranslation());
+                    })
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList());
+            if (trainTranslations.size() > amount) {
+                trainTranslations = trainTranslations.subList(0, amount);
+            }
+
+//            List<Translation> trainTranslations = restrictedTR.stream()
+//                    .map(TrainingResult::getTranslation).collect(Collectors.toList());
+
+            /* Список надо дополнить случайными переводами из БД, не попавшими до сих пор в результаты */
+            if (trainTranslations.size() < amount) {
+                 List<Translation> usedTranslations = getAllTrainingResults(training).stream()
+                         .map(TrainingResult::getTranslation)
+                         .collect(Collectors.toList());
+                int restrictedCount = translationService.getRestrictedCount(training.getLanguage1(),
+                        training.getLanguage2(),
+                        usedTranslations);
+                if (restrictedCount + trainTranslations.size() <= 0) {
+                    trainingResultService.renewCorrectAnswers(training);
+                    return new TrainingDTO(null, List.of());
+                }
+
+                /* Подобрать список неиспользованных переводов с уникальными элементами */
+                int requiredTranslations = amount - trainTranslations.size();   // Это требуемое количество
+                if (requiredTranslations > restrictedCount) {
+                    /* Если требуемое количество больше наличествующего (restrictedCount), добавляем все наличествующие */
+                    List<Translation> restrictedTranslations = translationService.getRestrictedTranslations(training.getLanguage1(),
+                            training.getLanguage2(),
+                            usedTranslations);
+                    trainTranslations.addAll(restrictedTranslations);
+                } else {
+                    List<Translation> excludeList = new ArrayList<>(usedTranslations);
+                    while (trainTranslations.size() < amount) {
+                        Translation toAdd = translationService.getRandomTranslation(
+                                training.getLanguage1(),
+                                training.getLanguage2(),
+                                excludeList,
+                                restrictedCount);
+                        if (Objects.nonNull(toAdd)) {
+                            excludeList.add(toAdd);
+                            trainTranslations.add(toAdd);
+                        }
+                    }
+                }
+            }
+
+            /* Удаляем дубликаты */
+            trainTranslations = trainTranslations.stream().distinct().collect(Collectors.toList());
+
+            List<TrainingWordDTO> words = trainTranslations.stream()
+                    .map(translation -> {
+                        if (Objects.isNull(translation.getPhysicalId())) {
+                            translation.setPhysicalId(UUID.randomUUID());
+                            return translationService.saveTranslation(translation);
+                        }
+                        return translation;
+                    })
+                    .map(translation -> new TrainingWordDTO(
+                            translation.getPhysicalId(),
+                            translation.getWord().getWriting(),
+                            translation.getTranslation().getWriting()))
+                    .collect(Collectors.toList());
+
+            Collections.shuffle(words); // Перемешиваем слова
+
+            return new TrainingDTO(training.getPhysicalId(), words);
+        } else {
+            throw new IllegalStateException("Couldn't determine current user");
+        }
     }
 
-    /* TODO Записываем результаты тренировки в специальную табличку */
-    public void saveTrainingResults(CheckRequestDTO dto) {
-        return;
+    private List<TrainingResult> getAllTrainingResults(Training training) {
+        return trainingResultService.getAllTrainingResults(training);
+    }
+
+    /* Записываем результаты тренировки в специальную табличку */
+    public void saveTrainingResults(TrainingResultDTO dto) {
+        trainingRepository.getTrainingByPhysicalId(dto.getId())
+            .ifPresent(training -> trainingResultService.saveResults(training, dto.getResults()));
+    }
+
+    /* Берём ранее сохранённые результаты тренировок */
+    private List<TrainingResult> getRestrictedTrainingResults(Training training) {
+        return trainingResultService.getTrainingResults(training, threshold, amount);
     }
 }

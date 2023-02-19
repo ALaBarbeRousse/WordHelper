@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -29,6 +30,9 @@ public class    Translation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, columnDefinition = "bigint")
     private Long id;
+
+    @Column(name="physical_id")
+    private UUID physicalId;
 
     @ManyToOne
     @JoinColumn(name = "word_language")
@@ -55,5 +59,10 @@ public class    Translation {
 
     public TranslationDTO toDTO() {
         return new TranslationDTO(wordLanguage.getName(), word.getWriting(), translationLanguage.getName(), translation.getWriting());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Translation: %s -> %s", word.getWriting(), translation.getWriting())  ;
     }
 }

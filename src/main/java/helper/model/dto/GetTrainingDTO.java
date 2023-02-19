@@ -5,7 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CheckRequestDTO {
+public class GetTrainingDTO {
     private String lang1, lang2;
-    private CheckResultDTO result;
 }

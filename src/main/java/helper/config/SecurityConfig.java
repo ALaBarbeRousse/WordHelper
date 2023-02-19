@@ -39,8 +39,9 @@ public class SecurityConfig {
 
                 .antMatchers(HttpMethod.GET, "/training", "/css/training.css", "/css/language.css", "/js/training.js").hasAuthority("Student") // Training page
                 .antMatchers(HttpMethod.GET, "/img/go.png", "/img/stop.png", "/img/send*", "/img/wrong.png").hasAuthority("Student") // Training page
-                .antMatchers(HttpMethod.GET, "/snd/error.mp3").hasAuthority("Student") // Training page
+                .antMatchers(HttpMethod.GET, "/snd/success.mp3", "/snd/error.mp3", "/snd/alert.mp3").hasAuthority("Student") // Training page
                 .antMatchers(HttpMethod.POST, "/api/training").hasAuthority("Student") // Training page
+                .antMatchers(HttpMethod.POST, "/api/training/result").hasAuthority("Student") // Training page
 
                 .antMatchers(HttpMethod.GET, "/collection", "/css/collection.css", "/js/collection.js", "/js/language.js").hasAuthority("Student") // Collection edit page
                 .antMatchers(HttpMethod.GET, "/img/new.png", "/css/language.css", "/img/arrows.png", "/img/delete.png", "/img/home*").hasAuthority("Student") // Collection edit page

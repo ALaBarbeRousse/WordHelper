@@ -48,9 +48,13 @@ div.go_stop_pane {
     border: none;
     outline: none;
     box-shadow: none;
+    vertical-align: middle;
 }
 #go_stop_btn:hover {
     box-shadow: 0 0 5px gray;
+}
+#go_stop_btn:focus {
+    box-shadow: 0 0 15px gray;
 }
 #go_stop_btn:active {
     border: none;
@@ -62,6 +66,12 @@ div.go_stop_pane {
     box-shadow: none;
     pointer-events: none;
 }
+#train_message {
+    color: red;
+    height: 40px;
+    display: inline-block;
+    vertical-align: middle;
+}
 
 #train_markup {
     width: 50%;
@@ -70,7 +80,7 @@ div.go_stop_pane {
     text-align: center;
     visibility: hidden;
     display: grid;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
 }
 #to_translate {
@@ -129,4 +139,25 @@ div.go_stop_pane {
 
 div.description_env {
     background-color: #D4F69E;
+}
+
+div.word_amnt {
+    /*border: 1px solid red;*/
+    font-size: 175%;
+    font-weight: bold;
+    margin: auto;
+}
+div.incorrect {
+    /*border: 1px solid red;*/
+    color: red;
+    font-size: 125%;
+    font-weight: bold;
+    margin: auto;
+}
+div.correct {
+    /*border: 1px solid green;*/
+    font-size: 125%;
+    color: green;
+    font-weight: bold;
+    margin: auto;
 }

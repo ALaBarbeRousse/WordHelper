@@ -1,8 +1,8 @@
-let wordToTranslate = {};
-let nextWordReady = false;
-let animationComplete = true;
-
 let t, l1, l2;
+
+let trainingWords;
+let trainResults = [];
+let trainingId;
 
 $(document).ready(function() {
     t = $('#translation');
@@ -37,36 +37,105 @@ $(document).ready(function() {
     });
 });
 
-function getWord() {
-    if('visible' === $('#train_markup').css("visibility")) {
-        /* Загружаем слово */
+function stopTraining() {
+    if (trainResults.length) {
+        /* Отправить результат тренировки на сервер */
         let data = {
-            "lang1": l1.val().toLowerCase(),
-            "lang2": l2.val().toLowerCase()
-        };
+            "id": trainingId,
+            "results": trainResults
+        }
         $.ajax({
             type: 'POST',
-            url: 'api/training',
+            url: 'api/training/result',
             contentType:"application/json; charset=utf-8",
             data: JSON.stringify(data),
             success: function (data) {
-                // console.log("Ответ: " + JSON.stringify(data));
-                paintWord(data);
+                // console.log("Ответ на отправку результата тренировки: " + JSON.stringify(data));
+                playSound('../snd/alert.mp3');
+                $("#word_message").text('Результаты тренировки успешно сохранены').fadeIn(10);
+                setTimeout(function() {
+                    $('#word_message').fadeOut(500, function() {
+                        showTrainingMarkup(true);
+                    });
+                }, 750);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                $("#word_message").text('Не удалось получить слово').fadeIn(10);
+                playSound('../snd/error.mp3');
+                $("#word_message").text('Не удалось отправить результаты тренировки').fadeIn(10);
                 setTimeout(function() {
-                    $('#word_message').fadeOut(2000);
-                }, 5000);
+                    $('#word_message').fadeOut(1000, function() {
+                        showTrainingMarkup(true);
+                    });
+                }, 1000);
             }
         });
+    } else {
+        showTrainingMarkup(true);
     }
+}
+
+function startTraining() {
+    // console.log("Это startTraining, trainResults: " + JSON.stringify(trainResults));
+
+    trainResults = [];
+    /* Загружаем слова для тренировки */
+    let data = {
+        "lang1": l1.val().toLowerCase(),
+        "lang2": l2.val().toLowerCase()
+    };
+    $.ajax({
+        type: 'POST',
+        url: 'api/training',
+        contentType:"application/json; charset=utf-8",
+        data: JSON.stringify(data),
+        success: function (data) {
+            // console.log("Слова для тренировки: " + JSON.stringify(data));
+            if (data.words.length) {
+                showTrainingMarkup(false);
+                trainingId = data.id;
+                trainingWords = data.words;
+                $('#word_total').text(data.words.length);
+                paintWord();
+                $('#translation').focus();
+            } else {
+                $('#go_stop_btn').hide();
+                $("#train_message").text('Слов для тренировки нет').fadeIn(10);
+                setTimeout(function() {
+                    $('#train_message').fadeOut(1000, function () {
+                        $('#go_stop_btn').show();
+                        $('#go_stop_btn').focus();
+                    });
+                }, 1000);
+            }
+
+            // showTrainingMarkup(false);
+            //
+            // t.focus();
+            // trainingId = data.id;
+            // trainingWords = data.words;
+            // $('#word_total').text(data.words.length);
+            // paintWord();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            $("#word_message").text('Не удалось загрузить слова').fadeIn(10);
+            setTimeout(function() {
+                $('#word_message').fadeOut(2000);
+            }, 5000);
+        }
+    });
+    /* Обнуляем счётчики */
+    $('.incorrect').text('0');
+    $('.correct').text('0');
+    $('#word_no').text('0');
 }
 
 function onGoStopButton() {
     /* Загружаем картинку тренировки */
-    showTrainingMarkup();
-    getWord();
+    if('visible' === $('#train_markup').css("visibility")) {
+        stopTraining();
+    } else {
+        startTraining();
+    }
 }
 
 function loadCollections() {
@@ -108,21 +177,21 @@ function checkFields() {
     }
 }
 
-function showTrainingMarkup() {
-    if('hidden' === $('#train_markup').css("visibility")) {
-        $('#swap_button').prop("disabled", true);
-        l1.prop("disabled", true);
-        l2.prop("disabled", true);
-        $('#collection').prop("disabled", true);
-        $('#train_markup').css("visibility", "visible");
-        $('#go_stop_btn').css('background-image', 'url("../img/stop.png")');
-    } else {
+function showTrainingMarkup(visible) {
+    if(visible) {
         $('#swap_button').prop("disabled", false);
         l1.prop("disabled", false);
         l2.prop("disabled", false);
         $('#collection').prop("disabled", false);
         $('#train_markup').css("visibility", "hidden");
         $('#go_stop_btn').css('background-image', 'url("../img/go.png")');
+    } else {
+        $('#swap_button').prop("disabled", true);
+        l1.prop("disabled", true);
+        l2.prop("disabled", true);
+        $('#collection').prop("disabled", true);
+        $('#train_markup').css("visibility", "visible");
+        $('#go_stop_btn').css('background-image', 'url("../img/stop.png")');
     }
 }
 
@@ -132,82 +201,105 @@ function setTrainMarkupEnabled(enabled) {
 }
 
 function onCheckButton() {
+    // console.log("Это onCheckButton, trainingWords: " + JSON.stringify(trainingWords));
     if (!$('#check_btn').prop("disabled")) {
-        showResultCorrect(wordToTranslate.translation === t.val().toLowerCase());
+        if(trainingWords[0].t === t.val().toLowerCase()) {
+            // console.log("Да, это верно");
+            trainResults.push({
+                "id": trainingWords[0].p,
+                "correct": true
+            });
+            incCorrect();
+            showResultCorrect(true);
+        } else {
+            // console.log("Нет, неверно");
+            trainResults.push({
+                "id": trainingWords[0].p,
+                "correct": false
+            });
+            incIncorrect();
+            showResultCorrect(false);
+        }
+        incCounter();
+        trainingWords.shift();
     }
 }
 
 function showResultCorrect(correct) {
-    sendCheckResult(correct);
-
-    animationComplete = false;
     if (correct) {
         playSound('../snd/success.mp3');
         $('#check_result').fadeTo(0, 1, function() {
             $(this).css('background-image', 'url("../img/correct.png")');
         }).delay(500).fadeTo(500, 0, function() {
             $('#check_result').css('background-image', '');
-            animationComplete = true;
-            if (nextWordReady) {
-                paintWord(wordToTranslate);
+            if (trainingWords.length > 0) {
+                paintWord();
+            } else {
+                paintEndTraining();
             }
         });
     } else {
-        t.val(wordToTranslate.translation);
+        t.val(trainingWords[0].t);
         playSound('../snd/error.mp3');
         $('#check_result').fadeTo(0, 1, function() {
             $(this).css('background-image', 'url("../img/wrong.png")');
-        }).delay(2500).fadeTo(500, 0, function () {
+        }).delay(500).fadeTo(500, 0, function () {
             $('#check_result').css('background-image', '');
-            animationComplete = true;
-            if (nextWordReady) {
-                paintWord(wordToTranslate);
+            if (trainingWords.length > 0) {
+                paintWord();
+            } else {
+                paintEndTraining();
             }
         });
     }
 }
 
-function sendCheckResult(correct) {
-    nextWordReady = false;
-
-    let result = wordToTranslate;
-    result.correct = correct;
-    let data = {
-        "lang1": l1.val().toLowerCase(),
-        "lang2": l2.val().toLowerCase(),
-        "result": result
-    };
-
-    $.ajax({
-        type: 'POST',
-        url: 'api/training',
-        contentType:"application/json; charset=utf-8",
-        data: JSON.stringify(data),
-        success: function (data) {
-            wordToTranslate = data;
-            nextWordReady = true;
-            if (animationComplete) {
-                paintWord(data);
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            $("#word_message").text('Не удалось отправить результат проверки').fadeIn(10);
-            setTimeout(function() {
-                $('#word_message').fadeOut(2000);
-            }, 3000);
-        }
-    });
-}
-
-function paintWord(data) {
+function paintWord() {
+    // console.log("paintWord, trainingWords: " + JSON.stringify(trainingWords));
+    /* Берём первое слово и показываем его */
+    $('#to_translate').text(trainingWords[0].w);
+    t.val('');
     setTrainMarkupEnabled(true);
-    wordToTranslate = data;
-    $('#to_translate').text(data.word);
-    t.val("").focus();
 }
 
 function swapLanguages() {
     let temp = l1.val();
     l1.val(l2.val());
     l2.val(temp);
+}
+
+function incCorrect() {
+    let corr = $('.correct');
+    if (corr.text()) {
+        corr.text(parseInt(corr.text()) + 1);
+    } else {
+        corr.text(1);
+    }
+}
+function incIncorrect() {
+    let incorr = $('.incorrect');
+    if (incorr.text()) {
+        incorr.text(parseInt(incorr.text()) + 1);
+    } else {
+        incorr.text(1);
+    }
+}
+
+function incCounter() {
+    let c = $('#word_no');
+    c.text(parseInt(c.text()) + 1);
+}
+
+function paintEndTraining() {
+    // console.log("Надо завершать");
+    $('#to_translate').text('');
+    t.val('');
+    setTrainMarkupEnabled(false);
+
+    $('#go_stop_btn').focus();
+
+    $("#word_message").text('Тренировка завершена').fadeIn(10);
+    setTimeout(function() {
+        $('#word_message').fadeOut(1000);
+    }, 1000);
 }

@@ -4,21 +4,31 @@ import helper.model.Language;
 import helper.model.Translation;
 import helper.model.Word;
 import helper.api.jpa.TranslationRepository;
-import helper.model.dto.FindTranslationDTO;
-import helper.model.dto.FindTranslationResultDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class TranslationService {
     private final TranslationRepository translationRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public Optional<Translation> findTranslation(UUID uuid) {
+        return translationRepository.findTranslationByPhysicalId(uuid);
+    }
+
     /*
-     * TODO Try to find translation
+     * Try to find translation
      */
     public Optional<Translation> findTranslation(Language wordLanguage, Word word, Language translationLanguage, Word translation) {
         return translationRepository.findTranslationByWordLanguageAndWordAndTranslationLanguageAndTranslation(
@@ -33,43 +43,51 @@ public class TranslationService {
         return translationRepository.save(translation);
     }
 
-    /* TODO Сделано крайне неэффективно */
-//    public Translation getRandomTranslation(Training training) {
-//        List<Translation> translations = translationRepository.getTranslationsByLanguage1AndLanguage2(
-//                training.getLanguage1(),
-//                training.getLanguage2()
-//        );
-//        /* todo Надо будет в какое-то подобие кэша складывать результат, чтобы не лазить каждый раз в базу. */
-//        Random random = new Random(System.currentTimeMillis());
-//
-//        /* TODO Сделать также развесовку */
-//
-//        return translations.get(random.nextInt(translations.size()));
-//    }
-
     public Optional<Translation> findTranslation(Language langFrom, Word word, Language langTo) {
-        return translationRepository.findTranslationByWordLanguageAndTranslationLanguageAndAndWord(langFrom, langTo, word);
+        return translationRepository.findTranslationByWordLanguageAndTranslationLanguageAndWord(langFrom, langTo, word);
     }
 
-    /* TODO Сохраняем список переводов*/
+    /* Сохраняем список переводов*/
     public List<Translation> saveTranslations(List<Translation> translations) {
         return translationRepository.saveAll(translations);
     }
 
+    /* Хватаем случайный перевод */
+    public Translation getRandomTranslation(Language l1, Language l2, List<Translation> exclude, int restrictedCount) {
+        Random random = new Random(System.currentTimeMillis());
 
-    /**
-     * TODO Берём все переводы из подборки по критериям из training - подборка и пара языков
-     * @param training
-     * @return
-//     */
-//    public List<Translation> getRandomTranslations(Training training, int amount) {
-//        Collection collection = training.getCollection();
-//        Language l1 = training.getLanguage1();
-//        Language l2 = training.getLanguage2();
-//
-//        /* todo это без учёта подборки */
-//        List<Translation> found = translationRepository.getTranslationsByLanguage1AndLanguage2(l1, l2);
-//
-//        return List.of();
-//    }
+        Query query;
+        if (exclude.isEmpty()) {
+            query = entityManager.createQuery("SELECT t FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2");
+        } else {
+            query = entityManager
+                    .createQuery("SELECT t FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2 AND t NOT IN ?3");
+            query.setParameter(3, exclude);
+        }
+        query.setParameter(1, l1);
+        query.setParameter(2, l2);
+
+        int restrictedRandom = random.nextInt(restrictedCount);
+        query.setFirstResult(restrictedRandom);
+        query.setMaxResults(1);
+        try {
+            return (Translation) query.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public int getRestrictedCount(Language l1, Language l2, List<Translation> exclude) {
+        Integer ret;
+        if (exclude.isEmpty()) {
+            ret = translationRepository.countTranslationByWordLanguageAndTranslationLanguage(l1, l2);
+        } else {
+            ret = translationRepository.countRestrictedTranslations(l1, l2, exclude);
+        }
+        return ret;
+    }
+
+    public List<Translation> getRestrictedTranslations(Language l1, Language l2, List<Translation> exclude) {
+        return translationRepository.getRestrictedTranslations(l1, l2, exclude);
+    }
 }

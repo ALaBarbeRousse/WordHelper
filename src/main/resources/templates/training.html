@@ -50,15 +50,20 @@
   </div>
 
   <div class="go_stop_pane">
+    <span id="train_message"></span>
     <button id="go_stop_btn"></button>
   </div>
 </fieldset>
 
 <fieldset id="train_markup">
+  <div class="incorrect"></div>
+  <div class="word_amnt"><span id="word_no"></span>/<span id="word_total"></span></div>
+  <div class="correct"></div>
+
   <div></div><div id="to_translate"></div><div></div>
   <div></div><input id="translation" type="text" disabled="disabled"/><div id="check_result"></div>
   <div></div><div id="word_message_wrapper"><span id="word_message"></span></div><div></div>
-  <div></div><div><button id="check_btn" disabled="disabled"></button></div><div></div>
+  <div></div><div><button id="check_btn" disabled="disabled" title="Отправить"></button></div><div></div>
 </fieldset>
 </body>
 </html>
