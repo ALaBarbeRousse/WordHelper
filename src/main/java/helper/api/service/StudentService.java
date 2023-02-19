@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -41,8 +42,23 @@ public class StudentService {
     private final LanguageService languageService;
     private final PasswordEncoder encoder;
     private final LanguageChoiceService languageChoiceService;
-
     private final RoleService roleService;
+
+    @PostConstruct
+    private void init() {
+        createAdminUser();
+    }
+
+    private Student createAdminUser() {
+        return studentRepository.findByLogin("admin")
+            .orElseGet(() -> {
+                Student user = createStudent(
+                        new StudentCreateDTO("Администратор", "admin", "admin", "русский"));
+                Role adminRole = roleService.findRoleByName(Roles.ROLE_ADMIN.getRole().getAuthority());
+                user.setRoles(Set.of(adminRole));
+                return studentRepository.save(user);
+            });
+    }
 
     /**
      * New student registration
@@ -120,11 +136,7 @@ public class StudentService {
         model.addAttribute("language_choice", getLanguageChoice());
     }
 
-    /**
-     * TODO Надо вернуть пару языков
-     *
-     * @return
-     */
+    /* Надо вернуть пару языков */
     private LanguageChoiceDTO getLanguageChoice() {
         Object pr = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (pr instanceof Student) {
