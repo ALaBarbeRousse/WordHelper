@@ -80,6 +80,7 @@ function validateFields() {
     if (l1.val() && l2.val() && w1.val() && w2.val()) {
         $('#ok_btn').prop("disabled", false);
     } else {
+        showArticleExist(false);
         $('#ok_btn').prop("disabled", true);
     }
 }
