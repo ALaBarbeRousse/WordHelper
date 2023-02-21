@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.UUID;
 
 @Entity
@@ -22,7 +23,8 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "translation")
+@Table(name = "translation",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"word_language", "word", "translation_language", "translation"}))
 public class    Translation {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)

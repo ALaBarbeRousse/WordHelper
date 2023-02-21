@@ -31,11 +31,6 @@ public class CollectionController {
         return collectionService.findTranslation(dto).stream()
                 .map(Translation::toDTO)
                 .collect(Collectors.toList());
-
-//        return translations.stream()
-//                .map(Translation::toDTO)
-//                .findFirst()
-//                .orElse(null);
     }
 
     @PostMapping

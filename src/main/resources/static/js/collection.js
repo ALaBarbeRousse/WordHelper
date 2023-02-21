@@ -106,7 +106,7 @@ function showTranslation(word1, word2) {
 function onSearchInput() {
     let word = ts.val().toLowerCase();
 
-    console.log("onSearchInput: " + word);
+    // console.log("onSearchInput: " + word);
 
     if (ts.val().length < 1) {
         hideTranslation();
@@ -125,7 +125,7 @@ function onSearchInput() {
         contentType:"application/json; charset=utf-8",
         data: JSON.stringify(data),
         success: function (data) {
-            console.log("Слово найдено: " + JSON.stringify(data));
+            // console.log("Слово найдено: " + JSON.stringify(data));
             wl.empty();
             if (data.length === 0) {
                 hideTranslation();
@@ -234,13 +234,9 @@ function addToCollection(toAdd1, toAdd2) {
     created.fadeIn(200, function () {
         ts.val('');
         ts.focus();
-        // console.log("Вызов 1");
-        // onSearchInput();
     });
     ts.val('');
     ts.focus();
-    // console.log("Вызов 2");
-    // onSearchInput();
 }
 
 function getRowWords(row) {
@@ -249,8 +245,6 @@ function getRowWords(row) {
 }
 
 function clearForm() {
-    // c.val('');
-    // wc.empty();
     ts.val('');
     hideTranslation();
 }
