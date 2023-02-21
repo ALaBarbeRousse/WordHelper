@@ -77,14 +77,6 @@ public class TrainingResultService {
             trainingResultRepository.saveAllAndFlush(removeDuplicates(collected));
         } catch (Exception e) {
             e.printStackTrace();
-
-//            collected.forEach(trainingResult -> {
-//                try {
-//                    trainingResultRepository.saveAndFlush(trainingResult);
-//                } catch (Exception ex) {
-//                    e.printStackTrace();
-//                }
-//            });
         }
     }
 

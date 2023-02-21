@@ -52,12 +52,12 @@ function stopTraining() {
             success: function (data) {
                 // console.log("Ответ на отправку результата тренировки: " + JSON.stringify(data));
                 playSound('../snd/alert.mp3');
-                $("#word_message").text('Результаты тренировки успешно сохранены').fadeIn(10);
+                $("#word_message").text('Результаты тренировки сохранены').fadeIn(10);
                 setTimeout(function() {
-                    $('#word_message').fadeOut(500, function() {
+                    $('#word_message').fadeOut(300, function() {
                         showTrainingMarkup(true);
                     });
-                }, 750);
+                }, 300);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 playSound('../snd/error.mp3');
@@ -81,7 +81,8 @@ function startTraining() {
     /* Загружаем слова для тренировки */
     let data = {
         "lang1": l1.val().toLowerCase(),
-        "lang2": l2.val().toLowerCase()
+        "lang2": l2.val().toLowerCase(),
+        "collection": $('#collection').val()
     };
     $.ajax({
         type: 'POST',
@@ -107,14 +108,6 @@ function startTraining() {
                     });
                 }, 1000);
             }
-
-            // showTrainingMarkup(false);
-            //
-            // t.focus();
-            // trainingId = data.id;
-            // trainingWords = data.words;
-            // $('#word_total').text(data.words.length);
-            // paintWord();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             $("#word_message").text('Не удалось загрузить слова').fadeIn(10);
@@ -139,7 +132,24 @@ function onGoStopButton() {
 }
 
 function loadCollections() {
-    /* todo Загрузить существующие подборки этого пользователя для этой пары языков */
+    /* Загрузить существующие подборки этого пользователя для этой пары языков */
+    $.ajax({
+        type: 'GET',
+        url: 'api/collection/names',
+        contentType:"application/json; charset=utf-8",
+        success: function (data) {
+            for (let i = 0; i < data.length; i++) {
+                $('#collection_list').append($('<option />').val(data[i]).text(data[i]));
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Не удалось получить список подборок');
+            $("#collection_message").text('Не удалось получить список подборок').fadeIn(10);
+            setTimeout(function() {
+                $('#collection_message').fadeOut(3000);
+            }, 5000);
+        }
+    });
 }
 
 function loadLanguages() {
@@ -230,7 +240,7 @@ function showResultCorrect(correct) {
         playSound('../snd/success.mp3');
         $('#check_result').fadeTo(0, 1, function() {
             $(this).css('background-image', 'url("../img/correct.png")');
-        }).delay(500).fadeTo(500, 0, function() {
+        }).delay(300).fadeTo(300, 0, function() {
             $('#check_result').css('background-image', '');
             if (trainingWords.length > 0) {
                 paintWord();
@@ -243,7 +253,7 @@ function showResultCorrect(correct) {
         playSound('../snd/error.mp3');
         $('#check_result').fadeTo(0, 1, function() {
             $(this).css('background-image', 'url("../img/wrong.png")');
-        }).delay(500).fadeTo(500, 0, function () {
+        }).delay(1500).fadeTo(1000, 0, function () {
             $('#check_result').css('background-image', '');
             if (trainingWords.length > 0) {
                 paintWord();

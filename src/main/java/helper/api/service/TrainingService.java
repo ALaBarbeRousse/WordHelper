@@ -1,6 +1,7 @@
 package helper.api.service;
 
 import helper.api.jpa.TrainingRepository;
+import helper.model.Collection;
 import helper.model.Language;
 import helper.model.LanguageChoice;
 import helper.model.Student;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -30,8 +32,8 @@ public class TrainingService {
     private final LanguageService languageService;
     private final TrainingRepository trainingRepository;
     private final TranslationService translationService;
-
     private final TrainingResultService trainingResultService;
+    private final CollectionService collectionService;
 
     /* Количество слов в выдаваемом списке на тренировку */
     @Value("${training.amount}")
@@ -40,7 +42,7 @@ public class TrainingService {
     @Value("${training.factor.threshold}")
     private Float threshold;
 
-    public TrainingDTO getWordTraining(String lang1, String lang2) {
+    public TrainingDTO getWordTraining(String lang1, String lang2, String cName) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal instanceof Student) {
@@ -68,15 +70,20 @@ public class TrainingService {
                 languageChoiceService.saveLanguageChoice(languageChoice);
             }
 
-            Training training = trainingRepository.findTrainingByStudentAndLanguage1AndLanguage2(
-                    student,
-                    languageChoice.getLang1(),
-                    languageChoice.getLang2()
+            Collection foundCollection = collectionService.findCollection(cName, l1, l2).orElse(null);
+
+            Training training = trainingRepository.findTrainingByStudentAndLanguage1AndLanguage2AndCollection(
+                student,
+                languageChoice.getLang1(),
+                languageChoice.getLang2(),
+                foundCollection
             ).orElseGet(() ->
-                    trainingRepository.save(new Training(student, languageChoice.getLang1(), languageChoice.getLang2()))
+                trainingRepository.save(new Training(student, languageChoice.getLang1(), languageChoice.getLang2(), foundCollection))
             );
 
-            List<TrainingResult> restrictedTR = getRestrictedTrainingResults(training);
+            /* Берём ранее сохранённые результаты тренировок */
+            List<TrainingResult> restrictedTR = trainingResultService.getTrainingResults(training, threshold, amount);
+
             List<Translation> trainTranslations =  restrictedTR.stream()
                     .map(tr -> {
                         int rounded = Math.round(tr.getWeight());
@@ -88,29 +95,34 @@ public class TrainingService {
                 trainTranslations = trainTranslations.subList(0, amount);
             }
 
-//            List<Translation> trainTranslations = restrictedTR.stream()
-//                    .map(TrainingResult::getTranslation).collect(Collectors.toList());
-
             /* Список надо дополнить случайными переводами из БД, не попавшими до сих пор в результаты */
             if (trainTranslations.size() < amount) {
                  List<Translation> usedTranslations = getAllTrainingResults(training).stream()
                          .map(TrainingResult::getTranslation)
                          .collect(Collectors.toList());
-                int restrictedCount = translationService.getRestrictedCount(training.getLanguage1(),
+                 List<Translation> collectionTranslations = Optional.ofNullable(foundCollection)
+                         .map(Collection::getTranslations)
+                         .orElse(List.of());
+                int restrictedCount = translationService.getRestrictedCount(
+                        training.getLanguage1(),
                         training.getLanguage2(),
-                        usedTranslations);
+                        usedTranslations,
+                        collectionTranslations
+                );
                 if (restrictedCount + trainTranslations.size() <= 0) {
                     trainingResultService.renewCorrectAnswers(training);
                     return new TrainingDTO(null, List.of());
                 }
 
                 /* Подобрать список неиспользованных переводов с уникальными элементами */
-                int requiredTranslations = amount - trainTranslations.size();   // Это требуемое количество
-                if (requiredTranslations > restrictedCount) {
+                int requiredAmount = amount - trainTranslations.size();   // Это требуемое количество переводов
+                if (requiredAmount > restrictedCount) {
                     /* Если требуемое количество больше наличествующего (restrictedCount), добавляем все наличествующие */
                     List<Translation> restrictedTranslations = translationService.getRestrictedTranslations(training.getLanguage1(),
                             training.getLanguage2(),
-                            usedTranslations);
+                            usedTranslations,
+                            collectionTranslations
+                    );
                     trainTranslations.addAll(restrictedTranslations);
                 } else {
                     List<Translation> excludeList = new ArrayList<>(usedTranslations);
@@ -119,6 +131,7 @@ public class TrainingService {
                                 training.getLanguage1(),
                                 training.getLanguage2(),
                                 excludeList,
+                                collectionTranslations,
                                 restrictedCount);
                         if (Objects.nonNull(toAdd)) {
                             excludeList.add(toAdd);
@@ -161,10 +174,5 @@ public class TrainingService {
     public void saveTrainingResults(TrainingResultDTO dto) {
         trainingRepository.getTrainingByPhysicalId(dto.getId())
             .ifPresent(training -> trainingResultService.saveResults(training, dto.getResults()));
-    }
-
-    /* Берём ранее сохранённые результаты тренировок */
-    private List<TrainingResult> getRestrictedTrainingResults(Training training) {
-        return trainingResultService.getTrainingResults(training, threshold, amount);
     }
 }

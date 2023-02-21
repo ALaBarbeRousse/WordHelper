@@ -1,5 +1,6 @@
 package helper.api.jpa;
 
+import helper.model.Collection;
 import helper.model.Language;
 import helper.model.Student;
 import helper.model.Training;
@@ -10,6 +11,11 @@ import java.util.UUID;
 
 public interface TrainingRepository extends JpaRepository<Training, String> {
 
-    Optional<Training> findTrainingByStudentAndLanguage1AndLanguage2(Student student, Language language1, Language language2);
+    Optional<Training> findTrainingByStudentAndLanguage1AndLanguage2AndCollection(
+            Student student,
+            Language language1,
+            Language language2,
+            Collection collection
+    );
     Optional<Training> getTrainingByPhysicalId(UUID physicalId);
 }

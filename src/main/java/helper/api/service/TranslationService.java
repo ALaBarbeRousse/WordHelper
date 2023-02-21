@@ -53,15 +53,28 @@ public class TranslationService {
     }
 
     /* Хватаем случайный перевод */
-    public Translation getRandomTranslation(Language l1, Language l2, List<Translation> exclude, int restrictedCount) {
+    public Translation getRandomTranslation(Language l1, Language l2, List<Translation> exclude, List<Translation> include, int restrictedCount) {
         Random random = new Random(System.currentTimeMillis());
 
         Query query;
         if (exclude.isEmpty()) {
-            query = entityManager.createQuery("SELECT t FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2");
+            if (include.isEmpty()) {
+                query = entityManager
+                        .createQuery("SELECT t FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2");
+            } else {
+                query = entityManager
+                        .createQuery("SELECT t FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2 AND t IN ?3");
+                query.setParameter(3, include);
+            }
         } else {
-            query = entityManager
-                    .createQuery("SELECT t FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2 AND t NOT IN ?3");
+            if (include.isEmpty()) {
+                query = entityManager
+                        .createQuery("SELECT t FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2 AND t NOT IN ?3");
+            } else {
+                query = entityManager
+                        .createQuery("SELECT t FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2 AND t NOT IN ?3 AND t in ?4");
+                query.setParameter(4, include);
+            }
             query.setParameter(3, exclude);
         }
         query.setParameter(1, l1);
@@ -77,17 +90,37 @@ public class TranslationService {
         }
     }
 
-    public int getRestrictedCount(Language l1, Language l2, List<Translation> exclude) {
-        Integer ret;
+    public int getRestrictedCount(Language l1, Language l2, List<Translation> exclude, List<Translation> include) {
+        /* Если список include не пустой, искать только в нём */
         if (exclude.isEmpty()) {
-            ret = translationRepository.countTranslationByWordLanguageAndTranslationLanguage(l1, l2);
+            if (include.isEmpty()) {
+                return translationRepository.countTranslationByWordLanguageAndTranslationLanguage(l1, l2);
+            } else {
+                /* Случай, когда в заданной подборке есть переводы */
+                return translationRepository.countTranslation(l1, l2, include);
+            }
         } else {
-            ret = translationRepository.countRestrictedTranslations(l1, l2, exclude);
+            if (include.isEmpty()) {
+                return translationRepository.countRestrictedTranslationsExclude(l1, l2, exclude);
+            } else {
+                return translationRepository.countRestrictedTranslationsIncludeExclude(l1, l2, include, exclude);
+            }
         }
-        return ret;
     }
 
-    public List<Translation> getRestrictedTranslations(Language l1, Language l2, List<Translation> exclude) {
-        return translationRepository.getRestrictedTranslations(l1, l2, exclude);
+    public List<Translation> getRestrictedTranslations(Language l1, Language l2, List<Translation> exclude, List<Translation> include) {
+        if (include.isEmpty()) {
+            if (exclude.isEmpty()) {
+                return translationRepository.getRestrictedTranslations(l1, l2);
+            } else {
+                return translationRepository.getRestrictedTranslationsExclude(l1, l2, exclude);
+            }
+        } else {
+            if (exclude.isEmpty()) {
+                return translationRepository.getRestrictedTranslationsInclude(l1, l2, include);
+            } else {
+                return translationRepository.getRestrictedTranslationsIncludeExclude(l1, l2, include, exclude);
+            }
+        }
     }
 }

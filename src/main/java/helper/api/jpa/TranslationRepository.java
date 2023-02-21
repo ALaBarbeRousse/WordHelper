@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-/* TODO */
 public interface TranslationRepository extends JpaRepository<Translation, Long> {
     Optional<Translation> findTranslationByWordLanguageAndTranslationLanguageAndWord(Language langFrom, Language langTo, Word word);
 
@@ -22,26 +21,26 @@ public interface TranslationRepository extends JpaRepository<Translation, Long> 
 
     Optional<Translation> findTranslationByPhysicalId(UUID physicalId);
 
-//    List<Translation> getTranslationsByWordLanguageAndTranslationLanguage(Language wordLanguage, Language translationLanguage);
     Integer countTranslationByWordLanguageAndTranslationLanguage(Language wordLanguage, Language translationLanguage);
 
     @Query("SELECT COUNT(t) FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2 AND t NOT IN ?3")
-    Integer countRestrictedTranslations(Language wordLanguage, Language translationLanguage, List<Translation> exclude);
+    Integer countRestrictedTranslationsExclude(Language wordLanguage, Language translationLanguage, List<Translation> exclude);
+
+    @Query("SELECT COUNT(t) FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2 AND t IN ?3 AND t NOT IN ?4")
+    Integer countRestrictedTranslationsIncludeExclude(Language l1, Language l2, List<Translation> include, List<Translation> exclude);
+
+    @Query("SELECT COUNT(t) FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2 AND t in ?3")
+    Integer countTranslation(Language l1, Language l2, List<Translation> include);
 
     @Query("SELECT t FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2 AND t NOT IN ?3")
-    List<Translation> getRestrictedTranslations(Language l1, Language l2, List<Translation> exclude);
+    List<Translation> getRestrictedTranslationsExclude(Language l1, Language l2, List<Translation> exclude);
 
-//    @Query("SELECT t FROM Translation t WHERE ((t.language1 = ?1 AND t.language2 = ?3) OR (t.language1 = ?3 AND t.language2 = ?1)) AND ((t.word1 = ?2 AND t.word2 = ?4) OR (t.word1 = ?4 AND t.word2 = ?2))")
-//    Optional<Translation> findTranslationByLanguage1AndWord1AndLanguage2AndWord2(
-//            Language oneLanguage,
-//            Word oneWord,
-//            Language anotherLanguage,
-//            Word anotherWord
-//    );
+    @Query("SELECT t FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2")
+    List<Translation> getRestrictedTranslations(Language l1, Language l2);
 
-//    @Query("SELECT t FROM Translation t WHERE (t.language1 = ?1 OR t.language2 = ?1) AND (t.language1 = ?2 OR t.language2 = ?2)")
-//    List<Translation> getTranslationsByLanguage1AndLanguage2(Language language1, Language language2);
+    @Query("SELECT t FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2 AND t IN ?3")
+    List<Translation> getRestrictedTranslationsInclude(Language l1, Language l2, List<Translation> include);
 
-//    @Query("SELECT t FROM Translation t WHERE (t.language1 = ?1 OR t.language2 = ?1) AND (t.language1 = ?2 OR t.language2 = ?2) AND (t.word1 = ?3 OR t.word2 = ?3)")
-//    Optional<Translation> findTranslation(Language lang1, Language lang2, Word word);
+    @Query("SELECT t FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2 AND t IN ?3 AND t NOT IN ?4")
+    List<Translation> getRestrictedTranslationsIncludeExclude(Language l1, Language l2, List<Translation> include, List<Translation> exclude);
 }

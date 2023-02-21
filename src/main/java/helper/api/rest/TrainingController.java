@@ -18,7 +18,7 @@ public class TrainingController {
 
     @PostMapping
     public TrainingDTO getWordTraining(@RequestBody GetTrainingDTO dto) {
-        return trainingService.getWordTraining(dto.getLang1(), dto.getLang2());
+        return trainingService.getWordTraining(dto.getLang1(), dto.getLang2(), dto.getCollection());
     }
 
     @PostMapping("/result")

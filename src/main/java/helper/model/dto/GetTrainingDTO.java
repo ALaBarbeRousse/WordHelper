@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GetTrainingDTO {
-    private String lang1, lang2;
+    private String lang1, lang2, collection;
 }

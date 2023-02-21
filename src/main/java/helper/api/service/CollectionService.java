@@ -170,4 +170,14 @@ public class CollectionService {
 
         throw new IllegalStateException("Couldn't identify current user.");
     }
+
+    public Optional<Collection> findCollection(String cName, Language l1, Language l2) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof Student) {
+            Student student = (Student)principal;
+            return collectionRepository.findCollectionByOwnerAndNameAndLanguages(student, cName, l1, l2);
+        }
+
+        throw new IllegalStateException("Couldn't identify current user.");
+    }
 }

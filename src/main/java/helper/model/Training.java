@@ -44,9 +44,10 @@ public class Training {
     @JoinColumn(name = "collection")
     private Collection collection;
 
-    public Training(Student student, Language language1, Language language2) {
+    public Training(Student student, Language language1, Language language2, Collection collection) {
         this.student = student;
         this.language1 = language1;
         this.language2 = language2;
+        this.collection = collection;
     }
 }
