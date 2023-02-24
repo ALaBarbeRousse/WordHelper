@@ -1,0 +1,68 @@
+body {
+    background-color: #FFF7E4;
+}
+
+div.description_env {
+    background-color: #EADDBF;
+}
+button {
+    background-color: #FFF7E4;
+}
+button:hover {
+    background-color: #EADDBF;
+}
+.dropdown-content {
+    background-color: #FFF7E4;
+}
+.dropdown-content a:hover {
+    background-color: #EADDBF;
+}
+
+.lang_select {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 5fr 1fr 5fr;
+    margin: 6px;
+    text-align: center;
+}
+
+.add_pair_wrapper {
+    /*border: 1px solid red;*/
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 10fr 1fr 10fr;
+}
+.add_button {
+    /*border: 1px solid blue;*/
+    background: url("../img/plus.png") no-repeat center;
+    min-height: 24px;
+    cursor: pointer;
+}
+.add_button:hover {
+    box-shadow: 0 0 5px #484848;
+}
+.add_button.button_disabled {
+    background: url("../img/plus_disabled.png") no-repeat center;
+    pointer-events: none;
+}
+.add_button:active {
+    box-shadow: 0 0 5px black;
+    background: url("../img/plus_active.png") no-repeat center;
+}
+
+div.message_wrapper {
+    min-height: 24px;
+}
+span#message {
+    color: red;
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+}
+
+div.button_wrapper {
+    min-height: 24px;
+    margin: 0 auto;
+    text-align: end;
+    padding: 6px 12px;
+}

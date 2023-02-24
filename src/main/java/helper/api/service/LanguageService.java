@@ -52,4 +52,8 @@ public class LanguageService {
                 .map(LanguageDTO::getId)
                 .collect(Collectors.toList());
     }
+
+    public List<List<Language>> getAvailableLanguages() {
+        return languageRepository.getAvailableLanguages();
+    }
 }

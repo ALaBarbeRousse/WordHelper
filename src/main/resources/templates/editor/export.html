@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Словесный помогатор</title>
+        <link rel="stylesheet" type="text/css" href="/css/common.css">
+        <link rel="stylesheet" type="text/css" href="/css/export.css">
+    <!--    <link rel="stylesheet" type="text/css" href="/css/language.css">-->
+        <link rel="icon" type="image/png" href="/img/globe.png" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="/js/export.js"></script>
+    <!--    <script src="/js/language.js"></script>-->
+    <!--    <script src="/js/sound.js"></script>-->
+    </head>
+    <body>
+        <div class="user_pane">
+            <div class="dropdown">
+                <button id="dropdown_btn" th:text="${student_name}"></button>
+                <div class="dropdown-content">
+                    <!--            <a href="#">Мой профиль</a>-->
+                    <a href="/logout">Выход</a>
+                </div>
+            </div>
+            <!--            <div>(Мой язык: <span th:text="${my_language}"></span>)</div>-->
+        </div>
+        <h1 class="caption">Словесный помогатор</h1>
+        <div class="description_env">
+            <div><button id="home_btn" onclick="location.href='/main'"></button></div>
+            <div class="description">Экспорт словарей</div>
+            <div></div>
+        </div>
+        <fieldset>
+            <legend>Экспорт</legend>
+            <div class="lang_select">
+                <label for="left">Язык</label>
+                <div></div>
+                <label for="right">Язык</label>
+                <input id="left" type="text" list="left_list"/>
+                <datalist id="left_list"></datalist>
+                <div></div>
+                <input id="right" type="text" list="right_list"/>
+                <datalist id="right_list"></datalist>
+            </div>
+            <div class="add_pair_wrapper">
+                <div></div><div class="add_button button_disabled" title="Добавить словарь в экспорт"></div><div></div>
+            </div>
+            <div class="message_wrapper"><span id="message"></span></div>
+            <div class="button_wrapper">
+<!--                <span id="file_path"></span>-->
+<!--                <label for="exportFile">Выберите файл для экспорта</label>-->
+<!--                <input id="exportFile" name="exportFile" type="file">-->
+                <button class="ok" id="ok_btn" disabled>OK</button>
+            </div>
+        </fieldset>
+    </body>
+</html>

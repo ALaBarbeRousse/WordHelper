@@ -62,6 +62,12 @@ public class PageController {
         return "collection";
     }
 
+    @GetMapping("/export")
+    public String getExportPage(Model model) {
+        setPersonalAttributes(model);
+        return "editor/export";
+    }
+
     private void setPersonalAttributes(Model model) {
         studentService.setPersonalAttributes(model);
     }

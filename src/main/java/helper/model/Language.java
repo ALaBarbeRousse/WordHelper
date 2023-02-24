@@ -2,8 +2,6 @@ package helper.model;
 
 
 import helper.model.dto.LanguageDTO;
-import helper.model.dto.LanguageListDTO;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,5 +32,10 @@ public class Language {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Language && ((Language)obj).name.equals(name);
+    }
+
+    @Override
+    public String toString() {
+        return "Language: " + name;
     }
 }
