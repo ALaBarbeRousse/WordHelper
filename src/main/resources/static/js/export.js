@@ -12,6 +12,18 @@ $(document).ready(function() {
     });
 });
 
+function getFullLanguageList() {
+    let arr = [];
+    for (let i = 0; i < languages.length; i++) {
+        for (let j = 0; j < languages[i].length; j++) {
+            if (!arr.includes(languages[i][j])) {
+                arr.push(languages[i][j]);
+            }
+        }
+    }
+    return arr;
+}
+
 function requestForLanguages() {
     // console.log("Это requestForLanguages");
     $.ajax({
@@ -34,14 +46,8 @@ function requestForLanguages() {
 
     function paintLanguages(l, r) {
         // console.log("Это paintLanguages, languages: " + JSON.stringify(languages));
-        let arr = [];
-        for (let i = 0; i < languages.length; i++) {
-            for (let j = 0; j < languages[i].length; j++) {
-                if (!arr.includes(languages[i][j])) {
-                    arr.push(languages[i][j]);
-                }
-            }
-        }
+        let arr = getFullLanguageList();
+
         paintLanguage(l, arr);
         paintLanguage(r, arr);
     }
@@ -69,17 +75,28 @@ function onLanguagesChange(e) {
     repaintInputList(langTarget, langSource.val());
 
     function repaintInputList(target, option) {
-        // console.log("Надо убрать из списка '" + target.prop('id') + "' значение '" + option +"'");
-        let toPopulate = getPairedLanguages(option);
+        // console.log("repaintInputList '" + target.prop('id') + "' убираем значение '" + option +"'");
+        let toPopulate = "";
+        if (option) {
+            toPopulate = getPairedLanguages(option);
+        } else {
+            toPopulate = getFullLanguageList();
+            target.val("");
+        }
+        // console.log("Получен список для заполнения: " + JSON.stringify(toPopulate));
         $(target.prop('list')).children('option').remove();
+        // console.log("Очистили список " + target.prop('id'));
         paintLanguage(langTarget, toPopulate);
     }
 
-    /* TODO Добавить также фильтрацию по ранее взятым парам */
+    /* Добавить также фильтрацию по ранее взятым парам */
     function getPairedLanguages(language) {
+        // console.log("Получаем список для заполнения: " + language + ". При этом languages: " + JSON.stringify(languages));
         let appropriate = [];
         for (let p in languages) {
+            // console.log("Проверяем язык на включение в список: " + languages[p]);
             if (languages[p].includes(language)) {  // Фильтрация по выбранному языку
+                // console.log("Берём новый язык из пары: " + languages[p]);
                 appropriate.push(getAnotherValue(languages[p], language));
             }
         }
@@ -97,7 +114,7 @@ function onLanguagesChange(e) {
 }
 
 function paintLanguage(target, list) {
-    // console.log("paintLanguage: " + target.prop('id') + "; list: " + JSON.stringify(list));
+    // console.log("Заполняем список: " + target.prop('id') + "; list: " + JSON.stringify(list));
     if (list.length === 0) {
         $(target.prop('list')).children().remove();
         target.val('');
