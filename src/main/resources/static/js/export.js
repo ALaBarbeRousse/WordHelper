@@ -10,6 +10,10 @@ $(document).ready(function() {
     $('#right').on('input propertychange', function (event) {
         onLanguagesChange(event);
     });
+
+    $("#ok_btn").on('click', function (){
+        gatherAndSendData();
+    });
 });
 
 function getFullLanguageList() {
@@ -31,7 +35,7 @@ function requestForLanguages() {
         url: 'api/translation/languages',
         contentType:"application/json; charset=utf-8",
         success: function (data) {
-            // console.log("Получены языки для экспорта:" + JSON.stringify(data));
+            // console.log("Получены языки для экспорта:" + JSON.stringify(dщтata));
             languages = data;
             paintLanguages($('#left'), $('#right'));
         },
@@ -73,6 +77,12 @@ function onLanguagesChange(e) {
     let langTarget = getPairedInput(langSource);
     // console.log("langTarget id: " + langTarget.prop('id'));
     repaintInputList(langTarget, langSource.val());
+
+    /* TODO Проверяем, можно ли добавлять строчку */
+    /* todo */
+
+    /* Проверяем, можно ли отправлять */
+    $("#ok_btn").prop('disabled', !checkFields());
 
     function repaintInputList(target, option) {
         // console.log("repaintInputList '" + target.prop('id') + "' убираем значение '" + option +"'");
@@ -126,4 +136,63 @@ function paintLanguage(target, list) {
             target.val(list[0]);
         }
     }
+}
+
+function checkFields() {
+    let fields = $("input");
+    for (let i = 0; i < fields.length; i++) {
+        if (!$(fields[i]).val()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function gatherAndSendData() {
+    // console.log("gatherAndSendData");
+    let rows = $(".lang_row");
+    let data = [];
+    for (let i = 0; i < rows.length; i++) {
+        let inputs = $(rows[i]).children("input");
+        let rowData = [];
+        for (let j = 0; j < inputs.length; j++) {
+            rowData.push($(inputs[j]).val());
+        }
+        data.push(rowData);
+    }
+
+    function isArrayOfStrings(key, value) {
+        if (key && Array.isArray(value)) {
+            value.forEach(function(item){
+                if(typeof item !== 'string'){
+                    return false;
+                }
+            });
+            return true;
+        }
+        return false;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: 'api/translation/export',
+        contentType:"application/json; charset=utf-8",
+        data: JSON.stringify(data),
+        success: function (data) {
+            $("<a />", {
+                "download": "dictionaries.json",
+                "href" : "data:application/json," + encodeURIComponent(JSON.stringify(data, null, 2))
+            }).appendTo("body")
+                .click(function() {
+                    $(this).remove();
+                })[0].click();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log("Ошибка при экспорте словарей.");
+            $("#message").text('Ошибка при экспорте словарей.').fadeIn(10);
+            setTimeout(function() {
+                $('#message').fadeOut(1000);
+            }, 1000);
+        }
+    });
 }

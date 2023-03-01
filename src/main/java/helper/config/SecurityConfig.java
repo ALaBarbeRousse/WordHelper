@@ -52,6 +52,7 @@ public class SecurityConfig {
 
                 .antMatchers(HttpMethod.GET, "/export", "/css/export.css", "/js/export.js", "/img/plus*").hasAuthority("Editor")  // export page
                 .antMatchers(HttpMethod.GET, "/api/translation/languages").hasAuthority("Editor")
+                .antMatchers(HttpMethod.POST, "/api/translation/export").hasAuthority("Editor")
 
 //                .anyRequest().authenticated()
                 .anyRequest().denyAll()

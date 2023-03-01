@@ -1,8 +1,11 @@
 package helper.api.rest;
 
 import helper.api.service.TranslationService;
+import helper.model.dto.DictionaryDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,5 +23,15 @@ public class TranslationController {
         return translationService.getAvailableLanguages().stream()
                 .map(lp -> new String[] {lp.getL1().getName(), lp.getL2().getName()})
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Выгружаем словари по заданным языковым парам
+     *
+     * @param dictionaries - Список языковых пар, по которым надо выгрузить словари
+     */
+    @PostMapping("/export")
+    public List<DictionaryDTO> getExportedDictionaries(@RequestBody List<List<String>> dictionaries) {
+        return translationService.findTranslations(dictionaries);
     }
 }

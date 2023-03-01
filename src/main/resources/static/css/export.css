@@ -18,9 +18,13 @@ button:hover {
     background-color: #EADDBF;
 }
 
+.caption_wrapper {
+
+}
+
 .lang_select {
     display: grid;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr;
     grid-template-columns: 5fr 1fr 5fr;
     margin: 6px;
     text-align: center;

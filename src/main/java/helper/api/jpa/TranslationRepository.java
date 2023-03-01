@@ -43,4 +43,6 @@ public interface TranslationRepository extends JpaRepository<Translation, Long> 
 
     @Query("SELECT t FROM Translation t WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2 AND t IN ?3 AND t NOT IN ?4")
     List<Translation> getRestrictedTranslationsIncludeExclude(Language l1, Language l2, List<Translation> include, List<Translation> exclude);
+
+    List<Translation> findTranslationsByWordLanguageAndTranslationLanguage(Language wl, Language tl);
 }

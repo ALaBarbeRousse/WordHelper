@@ -4,6 +4,7 @@ import helper.api.jpa.TranslationRepository;
 import helper.model.Language;
 import helper.model.Translation;
 import helper.model.Word;
+import helper.model.dto.DictionaryDTO;
 import helper.model.dto.LanguagePair;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
@@ -150,5 +153,32 @@ public class TranslationService {
         });
 
         return newList;
+    }
+
+    public List<DictionaryDTO> findTranslations(List<List<String>> dictionaries) {
+        return dictionaries.stream()
+            .map(languages -> List.of(
+                Objects.requireNonNull(languageService.findLanguageByName(languages.get(0)).orElse(null)),
+                Objects.requireNonNull(languageService.findLanguageByName(languages.get(1)).orElse(null))
+            ))
+                .map(languages -> {  // languages - это пара языков
+                    DictionaryDTO dictionaryDTO = new DictionaryDTO();
+                    dictionaryDTO.setLanguages(List.of(languages.get(0).getName(), languages.get(1).getName()));
+                    List<Translation> found = findTranslations(languages.get(0), languages.get(1));
+                    List<List<String>> foundTranslations = found.stream()
+                        .map(translation -> List.of(
+                            translation.getWord().getWriting(),
+                            translation.getTranslation().getWriting())
+                        ).collect(Collectors.toList());
+                    dictionaryDTO.setTranslations(foundTranslations);
+                    return dictionaryDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private List<Translation> findTranslations(Language l1, Language l2) {
+        List<Translation> ret = translationRepository.findTranslationsByWordLanguageAndTranslationLanguage(l1, l2);
+        ret.sort(Comparator.comparing(o -> o.getWord().getWriting()));
+        return ret;
     }
 }
