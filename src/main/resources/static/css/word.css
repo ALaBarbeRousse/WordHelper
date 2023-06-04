@@ -39,6 +39,40 @@ div.dict_article {
     grid-template-columns: 5fr 1fr 5fr;
 }
 
+div.word_buttons_wrapper {
+    /*border: 1px solid blueviolet;*/
+    height: 24px;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 5fr 1fr 5fr;
+}
+div.word_buttons {
+    /*border: 1px solid red;*/
+    /*text-align: center;*/
+}
+div.buttons_delimiter {
+    /*border: 1px solid green;*/
+    /*height: 24px;*/
+}
+
+div.get_voice_btn {
+    border: 1px solid #484848ff;
+    border-radius: 10px;
+    margin: 4px;
+    width: 18px;
+    height: 18px;
+    background: url("../img/plus.png") no-repeat center;
+    margin: auto auto;
+}
+div.get_voice_btn:hover {
+    border: 1px solid #606060ff;
+    background: url("../img/plus_disabled.png") no-repeat center;
+}
+div.get_voice_btn:active {
+    border: 1px solid #000000ff;
+    background: url("../img/plus_active.png") no-repeat center;
+}
+
 .word_input {
     margin: 6px;
 }
