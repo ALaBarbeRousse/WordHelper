@@ -19,9 +19,6 @@ spring:
       hibernate:
         format_sql: true
         enable_lazy_load_no_trans: true
-        schema-update:
-          unique_constraint_strategy: RECREATE_QUIETLY
-    open-in-view: false
 training:
   amount: 30  # Будем выдавать в одну тренировку именно столько слов. Когда-нибудь можно будет это перенести в личные настройки
   factor:
