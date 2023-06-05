@@ -32,46 +32,46 @@ public class TrainingResultService {
 
     public void saveResults(Training training, List<CheckResultDTO> results) {
         List<Translation> collectedTranslations = results.stream()
-                .map(dto -> translationService.findTranslation(dto.getId()).orElse(null))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+            .map(dto -> translationService.findTranslation(dto.getId()).orElse(null))
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
 
         // Это записанные ранее результаты, найденные по списку Translation
         List<TrainingResult> foundResults = trainingResultRepository
-                .findTrainingResultByTrainingAndTranslationIn(training, collectedTranslations);
+            .findTrainingResultByTrainingAndTranslationIn(training, collectedTranslations);
         List<Translation> foundResultsTranslations = foundResults.stream()
-                .map(TrainingResult::getTranslation)
-                .collect(Collectors.toList());
+            .map(TrainingResult::getTranslation)
+            .collect(Collectors.toList());
 
         List<TrainingResult> collected = results.stream()
-                .map(dto -> {
-                    Translation translation = translationService.findTranslation(dto.getId()).orElse(null);
-                    if (Objects.nonNull(translation)) {
-                        boolean correct = dto.getCorrect();
-                        float weight;
-                        if (foundResultsTranslations.contains(translation)) {
-                            TrainingResult foundResult = foundResults.stream()
-                                    .filter(trainingResult -> trainingResult.getTraining().equals(training))
-                                    .filter(trainingResult -> trainingResult.getTranslation().equals(translation))
-                                    .findFirst()
-                                    .orElseGet(() -> new TrainingResult(training, translation, 1F));
-                            if (correct) {
-                                foundResult.setWeight(foundResult.getWeight() * correctFactor);
-                            } else {
-                                foundResult.setWeight(foundResult.getWeight() * incorrectFactor);
-                            }
-
-                            return foundResult;
+            .map(dto -> {
+                Translation translation = translationService.findTranslation(dto.getId()).orElse(null);
+                if (Objects.nonNull(translation)) {
+                    boolean correct = dto.getCorrect();
+                    float weight;
+                    if (foundResultsTranslations.contains(translation)) {
+                        TrainingResult foundResult = foundResults.stream()
+                            .filter(trainingResult -> trainingResult.getTraining().equals(training))
+                            .filter(trainingResult -> trainingResult.getTranslation().equals(translation))
+                            .findFirst()
+                            .orElseGet(() -> new TrainingResult(training, translation, 1F));
+                        if (correct) {
+                            foundResult.setWeight(foundResult.getWeight() * correctFactor);
                         } else {
-                            weight = correct?correctFactor:incorrectFactor;
-                            return new TrainingResult(training, translation, weight);
+                            foundResult.setWeight(foundResult.getWeight() * incorrectFactor);
                         }
+
+                        return foundResult;
                     } else {
-                        return null;
+                        weight = correct ? correctFactor : incorrectFactor;
+                        return new TrainingResult(training, translation, weight);
                     }
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                } else {
+                    return null;
+                }
+            })
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
 
         try {
             trainingResultRepository.saveAllAndFlush(removeDuplicates(collected));
@@ -87,8 +87,8 @@ public class TrainingResultService {
                 diff.add(trainingResult);
             } else {
                 diff.stream()
-                        .filter(tr -> tr.getTranslation().equals(trainingResult.getTranslation()))
-                        .forEach(tr -> tr.setWeight(tr.getWeight() * trainingResult.getWeight()));
+                    .filter(tr -> tr.getTranslation().equals(trainingResult.getTranslation()))
+                    .forEach(tr -> tr.setWeight(tr.getWeight() * trainingResult.getWeight()));
             }
         });
         return diff;
@@ -104,7 +104,7 @@ public class TrainingResultService {
     }
 
     public List<TrainingResult> getTrainingResults(Training training, float threshold, int amount) {
-        return  trainingResultRepository.findAppropriateResults(training, threshold, PageRequest.of(0, amount));
+        return trainingResultRepository.findAppropriateResults(training, threshold, PageRequest.of(0, amount));
     }
 
     public List<TrainingResult> getAllTrainingResults(Training training) {
