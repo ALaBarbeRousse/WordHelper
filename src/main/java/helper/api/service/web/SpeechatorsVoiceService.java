@@ -40,8 +40,7 @@ public class SpeechatorsVoiceService implements VoiceFetcher {
         String url = baseURL + languageToLinkMap.get(language);
 
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("start-maximized");
-//        options.addArguments("headless");
+        options.addArguments("headless");
 
         WebDriver driver = new ChromeDriver(options);
         driver.get(url);
@@ -66,15 +65,15 @@ public class SpeechatorsVoiceService implements VoiceFetcher {
             saveButton.click();
 
             By downloadButtonBy = By.id("download-button");
-            wait.until(ExpectedConditions.visibilityOfElementLocated(downloadButtonBy));
+            wait.until(ExpectedConditions.elementToBeClickable(downloadButtonBy));
             WebElement downloadButton = driver.findElement(downloadButtonBy);
             downloadButton.click();
 
             By generateMoreBy = By.linkText("Generate More");
-            wait.until(ExpectedConditions.visibilityOfElementLocated(generateMoreBy));
+            wait.until(ExpectedConditions.presenceOfElementLocated(generateMoreBy));
             driver.findElement(generateMoreBy).click();
 
-            wait.until(ExpectedConditions.visibilityOfElementLocated(voiceSelectBy));
+            wait.until(ExpectedConditions.presenceOfElementLocated(voiceSelectBy));
         }
 
         driver.close();
