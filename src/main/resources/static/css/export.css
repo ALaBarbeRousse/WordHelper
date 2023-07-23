@@ -55,6 +55,7 @@ button:hover {
 }
 
 div.message_wrapper {
+    /*border: 1px solid red;*/
     min-height: 24px;
 }
 span#message {
@@ -69,4 +70,27 @@ div.button_wrapper {
     margin: 0 auto;
     text-align: end;
     padding: 6px 12px;
+}
+
+div.import_file_wrapper {
+    /*border: 1px solid red;*/
+    min-height: 24px;
+    padding: 4px 12px;
+    display: flex;
+}
+div.import_button_wrapper, div.import_input_wrapper  {
+    width: 100%;
+}
+div.import_button_wrapper {
+    text-align: right;
+}
+div.import_input_wrapper {
+    text-align: left;
+}
+
+button#export_btn, button#import_btn {
+    width: 96px;
+}
+span#import_message {
+    /*border: 1px solid green;*/
 }

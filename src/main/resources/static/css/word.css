@@ -66,11 +66,19 @@ div.get_voice_btn {
 }
 div.get_voice_btn:hover {
     border: 1px solid #606060ff;
-    background: url("../img/plus_disabled.png") no-repeat center;
+    /* background: url("../img/plus_disabled.png") no-repeat center; */
+    box-shadow: 0 0 5px #606060ff;
 }
 div.get_voice_btn:active {
     border: 1px solid #000000ff;
     background: url("../img/plus_active.png") no-repeat center;
+}
+
+div.disabled {
+    pointer-events: none;
+    /* for "disabled" effect */
+    opacity: 0.25;
+    /*background: #CCC;*/
 }
 
 .word_input {

@@ -47,7 +47,7 @@ public class PageController {
     @GetMapping("/word")
     public String getWordEditPage(Model model) {
         setPersonalAttributes(model);
-        return "editword";
+        return "word";
     }
 
     @GetMapping("/training")

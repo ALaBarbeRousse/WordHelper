@@ -26,7 +26,7 @@
         <h1 class="caption">Словесный помогатор</h1>
         <div class="description_env">
             <div><button id="home_btn" onclick="location.href='/main'"></button></div>
-            <div class="description">Экспорт словарей</div>
+            <div class="description">Экспорт-импорт словарей</div>
             <div></div>
         </div>
         <fieldset>
@@ -37,21 +37,30 @@
                 <span>Язык</span>
             </div>
             <div class="lang_select lang_row">
-                <input id="left" type="text" list="left_list"/>
+                <input id="left" type="text" class="export_input" list="left_list"/>
                 <datalist id="left_list"></datalist>
                 <div></div>
-                <input id="right" type="text" list="right_list"/>
+                <input id="right" type="text" class="export_input" list="right_list"/>
                 <datalist id="right_list"></datalist>
             </div>
             <div class="add_pair_wrapper">
                 <div></div><div class="add_button button_disabled" title="Добавить словарь в экспорт"></div><div></div>
             </div>
-            <div class="message_wrapper"><span id="message"></span></div>
+            <div class="message_wrapper"><span id="export_message"></span></div>
             <div class="button_wrapper">
-<!--                <span id="file_path"></span>-->
-<!--                <label for="exportFile">Выберите файл для экспорта</label>-->
-<!--                <input id="exportFile" name="exportFile" type="file">-->
-                <button class="ok" id="ok_btn" disabled>OK</button>
+                <button class="ok" id="export_btn" disabled>Экспорт</button>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Импорт</legend>
+            <div class="import_file_wrapper">
+                <div class="import_input_wrapper">
+                    <input type="file" accept="application/json" id="dict_input"/>
+                    <span id="import_message"></span>
+                </div>
+            </div>
+            <div class="button_wrapper">
+                <button class="ok" id="import_btn">Импорт</button>
             </div>
         </fieldset>
     </body>

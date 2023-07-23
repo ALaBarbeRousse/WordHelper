@@ -1,6 +1,7 @@
 let w1, w2, l1, l2, m, words_env;
 let r;
 let wl1, wl2;
+let gv1, gv2;   // Кнопки загрузки звука
 
 $(document).ready(function() {
     loadLanguages();
@@ -14,6 +15,8 @@ $(document).ready(function() {
     r = $('#result_icon')
     wl1 = $('#word_list_1');
     wl2 = $('#word_list_2');
+    gv1 = $('#getVoice1');
+    gv2 = $('#getVoice2');
 
     l1.on('input propertychange', function () {
         validateFields();
@@ -48,9 +51,27 @@ $(document).ready(function() {
     $('#swap_button').on('click', function () {
         swapWords();
     });
+
+    $('#getVoice1').on('click', function() {
+        getVoice($('#lang1').val(), $('#word1').val())
+    });
+    $('#getVoice2').on('click', function() {
+        getVoice($('#lang2').val(), $('#word2').val())
+    });
 });
 
+function setLoadVoiceEnabled(enabled) {
+    if(enabled) {
+        gv1.removeClass("disabled");
+        gv2.removeClass("disabled");
+    } else {
+        gv1.addClass("disabled");
+        gv2.addClass("disabled");
+    }
+}
+
 function loadLanguages() {
+    console.log("Загрузка языков");
     $.ajax({
         type: 'GET',
         url: 'api/language',
@@ -130,9 +151,10 @@ function showArticleExist(exists) {
     if (exists) {
         words_env.addClass("translation_exists");
         words_env.prop("title", "Перевод уже существует");
+        setLoadVoiceEnabled(true);
     } else {
         words_env.removeClass("translation_exists");
-        words_env.prop("title", "");
+        setLoadVoiceEnabled(false);
     }
 }
 
@@ -228,4 +250,31 @@ function swapWords() {
     temp = w1.val();
     w1.val(w2.val());
     w2.val(temp);
+}
+
+function getVoice(lang, word) {
+    console.log("Это getVoice, lang: " + lang + ", word: " + word);
+
+//    $.ajax({
+//        type: 'GET',
+//        url: 'api/voice'
+//    });
+    $.ajax({
+        type: 'GET',
+        url: 'api/voice',
+        data: {
+            lang: lang,
+            word: word
+        },
+        contentType:"application/json; charset=utf-8",
+        success: function (data) {
+            console.log("Озвучивание успешно получено.")
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            m.text('Не удалось озвучивание для слова " + word + "').fadeIn(10);
+            setTimeout(function() {
+                m.fadeOut(3000);
+            }, 5000);
+        }
+    });
 }

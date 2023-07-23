@@ -32,10 +32,11 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/css/roles.css", "/js/roles.js").hasAuthority("Admin") // Edit student (set roles)
                 .antMatchers(HttpMethod.GET, "/api/student/data").hasAuthority("Admin")  // Edit student (set roles)
                 .antMatchers(HttpMethod.PUT, "/api/student/data").hasAuthority("Admin")  // Edit student (set roles)
-//
+
                 .antMatchers(HttpMethod.GET, "/word", "/css/word.css", "/js/word*", "/js/sound.js", "/img/home*", "/img/swap*").hasAuthority("Editor") // Edit word page
                 .antMatchers(HttpMethod.GET, "/img/correct.png", "/snd/success.mp3").hasAuthority("Editor") // Edit word page
                 .antMatchers(HttpMethod.POST, "/api/word", "/api/word/translate").hasAuthority("Editor") // Edit word page
+                .antMatchers(HttpMethod.GET, "/api/voice").hasAuthority("Editor") // Edit word page
 
                 .antMatchers(HttpMethod.GET, "/training", "/css/training.css", "/css/language.css", "/js/training.js").hasAuthority("Student") // Training page
                 .antMatchers(HttpMethod.GET, "/img/go.png", "/img/stop.png", "/img/send*", "/img/wrong.png").hasAuthority("Student") // Training page

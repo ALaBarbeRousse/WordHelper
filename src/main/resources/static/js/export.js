@@ -11,7 +11,7 @@ $(document).ready(function() {
         onLanguagesChange(event);
     });
 
-    $("#ok_btn").on('click', function (){
+    $("#export_btn").on('click', function (){
         gatherAndSendData();
     });
 });
@@ -41,9 +41,9 @@ function requestForLanguages() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             // console.log("Не удалось получить список языков для экспорта");
-            $("#message").text('Не удалось получить список языков для экспорта').fadeIn(10);
+            $("#export_message").text('Не удалось получить список языков для экспорта').fadeIn(10);
             setTimeout(function() {
-                $('#message').fadeOut(1000);
+                $('#export_message').fadeOut(1000);
             }, 1000);
         }
     });
@@ -82,7 +82,7 @@ function onLanguagesChange(e) {
     /* todo */
 
     /* Проверяем, можно ли отправлять */
-    $("#ok_btn").prop('disabled', !checkFields());
+    $("#export_btn").prop('disabled', !checkFields());
 
     function repaintInputList(target, option) {
         // console.log("repaintInputList '" + target.prop('id') + "' убираем значение '" + option +"'");
@@ -139,7 +139,7 @@ function paintLanguage(target, list) {
 }
 
 function checkFields() {
-    let fields = $("input");
+    let fields = $("input.export_input");
     for (let i = 0; i < fields.length; i++) {
         if (!$(fields[i]).val()) {
             return false;
@@ -189,9 +189,9 @@ function gatherAndSendData() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log("Ошибка при экспорте словарей.");
-            $("#message").text('Ошибка при экспорте словарей.').fadeIn(10);
+            $("#export_message").text('Ошибка при экспорте словарей.').fadeIn(10);
             setTimeout(function() {
-                $('#message').fadeOut(1000);
+                $('#export_message').fadeOut(1000);
             }, 1000);
         }
     });
