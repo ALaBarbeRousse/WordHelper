@@ -26,13 +26,22 @@ div.description_env {
     margin: 6px;
     text-align: center;
 }
-
 .lang_select input {
     margin: 2px auto;
     max-width: 120px;
     text-align: center;
     font-weight: bold;
     font-size: large;
+}
+
+/* Строка сообщений */
+div.message_pane {
+    width: 50%;
+    min-height: 24px;
+    color: red;
+    margin: 0 auto;
+    font-size: smaller;
+    text-align: center;
 }
 
 /* Оболочка кнопки загрузки случайного неозвученного перевода */
@@ -49,6 +58,7 @@ div.description_env {
     text-align: center;
     cursor: pointer;
     background-color: #f4f4ff;
+    user-select: none;
 }
 #translation_load_btn:hover {
     background-color: #e3e3ee;

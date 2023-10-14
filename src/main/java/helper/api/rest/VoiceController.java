@@ -23,4 +23,10 @@ public class VoiceController {
 
         voiceService.getSound(language, word);
     }
+
+    @GetMapping(value = "/random")
+    public void getRandomTranslation(@RequestParam(name = "lang1") String lang1, @RequestParam(name = "lang2") String lang2) {
+        /* todo */
+        log.info("Получен запрос на получение случайного неозвученного перевода.");
+    }
 }

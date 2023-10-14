@@ -1,63 +1,66 @@
-let w1, w2, l1, l2, m, words_env;
-let r;
-let wl1, wl2;
-let gv1, gv2;   // Кнопки загрузки звука
+let l1, l2;
+let m;
+//let w1, w2, words_env;
+//let r;
+//let wl1, wl2;
+//let gv1, gv2;   // Кнопки загрузки звука
+let lt; // Кнопка загрузки случайного перевода
 
 $(document).ready(function() {
     loadLanguages();
 
-    w1 = $('#word1');
-    w2 = $('#word2');
+//    w1 = $('#word1');
+//    w2 = $('#word2');
     l1 = $('#lang1');
     l2 = $('#lang2');
+    lt = $('#translation_load_btn');
     m = $('#message');
-    words_env = $('div.dict_article');
-    r = $('#result_icon')
-    wl1 = $('#word_list_1');
-    wl2 = $('#word_list_2');
-    gv1 = $('#getVoice1');
-    gv2 = $('#getVoice2');
+//    words_env = $('div.dict_article');
+//    r = $('#result_icon')
+//    wl1 = $('#word_list_1');
+//    wl2 = $('#word_list_2');
+//    gv1 = $('#getVoice1');
+//    gv2 = $('#getVoice2');
 
-    l1.on('input propertychange', function () {
-        validateFields();
+//    l1.on('input propertychange', function () {
+//        validateFields();
+//    });
+//    l2.on('input propertychange', function () {
+//        validateFields();
+//    });
+    lt.on('click', function() {
+        loadRandomTranslation();
     });
-    l2.on('input propertychange', function () {
-        validateFields();
-    });
-    w1.on('input propertychange', function () {
-        validateFields();
-        findWordAndTranslation(l1.val(), w1.val(), l2.val());
-    });
-    w2.on('input propertychange', function () {
-        validateFields();
-        findWord(l2.val(), w2.val());
-    });
+//    w1.on('input propertychange', function () {
+//        validateFields();
+//        findWordAndTranslation(l1.val(), w1.val(), l2.val());
+//    });
+//    w2.on('input propertychange', function () {
+//        validateFields();
+//        findWord(l2.val(), w2.val());
+//    });
 
-    $('#ok_btn').on('click', function () {
-        collectAndSendData();
-    });
+//    $('#ok_btn').on('click', function () {
+//        collectAndSendData();
+//    });
 
-    w1.keypress(function (event){
-        if (13 === event.which) {
-            collectAndSendData();
-        }
-    });
-    w2.keypress(function (event){
-        if (13 === event.which) {
-            collectAndSendData();
-        }
-    });
+//    w1.keypress(function (event){
+//        if (13 === event.which) {
+//            collectAndSendData();
+//        }
+//    });
+//    w2.keypress(function (event){
+//        if (13 === event.which) {
+//            collectAndSendData();
+//        }
+//    });
 
-    $('#swap_button').on('click', function () {
-        swapWords();
-    });
-
-    $('#getVoice1').on('click', function() {
-        getVoice($('#lang1').val(), $('#word1').val())
-    });
-    $('#getVoice2').on('click', function() {
-        getVoice($('#lang2').val(), $('#word2').val())
-    });
+//    $('#getVoice1').on('click', function() {
+//        getVoice($('#lang1').val(), $('#word1').val())
+//    });
+//    $('#getVoice2').on('click', function() {
+//        getVoice($('#lang2').val(), $('#word2').val())
+//    });
 });
 
 function setLoadVoiceEnabled(enabled) {
@@ -71,7 +74,7 @@ function setLoadVoiceEnabled(enabled) {
 }
 
 function loadLanguages() {
-    console.log("Загрузка языков");
+//    console.log("Загрузка языков");
     $.ajax({
         type: 'GET',
         url: 'api/language',
@@ -117,6 +120,31 @@ function getVoice(lang, word) {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             m.text('Не удалось озвучивание для слова " + word + "').fadeIn(10);
+            setTimeout(function() {
+                m.fadeOut(3000);
+            }, 5000);
+        }
+    });
+}
+
+function loadRandomTranslation() {
+    m.text("Загружаем случайный перевод: " + l1.val() + "-" + l2.val()).fadeIn(10);
+    setTimeout(function() {
+        m.fadeOut(3000);
+    }, 5000);
+    $.ajax({
+        type: 'GET',
+        url: 'api/voice/random',
+        data: {
+            lang1: l1.val(),
+            lang2: l2.val()
+        },
+        contentType:"application/json; charset=utf-8",
+        success: function (data) {
+            console.log("Озвучивание успешно получено.")
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            m.text('Не удалось загрузить перевод для озвучивания.').fadeIn(10);
             setTimeout(function() {
                 m.fadeOut(3000);
             }, 5000);
