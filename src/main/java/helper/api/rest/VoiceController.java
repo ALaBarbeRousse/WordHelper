@@ -19,7 +19,7 @@ public class VoiceController {
     @GetMapping
     public void getVoice(@RequestParam(name = "lang") String language, @RequestParam String word) {
         /* TODO Для начала просто отправим каким-то образом запрос на сайт и запишем ответ в виде mp3-файла. */
-        log.info("Запрос на получение звука");
+        log.info("Запрос на получение звука \"{}\" ({}).", word, language);
 
         voiceService.getSound(language, word);
     }
