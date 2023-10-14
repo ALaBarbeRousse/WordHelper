@@ -34,3 +34,25 @@ div.description_env {
     font-weight: bold;
     font-size: large;
 }
+
+/* Оболочка кнопки загрузки случайного неозвученного перевода */
+.translation_load_envelope {
+    /*border: 1px solid red;*/
+    min-height: 24px;
+}
+/* Кнопка загрузки случайного неозвученного перевода */
+#translation_load_btn {
+    border: 1px solid gray;
+    min-height: 24px;
+    max-width: 360px;
+    margin: auto;
+    text-align: center;
+    cursor: pointer;
+    background-color: #f4f4ff;
+}
+#translation_load_btn:hover {
+    background-color: #e3e3ee;
+}
+#translation_load_btn:active {
+    background-color: #d2d2dd;
+}
