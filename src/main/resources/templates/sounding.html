@@ -6,6 +6,8 @@
     <link rel="stylesheet" type="text/css" href="/css/common.css">
     <link rel="stylesheet" type="text/css" href="/css/sounding.css">
     <link rel="icon" type="image/png" href="/img/globe.png" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="/js/sounding.js"></script>
 </head>
 <body>
 
@@ -24,6 +26,17 @@
         <div><button id="home_btn" onclick="location.href='/main'"></button></div>
         <div class="description">Загрузка озвучки</div>
     </div>
-
+    <fieldset>
+        <div class="lang_select">
+            <label for="lang1">Язык</label>
+            <div></div>
+            <label for="lang2">Язык</label>
+            <input id="lang1" type="text" list="lang_list_1"/>
+            <datalist id="lang_list_1"></datalist>
+            <div></div>
+            <input id="lang2" type="text" list="lang_list_2"/>
+            <datalist id="lang_list_2"></datalist>
+        </div>
+    </fieldset>
 </body>
 </html>

@@ -18,3 +18,19 @@ div.description_env {
     background-color: #e3e3ee;
 }
 
+.lang_select {
+    /*border: 1px solid red;*/
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 5fr 1fr 5fr;
+    margin: 6px;
+    text-align: center;
+}
+
+.lang_select input {
+    margin: 2px auto;
+    max-width: 120px;
+    text-align: center;
+    font-weight: bold;
+    font-size: large;
+}
