@@ -1,0 +1,20 @@
+body {
+    background-color: #f4f4ff;
+}
+button {
+    background-color: #f4f4ff;
+}
+button:hover {
+    background-color: #e3e3ee;
+}
+.dropdown-content {
+    background-color: #f4f4ff;
+}
+.dropdown-content a:hover {
+    background-color: #e3e3ee;
+}
+
+div.description_env {
+    background-color: #e3e3ee;
+}
+

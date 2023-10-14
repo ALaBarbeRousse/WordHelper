@@ -50,6 +50,12 @@ public class PageController {
         return "word";
     }
 
+    @GetMapping("/sounding")
+    public String getSoundPage(Model model) {
+        setPersonalAttributes(model);
+        return "sounding";
+    }
+
     @GetMapping("/training")
     public String getTrainWords(Model model) {
         setPersonalAttributes(model);
