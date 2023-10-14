@@ -52,39 +52,43 @@ public class SpeechatorsVoiceService implements VoiceFetcher {
 
         options.addArguments("headless");
 
-        WebDriver driver = new ChromeDriver(options);
-        driver.get(url);
+        try {
+            WebDriver driver = new ChromeDriver(options);
+            driver.get(url);
 
-        By inputTextBy = By.id("ms-input-text");
-        WebElement textInput = driver.findElement(inputTextBy);
-        textInput.sendKeys(word);
+            By inputTextBy = By.id("ms-input-text");
+            WebElement textInput = driver.findElement(inputTextBy);
+            textInput.sendKeys(word);
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.of(10L, ChronoUnit.SECONDS));
+            WebDriverWait wait = new WebDriverWait(driver, Duration.of(10L, ChronoUnit.SECONDS));
 
-        By voiceSelectBy = By.id("ms-voice-select");
-        Select voiceSelect = new Select(driver.findElement(voiceSelectBy));
-        List<WebElement> voiceSelectOptions = voiceSelect.getOptions();
+            By voiceSelectBy = By.id("ms-voice-select");
+            Select voiceSelect = new Select(driver.findElement(voiceSelectBy));
+            List<WebElement> voiceSelectOptions = voiceSelect.getOptions();
 
-        By saveButtonBy = By.id("save-button");
-        WebElement saveButton = driver.findElement(saveButtonBy);
+            By saveButtonBy = By.id("save-button");
+            WebElement saveButton = driver.findElement(saveButtonBy);
 
-        for (WebElement option: voiceSelectOptions) {
-            log.info("Голос: {}", option.getAttribute("value"));
-            voiceSelect.selectByValue(option.getAttribute("value"));
-            saveButton.click();
+            for (WebElement option: voiceSelectOptions) {
+                log.info("Голос: {}", option.getAttribute("value"));
+                voiceSelect.selectByValue(option.getAttribute("value"));
+                saveButton.click();
 
-            By downloadButtonBy = By.id("download-button");
-            wait.until(ExpectedConditions.elementToBeClickable(downloadButtonBy));
-            WebElement downloadButton = driver.findElement(downloadButtonBy);
-            downloadButton.click();
+                By downloadButtonBy = By.id("download-button");
+                wait.until(ExpectedConditions.elementToBeClickable(downloadButtonBy));
+                WebElement downloadButton = driver.findElement(downloadButtonBy);
+                downloadButton.click();
 
-            By generateMoreBy = By.linkText("Generate More");
-            wait.until(ExpectedConditions.presenceOfElementLocated(generateMoreBy));
-            driver.findElement(generateMoreBy).click();
+                By generateMoreBy = By.linkText("Generate More");
+                wait.until(ExpectedConditions.presenceOfElementLocated(generateMoreBy));
+                driver.findElement(generateMoreBy).click();
 
-            wait.until(ExpectedConditions.presenceOfElementLocated(voiceSelectBy));
+                wait.until(ExpectedConditions.presenceOfElementLocated(voiceSelectBy));
+            }
+
+            driver.close();
+        } catch (Exception e) {
+            log.error("Ошибка при получении звука: {}.", e.getMessage(), e);
         }
-
-        driver.close();
     }
 }
