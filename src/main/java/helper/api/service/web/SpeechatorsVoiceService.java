@@ -24,7 +24,7 @@ import java.util.Map;
 /*
 localhost:8081/api/voice?lang=suomi&word=maailma
 */
-public class SpeechatorsVoiceService implements VoiceFetcher {
+public class SpeechatorsVoiceService extends VoiceService {
     private final String baseURL = "https://speechactors.com/text-to-speech/";
 
     String downloadFilePath = new File("voices").getAbsolutePath();

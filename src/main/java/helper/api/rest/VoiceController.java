@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class VoiceController {
 //    private final TTSFreeVoiceService voiceService;
-    private final SpeechatorsVoiceService voiceService;
+    private final SpeechatorsVoiceService speechatorsVoiceService;
 
     @GetMapping
     public void getVoice(@RequestParam(name = "lang") String language, @RequestParam String word) {
         /* TODO Для начала просто отправим каким-то образом запрос на сайт и запишем ответ в виде mp3-файла. */
         log.info("Запрос на получение звука \"{}\" ({}).", word, language);
 
-        voiceService.getSound(language, word);
+        speechatorsVoiceService.getSound(language, word);
     }
 
     @GetMapping(value = "/random")
