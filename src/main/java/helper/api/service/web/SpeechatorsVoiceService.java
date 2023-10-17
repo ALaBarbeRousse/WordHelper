@@ -29,18 +29,19 @@ public class SpeechatorsVoiceService implements VoiceFetcher {
 
     String downloadFilePath = new File("voices").getAbsolutePath();
 
+    private static final Map<String, String> LANGUAGE_TO_LINK = new HashMap<>() {{
+        this.put("english", "english-united-states");
+        this.put("русский", "russian-russia");
+        this.put("suomi", "finnish-finland");
+        this.put("deutsch", "german-germany");
+        this.put("français", "french-france");
+        this.put("español", "spanish-spain");
+        this.put("italiano", "italian-italy");
+    }};
+
     @Override
     public void getSound(String language, String word) {
-        Map<String, String> languageToLinkMap = new HashMap<>() {{
-            this.put("english", "english-united-states");
-            this.put("русский", "russian-russia");
-            this.put("suomi", "finnish-finland");
-            this.put("deutsch", "german-germany");
-            this.put("français", "french-france");
-            this.put("español", "spanish-spain");
-            this.put("italiano", "italian-italy");
-        }};
-        String url = baseURL + languageToLinkMap.get(language);
+        String url = baseURL + LANGUAGE_TO_LINK.get(language);
 
         ChromeOptions options = new ChromeOptions();
         Map<String, Object> preferences = new HashMap<>() {{
