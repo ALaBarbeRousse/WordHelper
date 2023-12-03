@@ -76,9 +76,9 @@ public class SpeechatorsVoiceService extends VoiceService {
                 FileHelper.emptyFolder(downloadFolder);
 
                 String voiceValue = option.getAttribute("value");
-                log.info("Голос: {}", voiceValue);
+//                log.info("Голос: {}", voiceValue);
                 String voiceName = option.getText();
-                log.info("Имя: {}", voiceName);
+//                log.info("Имя: {}", voiceName);
                 voiceSelect.selectByValue(option.getAttribute("value"));
                 saveButton.click();
 
