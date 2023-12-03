@@ -12,6 +12,16 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FindTranslationResultDTO {
+    public FindTranslationResultDTO(List<String> suspect, boolean wordVoicePresent, String translation, boolean translationVoicePresent) {
+        this.suspect = suspect;
+        this.translation = translation;
+        this.wordVoicePresent = wordVoicePresent;
+        this.translationVoicePresent = translationVoicePresent;
+    }
+
     private List<String> suspect;
     private String translation;
+
+    private boolean wordVoicePresent;
+    private boolean translationVoicePresent;
 }

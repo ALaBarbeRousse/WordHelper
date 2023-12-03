@@ -31,4 +31,8 @@ public class SoundService {
             Voice voice = voiceHandler.findOrCreateVoice(foundWord, speaker, entry.getValue());
         }
     }
+
+    public boolean getVoicesPresent(Language language, String word) {
+        return voiceHandler.getVoicesPresent(language, word);
+    }
 }

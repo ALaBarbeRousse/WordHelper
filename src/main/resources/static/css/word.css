@@ -66,12 +66,28 @@ div.get_voice_btn {
 }
 div.get_voice_btn:hover {
     border: 1px solid #606060ff;
-    background: url("../img/wave_active.png") no-repeat center;
     box-shadow: 0 0 5px #606060ff;
 }
 div.get_voice_btn:active {
     border: 1px solid #000000ff;
     background: url("../img/wave_active.png") no-repeat center;
+}
+
+div.play_voice_btn {
+    border: 1px solid #484848ff;
+        border-radius: 10px;
+        margin: 4px;
+        width: 18px;
+        height: 18px;
+        background: url("../img/speaker.png") no-repeat center;
+        margin: auto auto;
+}
+div.play_voice_btn:hover {
+    border: 1px solid #606060ff;
+    box-shadow: 0 0 5px #606060ff;
+}
+div.play_voice_btn:active {
+    border: 1px solid #000000ff;
 }
 
 div.disabled {

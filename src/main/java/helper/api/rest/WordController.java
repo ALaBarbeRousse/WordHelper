@@ -1,6 +1,7 @@
 package helper.api.rest;
 
 import helper.api.service.LanguageService;
+import helper.api.service.SoundService;
 import helper.api.service.WordService;
 import helper.model.Language;
 import helper.model.dto.FindTranslationDTO;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/word")
@@ -23,6 +23,7 @@ import java.util.Optional;
 public class WordController {
     private final WordService wordService;
     private final LanguageService languageService;
+    private final SoundService soundService;
 
     @PostMapping
     public void saveWordPair(@RequestBody WordArticleEditDTO dto) {
@@ -39,12 +40,22 @@ public class WordController {
             langTo = null;
         } else {
             langTo = languageService.findLanguageByName(dto.getTo())
-                    .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(dto.getTo())));
+                .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(dto.getTo())));
         }
 
         List<String> suspects = wordService.findSimilarWords(dto.getWord(), langFrom);
         return wordService.findTranslation(langFrom, dto.getWord(), langTo)
-                .map(s -> new FindTranslationResultDTO(suspects, s))
-                .orElse(new FindTranslationResultDTO(suspects, null));
+            .map(translation -> new FindTranslationResultDTO(
+                suspects,
+                soundService.getVoicesPresent(langFrom, dto.getWord()),
+                translation,
+                soundService.getVoicesPresent(langTo, translation)
+            ))
+            .orElseGet(() -> new FindTranslationResultDTO(
+                suspects,
+                false,
+                null,
+                false)
+            );
     }
 }

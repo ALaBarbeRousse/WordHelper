@@ -100,32 +100,32 @@ function loadLanguages() {
     });
 }
 
-function getVoice(lang, word) {
-    console.log("Это getVoice, lang: " + lang + ", word: " + word);
-
+//function getVoice(lang, word) {
+//    console.log("Это sounding getVoice, lang: " + lang + ", word: " + word);
+//
+////    $.ajax({
+////        type: 'GET',
+////        url: 'api/voice'
+////    });
 //    $.ajax({
 //        type: 'GET',
-//        url: 'api/voice'
+//        url: 'api/voice',
+//        data: {
+//            lang: lang,
+//            word: word
+//        },
+//        contentType:"application/json; charset=utf-8",
+//        success: function (data) {
+//            console.log("Озвучивание успешно получено.")
+//        },
+//        error: function (jqXHR, textStatus, errorThrown) {
+//            m.text('Не удалось озвучивание для слова " + word + "').fadeIn(10);
+//            setTimeout(function() {
+//                m.fadeOut(3000);
+//            }, 5000);
+//        }
 //    });
-    $.ajax({
-        type: 'GET',
-        url: 'api/voice',
-        data: {
-            lang: lang,
-            word: word
-        },
-        contentType:"application/json; charset=utf-8",
-        success: function (data) {
-            console.log("Озвучивание успешно получено.")
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            m.text('Не удалось озвучивание для слова " + word + "').fadeIn(10);
-            setTimeout(function() {
-                m.fadeOut(3000);
-            }, 5000);
-        }
-    });
-}
+//}
 
 function loadRandomTranslation() {
     m.text("Загружаем случайный перевод: " + l1.val() + "-" + l2.val()).fadeIn(10);
