@@ -26,6 +26,9 @@ public class FileHelper {
 
     /* Получаем массив байт указанного файла */
     public static byte[] getFileBytes(File file) throws IOException {
+        if (Objects.isNull(file)) {
+            return null;
+        }
         if (file.isDirectory()) {
             log.warn("File '{} is a folder.", file.getAbsolutePath());
         }

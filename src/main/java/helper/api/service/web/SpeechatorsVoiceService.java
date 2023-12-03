@@ -1,7 +1,9 @@
 package helper.api.service.web;
 
+import helper.misc.FileHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -15,17 +17,13 @@ import java.io.File;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
 @Service
 @Slf4j
-/*
-localhost:8081/api/voice?lang=suomi&word=maailma
-*/
 public class SpeechatorsVoiceService extends VoiceService {
-    private final String baseURL = "https://speechactors.com/text-to-speech/";
+    private final String BASE_URL = "https://speechactors.com/text-to-speech/";
 
     String downloadFilePath = new File("voices").getAbsolutePath();
 
@@ -41,17 +39,17 @@ public class SpeechatorsVoiceService extends VoiceService {
 
     @Override
     public void getSound(String language, String word) {
-        String url = baseURL + LANGUAGE_TO_LINK.get(language);
+        String url = BASE_URL + LANGUAGE_TO_LINK.get(language);
 
-        ChromeOptions options = new ChromeOptions();
-        Map<String, Object> preferences = new HashMap<>() {{
-            this.put("profile.default_content_settings.popups", 0);
-            this.put("download.default_directory", downloadFilePath);
-            this.put("profile.default_content_setting_values.automatic_downloads", 1);
+        ChromeOptions options = new ChromeOptions() {{
+            this.setPageLoadStrategy(PageLoadStrategy.EAGER);
+            this.addArguments("headless");
+            this.setExperimentalOption("prefs", new HashMap<>() {{
+                this.put("profile.default_content_settings.popups", 0);
+                this.put("download.default_directory", downloadFilePath);
+                this.put("profile.default_content_setting_values.automatic_downloads", 1);
+            }});
         }};
-        options.setExperimentalOption("prefs", preferences);
-
-        options.addArguments("headless");
 
         try {
             WebDriver driver = new ChromeDriver(options);
@@ -70,8 +68,17 @@ public class SpeechatorsVoiceService extends VoiceService {
             By saveButtonBy = By.id("save-button");
             WebElement saveButton = driver.findElement(saveButtonBy);
 
+            File downloadFolder = new File(downloadFilePath);
+
+            Map<String, byte[]> voicesByName = new HashMap<>();
             for (WebElement option: voiceSelectOptions) {
-                log.info("Голос: {}", option.getAttribute("value"));
+                /* Очищаем папку скачанных файлов */
+                FileHelper.emptyFolder(downloadFolder);
+
+                String voiceValue = option.getAttribute("value");
+                log.info("Голос: {}", voiceValue);
+                String voiceName = option.getText();
+                log.info("Имя: {}", voiceName);
                 voiceSelect.selectByValue(option.getAttribute("value"));
                 saveButton.click();
 
@@ -85,9 +92,12 @@ public class SpeechatorsVoiceService extends VoiceService {
                 driver.findElement(generateMoreBy).click();
 
                 wait.until(ExpectedConditions.presenceOfElementLocated(voiceSelectBy));
+
+                /* Забрать скачанный файл */
+                voicesByName.put(voiceName, FileHelper.getFileBytes(FileHelper.getTheOnlyFile(downloadFolder)));
             }
 
-            driver.close();
+            driver.close(); // todo Проверить soundService
         } catch (Exception e) {
             log.error("Ошибка при получении звука: {}.", e.getMessage(), e);
         }
