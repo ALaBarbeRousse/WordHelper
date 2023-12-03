@@ -56,4 +56,10 @@ public class LanguageService {
     public List<List<Language>> getAvailableLanguages() {
         return languageRepository.getAvailableLanguages();
     }
+
+    /*  Получаем язык по его имени. Если такого нет - создаём */
+    public Language findOrCreateLanguageByName(String name) {
+        return languageRepository.findLanguageByName(name)
+            .orElseGet(() -> createLanguage(new LanguageCreateDTO(name)));
+    }
 }

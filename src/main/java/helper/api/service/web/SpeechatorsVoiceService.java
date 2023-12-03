@@ -97,7 +97,9 @@ public class SpeechatorsVoiceService extends VoiceService {
                 voicesByName.put(voiceName, FileHelper.getFileBytes(FileHelper.getTheOnlyFile(downloadFolder)));
             }
 
-            driver.close(); // todo Проверить soundService
+            driver.close();
+
+            soundService.saveVoices(language, word, voicesByName);
         } catch (Exception e) {
             log.error("Ошибка при получении звука: {}.", e.getMessage(), e);
         }

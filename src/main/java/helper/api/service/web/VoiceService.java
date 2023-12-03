@@ -1,5 +1,9 @@
 package helper.api.service.web;
 
-public abstract class VoiceService implements VoiceFetcher {
+import helper.api.service.SoundService;
+import org.springframework.beans.factory.annotation.Autowired;
 
+public abstract class VoiceService implements VoiceFetcher {
+    @Autowired
+    SoundService soundService;
 }
