@@ -20,6 +20,9 @@ public class SecurityConfig {
         http
             .csrf().disable()
             .authorizeRequests()
+
+            .antMatchers(HttpMethod.GET, "/img/*").permitAll()
+
             .antMatchers(HttpMethod.GET, "/", "/css/common.css", "/img/globe.png").permitAll()   // Start page
             .antMatchers(HttpMethod.GET, "/", "/css/start.css", "/js/start.js").permitAll()   // Start page
             .antMatchers(HttpMethod.GET, "/register", "/css/register.css", "/js/register.js", "/api/language").permitAll() // Register page
