@@ -285,18 +285,19 @@ function swapWords() {
     let temp = l1.val();
     l1.val(l2.val());
     l2.val(temp);
+
     temp = w1.val();
     w1.val(w2.val());
     w2.val(temp);
+
+    temp = gv1.attr('class');
+    gv1.attr('class', gv2.attr('class'));
+    gv2.attr('class', temp);
 }
 
 function getVoice(lang, word) {
     console.log("Это word getVoice, lang: " + lang + ", word: " + word);
 
-//    $.ajax({
-//        type: 'GET',
-//        url: 'api/voice'
-//    });
     $.ajax({
         type: 'GET',
         url: 'api/voice',
