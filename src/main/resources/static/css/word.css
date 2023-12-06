@@ -92,9 +92,12 @@ div.play_voice_btn:active {
 
 div.disabled {
     pointer-events: none;
-    /* for "disabled" effect */
     opacity: 0.25;
-    /*background: #CCC;*/
+}
+
+div.hidden {
+    pointer-events: none;
+    visibility: hidden;
 }
 
 .word_input {
