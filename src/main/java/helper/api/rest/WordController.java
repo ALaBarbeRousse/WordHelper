@@ -4,22 +4,25 @@ import helper.api.service.LanguageService;
 import helper.api.service.SoundService;
 import helper.api.service.WordService;
 import helper.model.Language;
-import helper.model.dto.FindTranslationDTO;
-import helper.model.dto.FindTranslationResultDTO;
-import helper.model.dto.LanguageCreateDTO;
-import helper.model.dto.WordArticleEditDTO;
+import helper.model.Voice;
+import helper.model.dto.*;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/word")
 @RequiredArgsConstructor
+@Slf4j
 public class WordController {
     private final WordService wordService;
     private final LanguageService languageService;
@@ -57,5 +60,18 @@ public class WordController {
                 null,
                 false)
             );
+    }
+
+    @SneakyThrows
+    @PostMapping(path = "/voice/random")
+    public VoiceDTO findVoice(@RequestBody GetVoiceDTO getVoiceDTO) {
+        Voice voice = soundService.getRandomVoice(getVoiceDTO.getLanguage(), getVoiceDTO.getWord());
+
+        return new VoiceDTO(
+            voice.getSpeaker().getName(),
+            voice.getWord().getLanguage().getName(),
+            voice.getWord().getWriting(),
+            voice.getSound()
+        );
     }
 }

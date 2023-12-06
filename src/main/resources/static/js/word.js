@@ -18,6 +18,18 @@ $(document).ready(function() {
     gv1 = $('#getVoice1');
     gv2 = $('#getVoice2');
 
+//    let ac;
+//    if(!window.AudioContext) {
+//            m.text('Браузер не поддерживает воспроизведение аудио').fadeIn(10);
+//            setTimeout(function() {
+//                m.fadeOut(3000);
+//            }, 5000);
+//        } else {
+//            console.log("Audio OK");
+//            window.AudioContext = window.webkitAudioContext;
+//            ac = window.AudioContext;
+//        }
+
     l1.on('input propertychange', function () {
         validateFields();
     });
@@ -54,16 +66,16 @@ $(document).ready(function() {
 
     gv1.on('click', function() {
         if(gv1.hasClass('play_voice_btn')) {
-            playVoice(l1.val(), w1.val());
+            playVoice(l1.val(), w1.val(), gv1);
         } else if(gv1.hasClass('get_voice_btn')) {
-            getVoice(l1.val(), w1.val())
+            getVoice(l1.val(), w1.val(), gv1);
         }
     });
     gv2.on('click', function() {
         if(gv2.hasClass('play_voice_btn')) {
-            playVoice(l2.val(), w2.val());
+            playVoice(l2.val(), w2.val(), gv2);
         } else if(gv2.hasClass('get_voice_btn')) {
-            getVoice(l2.val(), w2.val())
+            getVoice(l2.val(), w2.val(), gv2);
         }
     });
 });
@@ -221,7 +233,7 @@ function findWordAndTranslation(from, word, to) {
         contentType:"application/json; charset=utf-8",
         data: JSON.stringify(data),
         success: function (data) {
-            console.log("DATA: " + JSON.stringify(data));
+//            console.log("DATA: " + JSON.stringify(data));
 
             if (data) {
                 if (data.suspect) {
@@ -230,18 +242,20 @@ function findWordAndTranslation(from, word, to) {
                         w1.val(data.suspect[0]);
 
                         if(data.wordVoicePresent) {
-                            gv1.removeClass("get_voice_btn");
-                            gv1.addClass("play_voice_btn");
-                            gv1.attr("title", "Произнести");
+                            gv1.removeClass('get_voice_btn');
+                            gv1.addClass('play_voice_btn');
+                            gv1.removeClass('hidden');
+                            gv1.attr('title', 'Произнести');
                         } else {
-                            gv1.removeClass("play_voice_btn");
-                            gv1.addClass("get_voice_btn");
-                            gv1.attr("title", "Загрузить звук");
+                            gv1.removeClass('play_voice_btn');
+                            gv1.removeClass('hidden');
+                            gv1.addClass('get_voice_btn');
+                            gv1.attr('title', 'Загрузить звук');
                         }
                     } else {
-                        gv1.removeClass("play_voice_btn");
-                        gv1.addClass("get_voice_btn");
-                        gv1.attr("title", "Загрузить звук");
+                        gv1.removeClass('play_voice_btn');
+                        gv1.addClass('hidden');
+                        gv1.attr('title', 'Загрузить звук');
                         wl1.empty();
                         for (let i = 0; i < data.suspect.length; i++) {
                             wl1.append($('<option />').val(data.suspect[i]).text(data.suspect[i]));
@@ -258,15 +272,18 @@ function findWordAndTranslation(from, word, to) {
 
                     if(data.translationVoicePresent) {
                         gv2.removeClass("get_voice_btn");
+                        gv2.removeClass('hidden');
                         gv2.addClass("play_voice_btn");
                         gv2.attr("title", "Произнести");
                     } else {
                         gv2.removeClass("play_voice_btn");
+                        gv2.removeClass('hidden');
                         gv2.addClass("get_voice_btn");
                         gv2.attr("title", "Загрузить звук");
                     }
                 } else {
                     w2.val(null);  // Убрали перевод
+                    gv2.addClass('hidden');
                     showArticleExist(false);
                     validateFields();
                 }
@@ -295,9 +312,8 @@ function swapWords() {
     gv2.attr('class', temp);
 }
 
-function getVoice(lang, word) {
-    console.log("Это word getVoice, lang: " + lang + ", word: " + word);
-
+function getVoice(lang, word, source) {
+    source.addClass('disabled');
     $.ajax({
         type: 'GET',
         url: 'api/voice',
@@ -307,12 +323,15 @@ function getVoice(lang, word) {
         },
         contentType:"application/json; charset=utf-8",
         success: function (data) {
-            console.log("Озвучивание успешно получено.")
+            source.removeClass('disabled');
+            source.removeClass('get_voice_btn');
+            source.addClass('play_voice_btn');
         },
         error: function (jqXHR, textStatus, errorThrown) {
             m.text('Не удалось озвучивание для слова " + word + "').fadeIn(10);
             setTimeout(function() {
                 m.fadeOut(3000);
+                source.removeClass('disabled');
             }, 5000);
         }
     });

@@ -4,6 +4,7 @@ import helper.model.Language;
 import helper.model.Speaker;
 import helper.model.Voice;
 import helper.model.Word;
+import helper.model.dto.LanguageCreateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,12 @@ public class SoundService {
 
     public boolean getVoicesPresent(Language language, String word) {
         return voiceHandler.getVoicesPresent(language, word);
+    }
+
+    public Voice getRandomVoice(String language, String writing) {
+        Language lang = languageService.findLanguageByName(language)
+            .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(language)));
+        Word word = wordService.getOrSaveWord(writing, lang);
+        return voiceHandler.getVoice(word);
     }
 }

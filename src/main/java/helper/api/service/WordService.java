@@ -60,7 +60,7 @@ public class WordService {
         return translationService.saveTranslations(List.of(fwdTranslation, backTranslation));
     }
 
-    private Word getOrSaveWord(String writing, Language language) {
+    public Word getOrSaveWord(String writing, Language language) {
         return wordRepository.findWordByWriting(writing)
                 .orElseGet(() -> wordRepository.save(new Word(writing, language)));
     }
