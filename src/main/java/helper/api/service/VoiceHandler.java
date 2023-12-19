@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -26,7 +28,12 @@ public class VoiceHandler {
         return voiceRepository.getVoicesPresent(word, language) > 0;
     }
 
-    public Voice getVoice(Word word) {
-        return voiceRepository.getRandomVoice(word, PageRequest.of(0, 1)).get(0);
+    public Voice getRandomVoice(Word word) {
+        List<Voice> got = voiceRepository.getRandomVoice(word, PageRequest.of(0, 1));
+        if (got.isEmpty()) {
+            return null;
+        } else {
+            return got.get(0);
+        }
     }
 }

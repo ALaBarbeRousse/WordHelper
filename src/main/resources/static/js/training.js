@@ -75,7 +75,7 @@ function stopTraining() {
 }
 
 function startTraining() {
-    // console.log("Это startTraining, trainResults: " + JSON.stringify(trainResults));
+//     console.log("Это startTraining, trainResults: " + JSON.stringify(trainResults));
 
     trainResults = [];
     /* Загружаем слова для тренировки */
@@ -90,7 +90,7 @@ function startTraining() {
         contentType:"application/json; charset=utf-8",
         data: JSON.stringify(data),
         success: function (data) {
-            // console.log("Слова для тренировки: " + JSON.stringify(data));
+//            console.log("Слова для тренировки: " + JSON.stringify(data));
             if (data.words.length) {
                 showTrainingMarkup(false);
                 trainingId = data.id;
@@ -211,27 +211,38 @@ function setTrainMarkupEnabled(enabled) {
 }
 
 function onCheckButton() {
-    // console.log("Это onCheckButton, trainingWords: " + JSON.stringify(trainingWords));
+//     console.log("Это onCheckButton, trainingWords: " + JSON.stringify(trainingWords[0]));
     if (!$('#check_btn').prop("disabled")) {
         if(trainingWords[0].t === t.val().toLowerCase()) {
-            // console.log("Да, это верно");
+//            console.log("Да, это верно");
             trainResults.push({
                 "id": trainingWords[0].p,
                 "correct": true
             });
             incCorrect();
+
+//            setTimeout(function() {
+//                sound(trainingWords[0].ts);
+//            }, 1000);
+
             showResultCorrect(true);
+            incCounter();
+            trainingWords.shift();
         } else {
-            // console.log("Нет, неверно");
-            trainResults.push({
-                "id": trainingWords[0].p,
-                "correct": false
-            });
-            incIncorrect();
-            showResultCorrect(false);
+//            console.log("Нет, неверно");
+            setTimeout(function() {
+                sound(trainingWords[0].ts);
+                trainResults.push({
+                    "id": trainingWords[0].p,
+                    "correct": false
+                });
+                incIncorrect();
+
+                showResultCorrect(false);
+                incCounter();
+                trainingWords.shift();
+            }, 1000);
         }
-        incCounter();
-        trainingWords.shift();
     }
 }
 
@@ -265,8 +276,9 @@ function showResultCorrect(correct) {
 }
 
 function paintWord() {
-    // console.log("paintWord, trainingWords: " + JSON.stringify(trainingWords));
+//     console.log("paintWord, trainingWords: " + JSON.stringify(trainingWords));
     /* Берём первое слово и показываем его */
+    sound(trainingWords[0].ws);
     $('#to_translate').text(trainingWords[0].w);
     t.val('');
     setTrainMarkupEnabled(true);

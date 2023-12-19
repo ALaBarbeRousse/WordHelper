@@ -41,6 +41,15 @@ public class SoundService {
         Language lang = languageService.findLanguageByName(language)
             .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(language)));
         Word word = wordService.getOrSaveWord(writing, lang);
-        return voiceHandler.getVoice(word);
+        return voiceHandler.getRandomVoice(word);
+    }
+
+    /**
+     * Получаем случайную озвучку для слова
+     * @param word
+     * @return
+     */
+    public Voice getRandomVoice(Word word) {
+        return voiceHandler.getRandomVoice(word);
     }
 }

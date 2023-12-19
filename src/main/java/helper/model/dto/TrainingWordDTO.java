@@ -12,5 +12,7 @@ import java.util.UUID;
 public class TrainingWordDTO {
     private UUID p;
     private String w;
+    private byte[] ws;
     private String t;
+    private byte[] ts;
 }

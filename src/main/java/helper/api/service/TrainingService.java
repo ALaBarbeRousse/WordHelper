@@ -1,13 +1,7 @@
 package helper.api.service;
 
 import helper.api.jpa.TrainingRepository;
-import helper.model.Collection;
-import helper.model.Language;
-import helper.model.LanguageChoice;
-import helper.model.Student;
-import helper.model.Training;
-import helper.model.TrainingResult;
-import helper.model.Translation;
+import helper.model.*;
 import helper.model.dto.LanguageCreateDTO;
 import helper.model.dto.TrainingDTO;
 import helper.model.dto.TrainingResultDTO;
@@ -34,6 +28,7 @@ public class TrainingService {
     private final TranslationService translationService;
     private final TrainingResultService trainingResultService;
     private final CollectionService collectionService;
+    private final SoundService soundService;
 
     /* Количество слов в выдаваемом списке на тренировку */
     @Value("${training.amount}")
@@ -153,9 +148,12 @@ public class TrainingService {
                         return translation;
                     })
                     .map(translation -> new TrainingWordDTO(
-                            translation.getPhysicalId(),
-                            translation.getWord().getWriting(),
-                            translation.getTranslation().getWriting()))
+                        translation.getPhysicalId(),
+                        translation.getWord().getWriting(),
+                        Optional.ofNullable(soundService.getRandomVoice(translation.getWord())).map(Voice::getSound).orElse(null),
+                        translation.getTranslation().getWriting(),
+                        Optional.ofNullable(soundService.getRandomVoice(translation.getTranslation())).map(Voice::getSound).orElse(null)
+                    ))
                     .collect(Collectors.toList());
 
             Collections.shuffle(words); // Перемешиваем слова

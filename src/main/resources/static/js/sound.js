@@ -9,6 +9,20 @@ function playSound(file) {
     audio.play().catch((e)=>{});
 }
 
+function sound(data) {
+//    console.log("Это sound, data: " + JSON.stringify(data));
+    if(data) {
+        var context = new AudioContext();
+        var arrayBuffer = base64ToArrayBuffer(data);
+        context.decodeAudioData(arrayBuffer, function(buffer) {
+            var source = context.createBufferSource();
+            source.buffer = buffer;
+            source.connect(context.destination);
+            source.start();
+        });
+    }
+}
+
 function playVoice(language, word, s) {
     let data = {
         'language': language,
@@ -22,16 +36,10 @@ function playVoice(language, word, s) {
         contentType:'application/json; charset=utf-8',
         data: JSON.stringify(data),
         success: function(data) {
-            var context = new AudioContext();
-            var arrayBuffer = base64ToArrayBuffer(data.sound);
-            context.decodeAudioData(arrayBuffer, function(buffer) {
-                var source = context.createBufferSource();
-                source.buffer = buffer;
-                source.connect(context.destination);
-                source.start();
-
+            sound(data.sound);
+            setTimeout(function() {
                 s.removeClass('disabled');
-            });
+            }, 1000);
         },
         error: function() {
             m.text('Не удалось получить озвучку').fadeIn(10);
