@@ -164,10 +164,11 @@ function loadRandomTranslation() {
 }
 
 function findSounding(data, source) {
-    console.log("Это findSounding, data: " + JSON.stringify(data));
+//    console.log("Это findSounding, data: " + JSON.stringify(data));
 
     source.addClass('disabled');
     $("#translation_load_btn").addClass('disabled');
+    $("#sound_fetch_btn").addClass('busy');
 
     var array = [];
     for(var i = 0; i < data.length; i++) {
@@ -181,7 +182,7 @@ function findSounding(data, source) {
         data: JSON.stringify(array),
         contentType:"application/json; charset=utf-8",
         success: function (data) {
-            console.log("Озвучка благополучно найдена");
+            playSound('../snd/success.mp3');
             m.text('Озвучка благополучно найдена.').fadeIn(10);
             setTimeout(function() {
                 m.fadeOut(1000);
@@ -191,6 +192,7 @@ function findSounding(data, source) {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             m.text('Не удалось найти озвучивание.').fadeIn(10);
+            playSound('../snd/error.mp3');
             setTimeout(function() {
                 m.fadeOut(3000);
                 source.removeClass('disabled');

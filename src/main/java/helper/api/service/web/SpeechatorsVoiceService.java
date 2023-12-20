@@ -114,7 +114,7 @@ public class SpeechatorsVoiceService extends VoiceService {
 
     @Override
     public void fetchSounds(List<SoundingRequestDTO> dtos) {
-        log.info("Это fetchSounds");
+//        log.info("Это fetchSounds");
 
         /* Надо разложить входящие данные по языкам */
         Map<Language, List<String>> map = new HashMap<>();
