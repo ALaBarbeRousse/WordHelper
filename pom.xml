@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <selenium.version>4.14.1</selenium.version>
+        <selenium.version>4.16.1</selenium.version>
     </properties>
 
     <dependencies>
