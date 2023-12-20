@@ -1,6 +1,11 @@
 package helper.api.service.web;
 
+import helper.api.service.LanguageService;
+import helper.api.service.SoundService;
 import helper.misc.FileHelper;
+import helper.model.Language;
+import helper.model.dto.SoundingRequestDTO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.PageLoadStrategy;
@@ -16,14 +21,16 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class SpeechatorsVoiceService extends VoiceService {
     private final String BASE_URL = "https://speechactors.com/text-to-speech/";
+
+    private final LanguageService languageService;
 
     String downloadFilePath = new File("voices").getAbsolutePath();
 
@@ -75,7 +82,7 @@ public class SpeechatorsVoiceService extends VoiceService {
                 /* Очищаем папку скачанных файлов */
                 FileHelper.emptyFolder(downloadFolder);
 
-                String voiceValue = option.getAttribute("value");
+//                String voiceValue = option.getAttribute("value");
 //                log.info("Голос: {}", voiceValue);
                 String voiceName = option.getText();
 //                log.info("Имя: {}", voiceName);
@@ -103,5 +110,101 @@ public class SpeechatorsVoiceService extends VoiceService {
         } catch (Exception e) {
             log.error("Ошибка при получении звука: {}.", e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void fetchSounds(List<SoundingRequestDTO> dtos) {
+        log.info("Это fetchSounds");
+
+        /* Надо разложить входящие данные по языкам */
+        Map<Language, List<String>> map = new HashMap<>();
+        for (SoundingRequestDTO dto: dtos) {
+            Language lang = languageService.findLanguageByName(dto.getLanguage()).orElse(null);
+            if (lang != null && !map.containsKey(lang)) {
+                map.put(lang, new ArrayList<>());
+            }
+            map.get(lang).add(dto.getWord());
+        }
+
+        /* Проверить, нет ли озвучки для этого слова */
+        Map<Language, List<String>> filteredMap = new HashMap<>();
+        for (Language language: map.keySet()) {
+            List<String> words = map.get(language);
+            List<String> filtered = words.stream()
+                .filter(word -> !soundService.getVoicesPresent(language, word))
+                .collect(Collectors.toList());
+            filteredMap.put(language, filtered);
+        }
+
+        ChromeOptions options = new ChromeOptions() {{
+            this.setPageLoadStrategy(PageLoadStrategy.EAGER);
+            this.addArguments("headless");
+            this.addArguments("--mute-audio");  // Глушим звуки
+            this.setExperimentalOption("prefs", new HashMap<>() {{
+                this.put("profile.default_content_settings.popups", 0);
+                this.put("download.default_directory", downloadFilePath);
+                this.put("profile.default_content_setting_values.automatic_downloads", 1);
+            }});
+        }};
+
+        WebDriver driver = new ChromeDriver(options);
+        for (Language language: filteredMap.keySet()) {
+            /* По каждому языку формируем адрес */
+            String url = BASE_URL + LANGUAGE_TO_LINK.get(language.getName());
+            try {
+                driver.get(url);
+
+                By inputTextBy = By.id("ms-input-text");
+                WebElement textInput = driver.findElement(inputTextBy);
+                for (String word: filteredMap.get(language)) {
+                    textInput.clear();  // Очищаем поле ввода
+                    textInput.sendKeys(word);
+
+                    WebDriverWait wait = new WebDriverWait(driver, Duration.of(10L, ChronoUnit.SECONDS));
+
+                    By voiceSelectBy = By.id("ms-voice-select");
+                    Select voiceSelect = new Select(driver.findElement(voiceSelectBy));
+                    List<WebElement> voiceSelectOptions = voiceSelect.getOptions();
+
+                    By saveButtonBy = By.id("save-button");
+                    WebElement saveButton = driver.findElement(saveButtonBy);
+
+                    File downloadFolder = new File(downloadFilePath);
+
+                    Map<String, byte[]> voicesByName = new HashMap<>();
+
+                    for (WebElement option: voiceSelectOptions) {
+                        /* Очищаем папку скачанных файлов */
+                        FileHelper.emptyFolder(downloadFolder);
+
+                        String voiceName = option.getText();
+
+                        voiceSelect.selectByValue(option.getAttribute("value"));
+                        saveButton.click();
+
+                        By downloadButtonBy = By.id("download-button");
+                        wait.until(ExpectedConditions.elementToBeClickable(downloadButtonBy));
+                        WebElement downloadButton = driver.findElement(downloadButtonBy);
+                        downloadButton.click();
+
+                        By generateMoreBy = By.linkText("Generate More");
+                        wait.until(ExpectedConditions.presenceOfElementLocated(generateMoreBy));
+                        driver.findElement(generateMoreBy).click();
+
+                        wait.until(ExpectedConditions.presenceOfElementLocated(voiceSelectBy));
+
+                        /* Забрать скачанный файл */
+                        voicesByName.put(voiceName, FileHelper.getFileBytes(FileHelper.getTheOnlyFile(downloadFolder)));
+                    }
+
+                    /* Записать забранное в БД */
+                    soundService.saveVoices(language.getName(), word, voicesByName);
+                }
+            } catch (Exception e) {
+                log.error("Exception caught: {}", e.getClass().getName(), e);
+            }
+        }
+
+        driver.close();
     }
 }

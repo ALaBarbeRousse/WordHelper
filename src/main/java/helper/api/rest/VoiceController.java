@@ -1,13 +1,14 @@
 package helper.api.rest;
 
-import helper.api.service.web.SpeechatorsVoiceService;
+import helper.api.service.TranslationService;
 import helper.api.service.web.VoiceService;
+import helper.model.Translation;
+import helper.model.dto.SoundingRequestDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/voice")
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class VoiceController {
     private final VoiceService speechatorsVoiceService;
+    private final TranslationService translationService;
 
     @GetMapping
     public void getVoice(@RequestParam(name = "lang") String language, @RequestParam String word) {
@@ -25,8 +27,14 @@ public class VoiceController {
     }
 
     @GetMapping(value = "/random")
-    public void getRandomTranslation(@RequestParam(name = "lang1") String lang1, @RequestParam(name = "lang2") String lang2) {
-        /* todo */
+    public List<Translation> getRandomDeafTranslation(@RequestParam(name = "lang1") String lang1, @RequestParam(name = "lang2") String lang2) {
         log.info("Получен запрос на получение случайного неозвученного перевода.");
+        return translationService.getRandomDeafTranslation(lang1, lang2, 1);
+    }
+
+    @PostMapping(value = "/voices")
+    public void findVoices(@RequestBody List<SoundingRequestDTO> dtos) {
+        log.info("Получен запрос на озвучку слов");
+        speechatorsVoiceService.fetchSounds(dtos);
     }
 }

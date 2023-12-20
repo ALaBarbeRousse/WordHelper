@@ -313,6 +313,7 @@ function swapWords() {
 }
 
 function getVoice(lang, word, source) {
+    console.log("Это getVoice, lang: " + lang + ", word: " + word + ", source: " + source);
     source.addClass('disabled');
     $.ajax({
         type: 'GET',

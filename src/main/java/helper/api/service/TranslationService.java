@@ -7,25 +7,21 @@ import helper.model.Word;
 import helper.model.dto.DictionaryDTO;
 import helper.model.dto.LanguagePair;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TranslationService {
     private final TranslationRepository translationRepository;
-
     private final LanguageService languageService;
 
     @PersistenceContext
@@ -180,5 +176,19 @@ public class TranslationService {
         List<Translation> ret = translationRepository.findTranslationsByWordLanguageAndTranslationLanguage(l1, l2);
         ret.sort(Comparator.comparing(o -> o.getWord().getWriting()));
         return ret;
+    }
+
+    /**
+     * todo Получаем случайный (один) перевод, у которого хотя бы одно слово без озвучки.
+     *
+     * @return
+     */
+    public List<Translation> getRandomDeafTranslation(String lang1, String lang2, int amnt) {
+        Optional<Language> l1 = languageService.findLanguageByName(lang1);
+        Optional<Language> l2 = languageService.findLanguageByName(lang2);
+        if (l1.isPresent() && l2.isPresent()) {
+            return translationRepository.getRandomDeafTranslation(l1.get(), l2.get(), PageRequest.of(0, amnt));
+        }
+        return Collections.emptyList();
     }
 }

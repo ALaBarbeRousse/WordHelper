@@ -45,7 +45,7 @@ div.message_pane {
 }
 
 /* Оболочка кнопки загрузки случайного неозвученного перевода */
-.translation_load_envelope {
+#translation_load_envelope {
     /*border: 1px solid red;*/
     min-height: 24px;
 }
@@ -65,4 +65,32 @@ div.message_pane {
 }
 #translation_load_btn:active {
     background-color: #d2d2dd;
+}
+.tl_item {
+    min-height: 24px;
+    text-align: center;
+    padding: 2px;
+    font-weight: bold;
+}
+
+#sound_fetch_btn {
+    border: 1px solid #484848ff;
+    border-radius: 13px;
+    width: 24px;
+    height: 24px;
+    background: url("../img/wave.png") no-repeat center;
+    margin: auto auto;
+}
+#sound_fetch_btn:hover {
+    border: 1px solid #606060ff;
+    box-shadow: 0 0 5px #606060ff;
+}
+#sound_fetch_btn:active {
+    border: 1px solid #000000ff;
+    background: url("../img/wave_active.png") no-repeat center;
+}
+
+div.disabled {
+    pointer-events: none;
+    opacity: 0.25;
 }
