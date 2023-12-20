@@ -145,14 +145,21 @@ function loadRandomTranslation() {
         success: function (data) {
 //            console.log("Озвучивание успешно получено: " + JSON.stringify(data));
             tl.empty();
-            for(var i = 0; i < data.length; i++) {
-                tl.append("<div class='tl_item'>" + data[i].word.writing + " &rarr; " + data[i].translation.writing + "</div");
+            if(data.length > 0) {
+                for(var i = 0; i < data.length; i++) {
+                    tl.append("<div class='tl_item'>" + data[i].word.writing + " &rarr; " + data[i].translation.writing + "</div");
+                }
+                tl.append("<div id='sound_fetch_btn' title='Найти озвучку'></>");
+                /* Установить слушатель */
+                $('#sound_fetch_btn').click(function() {
+                    findSounding(data, $('#sound_fetch_btn'));
+                });
+            } else {
+                m.text('Неозвученных переводов не найдено.').fadeIn(10);
+                setTimeout(function() {
+                    m.fadeOut(3000);
+                }, 3000);
             }
-            tl.append("<div id='sound_fetch_btn' title='Найти озвучку'></>");
-            /* Установить слушатель */
-            $('#sound_fetch_btn').click(function() {
-                findSounding(data, $('#sound_fetch_btn'));
-            });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             m.text('Не удалось загрузить перевод для озвучивания.').fadeIn(10);
@@ -167,7 +174,7 @@ function findSounding(data, source) {
 //    console.log("Это findSounding, data: " + JSON.stringify(data));
 
     source.addClass('disabled');
-    $("#translation_load_btn").addClass('disabled');
+    lt.addClass('disabled');
     $("#sound_fetch_btn").addClass('busy');
 
     var array = [];
@@ -187,7 +194,7 @@ function findSounding(data, source) {
             setTimeout(function() {
                 m.fadeOut(1000);
             }, 1000);
-            $("#translation_load_btn").removeClass('disabled');
+            lt.removeClass('disabled');
             tl.empty();
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -195,8 +202,10 @@ function findSounding(data, source) {
             playSound('../snd/error.mp3');
             setTimeout(function() {
                 m.fadeOut(3000);
-                source.removeClass('disabled');
-            }, 5000);
+                lt.removeClass('disabled');
+                $('#sound_fetch_btn').removeClass('busy');
+                $('#sound_fetch_btn').removeClass('disabled');
+            }, 3000);
         }
     });
 }

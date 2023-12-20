@@ -202,6 +202,7 @@ public class SpeechatorsVoiceService extends VoiceService {
                 }
             } catch (Exception e) {
                 log.error("Exception caught: {}", e.getClass().getName(), e);
+                throw new RuntimeException(e);
             }
         }
 
