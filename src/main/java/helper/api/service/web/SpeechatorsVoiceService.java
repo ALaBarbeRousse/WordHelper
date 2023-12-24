@@ -44,19 +44,20 @@ public class SpeechatorsVoiceService extends VoiceService {
         this.put("italiano", "italian-italy");
     }};
 
+    private final ChromeOptions options = new ChromeOptions() {{
+        this.setPageLoadStrategy(PageLoadStrategy.EAGER);
+        this.addArguments("headless");
+        this.addArguments("--mute-audio");  // Глушим звуки
+        this.setExperimentalOption("prefs", new HashMap<>() {{
+            this.put("profile.default_content_settings.popups", 0);
+            this.put("download.default_directory", downloadFilePath);
+            this.put("profile.default_content_setting_values.automatic_downloads", 1);
+        }});
+    }};
+
     @Override
     public void getSound(String language, String word) {
         String url = BASE_URL + LANGUAGE_TO_LINK.get(language);
-
-        ChromeOptions options = new ChromeOptions() {{
-            this.setPageLoadStrategy(PageLoadStrategy.EAGER);
-            this.addArguments("headless");
-            this.setExperimentalOption("prefs", new HashMap<>() {{
-                this.put("profile.default_content_settings.popups", 0);
-                this.put("download.default_directory", downloadFilePath);
-                this.put("profile.default_content_setting_values.automatic_downloads", 1);
-            }});
-        }};
 
         try {
             WebDriver driver = new ChromeDriver(options);
@@ -82,10 +83,8 @@ public class SpeechatorsVoiceService extends VoiceService {
                 /* Очищаем папку скачанных файлов */
                 FileHelper.emptyFolder(downloadFolder);
 
-//                String voiceValue = option.getAttribute("value");
-//                log.info("Голос: {}", voiceValue);
                 String voiceName = option.getText();
-//                log.info("Имя: {}", voiceName);
+
                 voiceSelect.selectByValue(option.getAttribute("value"));
                 saveButton.click();
 
@@ -135,17 +134,6 @@ public class SpeechatorsVoiceService extends VoiceService {
                 .collect(Collectors.toList());
             filteredMap.put(language, filtered);
         }
-
-        ChromeOptions options = new ChromeOptions() {{
-            this.setPageLoadStrategy(PageLoadStrategy.EAGER);
-            this.addArguments("headless");
-            this.addArguments("--mute-audio");  // Глушим звуки
-            this.setExperimentalOption("prefs", new HashMap<>() {{
-                this.put("profile.default_content_settings.popups", 0);
-                this.put("download.default_directory", downloadFilePath);
-                this.put("profile.default_content_setting_values.automatic_downloads", 1);
-            }});
-        }};
 
         WebDriver driver = new ChromeDriver(options);
         for (Language language: filteredMap.keySet()) {
