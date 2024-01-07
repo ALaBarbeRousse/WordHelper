@@ -29,6 +29,7 @@ button:hover {
     width: 100%;
     text-align: center;
     overflow-y: scroll;
+    min-height: 420px;
 }
 div.words_pair {
     border: 1px solid black;
