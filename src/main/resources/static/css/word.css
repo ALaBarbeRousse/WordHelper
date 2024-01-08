@@ -75,12 +75,12 @@ div.get_voice_btn:active {
 
 div.play_voice_btn {
     border: 1px solid #484848ff;
-        border-radius: 10px;
-        margin: 4px;
-        width: 18px;
-        height: 18px;
-        background: url("../img/speaker.png") no-repeat center;
-        margin: auto auto;
+    border-radius: 13px;
+    width: 24px;
+    height: 24px;
+    background: url("../img/speaker.png") no-repeat center;
+    margin: auto auto;
+    cursor: pointer;
 }
 div.play_voice_btn:hover {
     border: 1px solid #606060ff;
