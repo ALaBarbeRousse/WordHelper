@@ -19,4 +19,7 @@ public interface VoiceRepository extends JpaRepository<Voice, Long> {
 
     @Query("SELECT v FROM Voice v WHERE v.word = ?1 ORDER BY RANDOM()")
     List<Voice> getRandomVoice(Word word, Pageable pageable);
+
+    @Query(value = "SELECT v FROM Voice v WHERE v.word.writing = ?1 AND v.word.language = ?2")
+    List<Voice> getVoices(String word, Language language);
 }

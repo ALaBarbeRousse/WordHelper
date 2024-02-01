@@ -46,10 +46,28 @@ div.word_buttons_wrapper {
     grid-template-rows: 1fr;
     grid-template-columns: 5fr 1fr 5fr;
 }
-div.word_buttons {
+div.word_buttons {  /* Это контейнер */
     /*border: 1px solid red;*/
-    /*text-align: center;*/
+    text-align: center;
+    display: block;
+    position: relative;
+    height: 28px;
 }
+div.voices_list {   /* А это список голосов */
+    border: 1px solid #a0a0a0;
+    width: fit-content;
+    position: relative;
+    z-index: 10;
+    background-color: #fafaf7;
+    max-height: 180px;
+    overflow-y: scroll;
+    margin: 0 auto;
+    padding: 0 4px;
+    border-radius: 4px;
+    box-shadow: 1px 1px 2px #8f8f89;
+    display: none;
+}
+
 div.buttons_delimiter {
     /*border: 1px solid green;*/
     /*height: 24px;*/
@@ -72,8 +90,7 @@ div.get_voice_btn:active {
     border: 1px solid #000000ff;
     background: url("../img/wave_active.png") no-repeat center;
 }
-
-div.play_voice_btn {
+div.open_voices_btn {
     border: 1px solid #484848ff;
     border-radius: 13px;
     width: 24px;
@@ -81,6 +98,24 @@ div.play_voice_btn {
     background: url("../img/speaker.png") no-repeat center;
     margin: auto auto;
     cursor: pointer;
+    display: block;
+}
+div.open_voices_btn:hover {
+    border: 1px solid #606060ff;
+    box-shadow: 0 0 5px #606060ff;
+}
+div.open_voices_btn:active {
+    border: 1px solid #000000ff;
+}
+
+div.play_voice_btn {
+    border: 1px solid #484848ff;
+    border-radius: 13px;
+    width: 24px;
+    height: 24px;
+    background: url("../img/speaker.png") no-repeat center;
+    cursor: pointer;
+    margin: 8px auto;
 }
 div.play_voice_btn:hover {
     border: 1px solid #606060ff;
@@ -134,8 +169,8 @@ div.hidden {
 }
 
 .translation_exists {
-    box-shadow: 0 0 15px #FFE311FF;
-    background-color: #FFE311FF;
+    box-shadow: 0 0 12px #fffbc7;
+    background-color: #fffbc7;
 }
 
 div.description_env {

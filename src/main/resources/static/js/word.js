@@ -3,6 +3,9 @@ let r;
 let wl1, wl2;
 let gv1, gv2;   // Кнопки загрузки звука
 
+let wbpl, wbpr; // Левая и правая панели кнопок голосов.
+let lvl, rvl;   // Левый и правый список голосов
+
 $(document).ready(function() {
     loadLanguages();
 
@@ -15,8 +18,13 @@ $(document).ready(function() {
     r = $('#result_icon')
     wl1 = $('#word_list_1');
     wl2 = $('#word_list_2');
-    gv1 = $('#getVoice1');
-    gv2 = $('#getVoice2');
+//    gv1 = $('#getVoice1');
+//    gv2 = $('#getVoice2');
+    wbpl = $('#word_buttons_left');
+    wbpr = $('#word_buttons_right');
+
+    lvl = $("#left_voices_list");
+    rvl = $("#right_voices_list");
 
 //    let ac;
 //    if(!window.AudioContext) {
@@ -64,29 +72,29 @@ $(document).ready(function() {
         swapWords();
     });
 
-    gv1.on('click', function() {
-        if(gv1.hasClass('play_voice_btn')) {
-            playVoice(l1.val(), w1.val(), gv1);
-        } else if(gv1.hasClass('get_voice_btn')) {
-            getVoice(l1.val(), w1.val(), gv1);
-        }
-    });
-    gv2.on('click', function() {
-        if(gv2.hasClass('play_voice_btn')) {
-            playVoice(l2.val(), w2.val(), gv2);
-        } else if(gv2.hasClass('get_voice_btn')) {
-            getVoice(l2.val(), w2.val(), gv2);
-        }
-    });
+//    gv1.on('click', function() {
+//        if(gv1.hasClass('play_voice_btn')) {
+//            playVoice(l1.val(), w1.val(), gv1);
+//        } else if(gv1.hasClass('get_voice_btn')) {
+//            getVoice(l1.val(), w1.val(), gv1);
+//        }
+//    });
+//    gv2.on('click', function() {
+//        if(gv2.hasClass('play_voice_btn')) {
+//            playVoice(l2.val(), w2.val(), gv2);
+//        } else if(gv2.hasClass('get_voice_btn')) {
+//            getVoice(l2.val(), w2.val(), gv2);
+//        }
+//    });
 });
 
 function setLoadVoiceEnabled(enabled) {
     if(enabled) {
-        gv1.removeClass("disabled");
-        gv2.removeClass("disabled");
+//        gv1.removeClass("disabled");
+//        gv2.removeClass("disabled");
     } else {
-        gv1.addClass("disabled");
-        gv2.addClass("disabled");
+//        gv1.addClass("disabled");
+//        gv2.addClass("disabled");
     }
 }
 
@@ -174,6 +182,7 @@ function showArticleExist(exists) {
         setLoadVoiceEnabled(true);
     } else {
         words_env.removeClass("translation_exists");
+        words_env.prop("title", "");
         setLoadVoiceEnabled(false);
     }
 }
@@ -217,8 +226,10 @@ function findWord(language, word) {
 
 function findWordAndTranslation(from, word, to) {
     if (!word.trim()) {
+        console.log("Пусто");
         w2.val('');
         wl1.empty();
+        $("div.word_buttons div.play_voice_btn").remove();
         return;
     }
 
@@ -233,35 +244,63 @@ function findWordAndTranslation(from, word, to) {
         contentType:"application/json; charset=utf-8",
         data: JSON.stringify(data),
         success: function (data) {
-//            console.log("DATA: " + JSON.stringify(data));
+//            if(data.translation) {
+//                console.log("DATA: " + JSON.stringify(data));
+//            }
 
             if (data) {
                 if (data.suspect) {
                     if(data.suspect.length == 1 && word == data.suspect[0]) {
                         wl1.empty();
                         w1.val(data.suspect[0]);
+                        console.log("Да, перевод есть");
 
-                        if(data.wordVoicePresent) {
-                            gv1.removeClass('get_voice_btn');
-                            gv1.addClass('play_voice_btn');
-                            gv1.removeClass('hidden');
-                            gv1.attr('title', 'Произнести');
+                        if(Object.keys(data.wordSounds).length > 0) {
+                            console.log("Да, звуки есть");
+//                            gv1.removeClass('get_voice_btn');
+//                            gv1.addClass('play_voice_btn');
+//                            gv1.addClass('hidden');
+//                            gv1.attr('title', 'Произнести');
+                            wbpl.append("<div id='left_sounds_button' class='open_voices_btn'></div>");
+                            for(var key in data.wordSounds) {
+                                /* Добавляем кнопки по числу голосов */
+//                                console.log("Голос: " + key);
+                                var el = $('<div class="play_voice_btn" title=' + key + '></div>');
+                                el.on("click", function() {
+                                    sound(data.wordSounds[$(this).attr("title")]);
+                                });
+                                lvl.append(el);
+
+//                                wbpl.append("<div class='play_voice_btn'></div>")
+//                                gv1.parent().css("background-color", "red");
+//                                gv1.parent().append("<div class='play_voice_btn'></div>")
+                            }
+                            $("#left_sounds_button").on('mouseover', function() {
+                                showVoicesList($(this));
+                            });
                         } else {
-                            gv1.removeClass('play_voice_btn');
-                            gv1.removeClass('hidden');
-                            gv1.addClass('get_voice_btn');
-                            gv1.attr('title', 'Загрузить звук');
+                            console.log("Нет, звуков нет");
+//                            gv1.removeClass('play_voice_btn');
+//                            gv1.removeClass('hidden');
+//                            gv1.addClass('get_voice_btn');
+//                            gv1.attr('title', 'Загрузить звук');
                         }
                     } else {
-                        gv1.removeClass('play_voice_btn');
-                        gv1.addClass('hidden');
-                        gv1.attr('title', 'Загрузить звук');
+                        console.log("Нет, перевода нет");
+                        $("div.word_buttons div.open_voices_btn").remove();
+                        /* Опустошить список кнопок голосов */
+                        $(".voices_list").empty();
+
+//                        gv1.removeClass('play_voice_btn');
+//                        gv1.addClass('hidden');
+//                        gv1.attr('title', 'Загрузить звук');
                         wl1.empty();
                         for (let i = 0; i < data.suspect.length; i++) {
                             wl1.append($('<option />').val(data.suspect[i]).text(data.suspect[i]));
                         }
                     }
                 } else {
+                    console.log("Подозреваемых нет");
                     wl1.empty();
                 }
 
@@ -271,22 +310,40 @@ function findWordAndTranslation(from, word, to) {
                     validateFields();
 
                     if(data.translationVoicePresent) {
-                        gv2.removeClass("get_voice_btn");
-                        gv2.removeClass('hidden');
-                        gv2.addClass("play_voice_btn");
-                        gv2.attr("title", "Произнести");
+                        console.log("Звуки перевода есть");
+                        wbpr.append("<div id='right_sounds_button' class='open_voices_btn'></div>");
+                        for(var key in data.translationSounds) {
+//                            console.log("Голос перевода: " + key);
+                            var el = $('<div class="play_voice_btn" title=' + key + '></div>');
+                            el.on("click", function() {
+                                sound(data.translationSounds[$(this).attr("title")]);
+                            });
+                            rvl.append(el);
+                        }
+                        $("#right_sounds_button").on('mouseover', function() {
+//                            console.log("Это mouseover, источник: " + $(this).attr("id"));
+                            showVoicesList($(this));
+                        });
+
+//                        gv2.removeClass("get_voice_btn");
+//                        gv2.removeClass('hidden');
+//                        gv2.addClass("play_voice_btn");
+//                        gv2.attr("title", "Произнести");
                     } else {
-                        gv2.removeClass("play_voice_btn");
-                        gv2.removeClass('hidden');
-                        gv2.addClass("get_voice_btn");
-                        gv2.attr("title", "Загрузить звук");
+                        console.log("Звуков перевода нет");
+//                        gv2.removeClass("play_voice_btn");
+//                        gv2.removeClass('hidden');
+//                        gv2.addClass("get_voice_btn");
+//                        gv2.attr("title", "Загрузить звук");
                     }
                 } else {
                     w2.val(null);  // Убрали перевод
-                    gv2.addClass('hidden');
+//                    gv2.addClass('hidden');
                     showArticleExist(false);
                     validateFields();
                 }
+            } else {
+                console.log("Данных нет");
             }
         },
         error: function () {
@@ -307,9 +364,9 @@ function swapWords() {
     w1.val(w2.val());
     w2.val(temp);
 
-    temp = gv1.attr('class');
-    gv1.attr('class', gv2.attr('class'));
-    gv2.attr('class', temp);
+//    temp = gv1.attr('class');
+//    gv1.attr('class', gv2.attr('class'));
+//    gv2.attr('class', temp);
 }
 
 function getVoice(lang, word, source) {
@@ -336,4 +393,30 @@ function getVoice(lang, word, source) {
             }, 5000);
         }
     });
+}
+
+function showVoicesList(source) {
+//    console.log("Это showVoicesList, источник: " + source.attr("id"));
+
+    /* Показываем список голосов */
+    source.parent().find(".voices_list").attr("style", "display: block;");
+    /* Ставим слушатель на список голосов */
+    source.parent().find(".voices_list").on("mouseleave", function() {
+        hideVoicesList($(this));
+    });
+    /* Убираем кнопку показа списка */
+    source.parent().find(".open_voices_btn").attr("style", "display: none;");
+}
+
+function hideVoicesList(source) {
+//    console.log("Курсор выведен: " + source.attr("id"));
+
+    /* Скрываем список голосов */
+    source.removeAttr("style");
+    /* Показываем кнопку показа списка */
+    source.parent().find(".open_voices_btn").removeAttr("style");
+}
+
+function deleteSound() {
+    console.log("Это deleteSound");
 }

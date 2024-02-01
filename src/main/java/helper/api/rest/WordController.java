@@ -48,12 +48,18 @@ public class WordController {
 
         List<String> suspects = wordService.findSimilarWords(dto.getWord(), langFrom);
         return wordService.findTranslation(langFrom, dto.getWord(), langTo)
-            .map(translation -> new FindTranslationResultDTO(
-                suspects,
-                soundService.getVoicesPresent(langFrom, dto.getWord()),
-                translation,
-                soundService.getVoicesPresent(langTo, translation)
-            ))
+            .map(translation -> {
+                FindTranslationResultDTO retValue = new FindTranslationResultDTO(
+                    suspects,
+                    soundService.getVoicesPresent(langFrom, dto.getWord()),
+                    translation,
+                    soundService.getVoicesPresent(langTo, translation)
+                );
+                retValue.setWordSounds(soundService.getVoices(langFrom, dto.getWord()));
+                retValue.setTranslationSounds(soundService.getVoices(langTo, translation));
+
+                return retValue;
+            })
             .orElseGet(() -> new FindTranslationResultDTO(
                 suspects,
                 false,

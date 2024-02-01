@@ -90,7 +90,7 @@ function startTraining() {
         contentType:"application/json; charset=utf-8",
         data: JSON.stringify(data),
         success: function (data) {
-//            console.log("Слова для тренировки: " + JSON.stringify(data));
+            console.log("Слова для тренировки: " + JSON.stringify(data));
             if (data.words.length) {
                 showTrainingMarkup(false);
                 trainingId = data.id;
@@ -241,7 +241,7 @@ function onCheckButton() {
                 showResultCorrect(false);
                 incCounter();
                 trainingWords.shift();
-            }, 1000);
+            }, 500);
         }
     }
 }

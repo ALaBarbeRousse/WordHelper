@@ -36,6 +36,9 @@ public class SoundService {
     public boolean getVoicesPresent(Language language, String word) {
         return voiceHandler.getVoicesPresent(language, word);
     }
+    public Map<String,byte[]> getVoices(Language language, String word) {
+        return voiceHandler.getVoices(language, word);
+    }
 
     public Voice getRandomVoice(String language, String writing) {
         Language lang = languageService.findLanguageByName(language)

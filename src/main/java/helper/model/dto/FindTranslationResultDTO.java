@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 public class FindTranslationResultDTO {
     public FindTranslationResultDTO(List<String> suspect, boolean wordVoicePresent, String translation, boolean translationVoicePresent) {
@@ -23,5 +24,8 @@ public class FindTranslationResultDTO {
     private String translation;
 
     private boolean wordVoicePresent;
+    private Map<String, byte[]> wordSounds;
+
     private boolean translationVoicePresent;
+    private Map<String, byte[]> translationSounds;
 }
