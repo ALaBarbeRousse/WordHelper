@@ -90,7 +90,7 @@ div.go_stop_pane {
     font-weight: bold;
     margin: 0 auto;
     min-height: 24px;
-    cursor: pointer;
+    cursor: url('../img/speaker.png'), auto;
     padding: 6px;
 }
 #to_translate:hover {
