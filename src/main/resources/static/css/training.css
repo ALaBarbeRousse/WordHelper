@@ -81,14 +81,25 @@ div.go_stop_pane {
     visibility: hidden;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr;
 }
 #to_translate {
+    /*border: 1px solid red;*/
+    border-radius: 8px;
     font-size: 150%;
     font-weight: bold;
-    margin: 6px auto;
-    min-height: 36px;
+    margin: 0 auto;
+    min-height: 24px;
+    cursor: pointer;
+    padding: 6px;
 }
+#to_translate:hover {
+    box-shadow: 0 0 5px gray;
+}
+#to_translate:active {
+    box-shadow: 0 0 5px black;
+}
+
 #translation {
     margin: 6px auto;
     width: 95%;
