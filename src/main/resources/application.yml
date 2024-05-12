@@ -10,6 +10,7 @@ spring:
     username: postgres
     password: postgres
   jpa:
+    open-in-view: true
     generate-ddl: false
     hibernate:
       ddl-auto: update
