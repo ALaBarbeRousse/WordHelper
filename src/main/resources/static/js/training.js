@@ -35,6 +35,10 @@ $(document).ready(function() {
     $('#swap_button').on('click', function () {
         swapLanguages();
     });
+
+    $('#to_translate').on('click', function () {
+        sound(trainingWords[0].ws);
+    });
 });
 
 function stopTraining() {
@@ -90,7 +94,7 @@ function startTraining() {
         contentType:"application/json; charset=utf-8",
         data: JSON.stringify(data),
         success: function (data) {
-            console.log("Слова для тренировки: " + JSON.stringify(data));
+//            console.log("Слова для тренировки: " + JSON.stringify(data));
             if (data.words.length) {
                 showTrainingMarkup(false);
                 trainingId = data.id;
@@ -279,7 +283,7 @@ function paintWord() {
 //     console.log("paintWord, trainingWords: " + JSON.stringify(trainingWords));
     /* Берём первое слово и показываем его */
     sound(trainingWords[0].ws);
-    $('#to_translate').text(trainingWords[0].w);
+    $('#to_translate').text(trainingWords[0].w).attr("title", "Произнести");
     t.val('');
     setTrainMarkupEnabled(true);
 }
