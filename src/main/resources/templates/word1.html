@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Словесный помогатор</title>
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+<!--    <link rel="stylesheet" type="text/css" href="/css/word.css">-->
+    <link rel="stylesheet" type="text/css" href="/css/word1.css">
+    <link rel="icon" type="image/png" href="/img/globe.png" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="/js/word1.js"></script>
+    <script src="/js/sound.js"></script>
+</head>
+<body>
+<div class="user_pane">
+    <div class="dropdown">
+        <button id="dropdown_btn" th:text="${student_name}"></button>
+        <div class="dropdown-content">
+            <!--            <a href="#">Мой профиль</a>-->
+            <a href="/logout">Выход</a>
+        </div>
+    </div>
+    <!--            <div>(Мой язык: <span th:text="${my_language}"></span>)</div>-->
+</div>
+<h1 class="caption">Словесный помогатор</h1>
+
+<div class="word_edit_main_panel">
+    <div class="description_env">
+        <div><button id="home_btn" onclick="location.href='/main'"></button></div>
+        <div class="description">Словарная статья</div>
+        <div></div>
+    </div>
+
+    <fieldset class="edit_panel">
+        <legend>Слово</legend>
+
+        <div class="controls">
+            <button id="swap_button" class="control_button" title="Поменять языки"></button>
+        </div>
+        <div class="dict_article">
+            <div class="one_word">
+                <div class="lang_select">
+                    <input id="lang1" type="text" list="lang_list_1" class="lang_select"/>
+                    <datalist id="lang_list_1"></datalist>
+                </div>
+                <input class="word_input" id="word1" type="text" list="word_list_1"/>
+                <datalist id="word_list_1"></datalist>
+            </div>
+            <div class="one_word">
+                <div class="lang_select">
+                    <input id="lang2" type="text" list="lang_list_2" class="lang_select"/>
+                    <datalist id="lang_list_2"></datalist>
+                </div>
+                <input class="word_input" id="word2" type="text" list="word_list_2"/>
+                <datalist id="word_list_2"></datalist>
+            </div>
+        </div>
+        <div class="controls">
+            <button id="delete_button" class="control_button" disabled title="Удалить"></button>
+        </div>
+<!--        <div class="controls"></div>-->
+    </fieldset>
+
+    <div class="message_pane"><span id="message"></span></div>
+
+    <div class="options_pane">
+        <span id="success"></span>
+        <button onclick="location.href='/main'">Отмена</button>
+        <button class="ok" id="ok_btn" disabled>OK</button>
+    </div>
+</div>
+
+<!--<div class="description_env">-->
+<!--    <div><button id="home_btn1" onclick="location.href='/main'"></button></div>-->
+<!--    <div class="description">Словарная статья</div>-->
+<!--    <div></div>-->
+<!--</div>-->
+
+<!--<fieldset>-->
+<!--    <legend>Слово</legend>-->
+<!--    <div class="lang_select">-->
+<!--        <label for="lang1">Язык</label>-->
+<!--        <div><button id="swap_button"></button></div>-->
+<!--        <label for="lang2">Язык</label>-->
+<!--        <input id="lang1" type="text" list="lang_list_1"/>-->
+<!--        <datalist id="lang_list_1"></datalist>-->
+<!--        <div></div>-->
+<!--        <input id="lang2" type="text" list="lang_list_2"/>-->
+<!--        <datalist id="lang_list_2"></datalist>-->
+<!--    </div>-->
+<!--    <div class="dict_article">-->
+<!--        <input class="word_input" id="word1" type="text" list="word_list_1"/>-->
+<!--        <datalist id="word_list_1"></datalist>-->
+<!--        <div id="result_icon"></div>-->
+<!--        <input class="word_input" id="word2" type="text" list="word_list_2"/>-->
+<!--        <datalist id="word_list_2"></datalist>-->
+<!--    </div>-->
+<!--    <div class="word_buttons_wrapper">-->
+<!--        <div id='word_buttons_left' class="word_buttons">-->
+<!--            &lt;!&ndash;                    <div id="getVoice1" class="hidden get_voice_btn" title="Загрузить звук" ></div>&ndash;&gt;-->
+<!--            <div id="left_voices_list" class="voices_list"></div>-->
+<!--        </div>-->
+<!--        <div class="buttons_delimiter"></div>-->
+<!--        <div id='word_buttons_right' class="word_buttons">-->
+<!--            &lt;!&ndash;                    <div id="getVoice2" class="hidden get_voice_btn" title="Загрузить звук"></div>&ndash;&gt;-->
+<!--            <div id="right_voices_list" class="voices_list"></div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</fieldset>-->
+<!--<div class="message_pane"><span id="message"></span></div>-->
+<!--<div class="options_pane">-->
+<!--    <span id="success"></span>-->
+<!--    <button onclick="location.href='/main'">Отмена</button>-->
+<!--    <button class="ok" id="ok_btn" disabled>OK</button>-->
+<!--</div>-->
+</body>
+</html>

@@ -1,0 +1,124 @@
+html, body {
+    background: linear-gradient(to bottom right, rgb(255, 255, 255) 0%, rgb(216, 216, 208) 100%);
+    margin: 0;
+    height: 100%;
+}
+
+div.description_env {
+    background-color: #d6d6cd;
+}
+
+div.message_pane {
+/*    border: 1px solid orangered;*/
+    min-height: 24px;
+    color: red;
+    margin: 0 auto;
+    font-size: smaller;
+    width: 50%;
+}
+
+div.word_edit_main_panel {
+/*    border: 1px solid red;*/
+    background: linear-gradient(to bottom right, rgb(255, 255, 255) 0%, rgb(216, 216, 208) 100%);
+    width: 620px;
+    margin: 12px auto;
+    box-shadow: 2px 4px 4px 1px rgb(141, 141, 136);
+}
+
+fieldset.edit_panel {
+    width: 90%;
+    margin: 12px auto;
+    border-radius: 6px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+}
+
+.options_pane {
+    width: 90%;
+    margin: 0 auto;
+    text-align: end;
+    padding: 6px 12px;
+    min-height: 24px;
+}
+
+div.dict_article {
+/*    border: 1px solid red;*/
+    display: grid;
+    grid-template-rows: 2fr;
+    grid-template-columns: 1fr;
+}
+
+label.word_label {
+/*    border: 1px solid blue;*/
+    margin: 2px auto;
+    font-weight: bold;
+}
+
+input.word_input {
+    margin: 0px auto;
+    width: 95%;
+}
+
+div.one_word {
+/*    border: 1px solid blue;*/
+    padding: 6px;
+    display: grid;
+    grid-template-rows: 2fr;
+    grid-template-columns: 1fr;
+}
+
+div.lang_select {
+/*    border: 1px solid green;*/
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    margin: 0 auto;
+    text-align: center;
+}
+
+input[type="text"].lang_select {
+/*    border: 1px solid pink;*/
+    background: transparent;
+    border:none;
+    margin: 2px auto;
+    max-width: 120px;
+    text-align: center;
+    font-weight: bold;
+    font-size: large;
+}
+
+div.controls {
+/*    border: 1px solid blue;*/
+    display: flex;
+    align-items: center;
+}
+
+button.control_button {
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
+    background-color: transparent;
+    margin: 2px 2px;
+    border-radius: 12px;
+    min-width: 0;
+    border: none;
+}
+button.control_button:hover {
+    box-shadow: 0 0 5px gray;
+}
+button.control_button:active {
+    box-shadow: 0 0 5px black;
+}
+button.control_button:disabled {
+    cursor: auto;
+    box-shadow: none;
+    opacity: 0.2;
+}
+
+#swap_button {
+    background-image: url("../img/swap_round.png");
+}
+
+#delete_button {
+    background-image: url("../img/delete_bw.png");
+}
