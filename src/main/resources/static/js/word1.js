@@ -56,4 +56,7 @@ function swapLanguages() {
     let temp = l1.val();
     l1.val(l2.val());
     l2.val(temp);
+
+    w1.val("");
+    w2.val("");
 }
