@@ -63,7 +63,7 @@ div.one_word {
 /*    border: 1px solid blue;*/
     padding: 6px;
     display: grid;
-    grid-template-rows: 2fr;
+    grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: 1fr;
 }
 
@@ -125,4 +125,20 @@ button.control_button:disabled {
 
 .readonly {
     cursor: default;
+    background-color: #f4f4f4;
+}
+
+div.voice_button_wrapper {
+    margin: auto;
+}
+
+button.load_voice_button {
+    background-image: url("../img/wave.png");
+    border: 1px solid black;
+    background-position: center;
+}
+button.select_sound_button {
+    background-image: url("../img/speaker.png");
+    border: 1px solid black;
+    background-position: center;
 }
