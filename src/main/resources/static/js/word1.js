@@ -129,18 +129,31 @@ function findWordAndTranslation(from, word, to) {
             console.log("SUCCESS: " + JSON.stringify(data));
             if (data) {
                 /* Что бы ни было получено, добавляем кнопку загрузки звука */
-                wsw.html('<button id="word_voice_button" class="load_voice_button control_button"></button');
+                wsw.html('<button id="word_voice_button" class="load_voice_button control_button" title="Загрузить"></button');
+
+                /* todo Грузим звук */
+                $('#word_voice_button').off('click');
+                $('#word_voice_button').on('click', function() {
+                    console.log('Грузим звук слова');
+                });
 
                 if (data.suspect) {
                     if (data.suspect.length == 0) {
                         w2.val(""); // Опустошаем второе слово
                         setFieldReadOnly(w2, false);  // Отпираем второе слово
                     } else {
-                        console.log("WORD: " + word);
+//                        console.log("WORD: " + word);
                         if (data.wordVoicePresent) {
                             /* Ставим для кнопки звука слова другой класс - select_sound_button */
                             $('#word_voice_button').removeClass("load_voice_button");
+                            $('#word_voice_button').attr('title', 'Произнести');
                             $('#word_voice_button').addClass("select_sound_button");
+
+                            /* todo Играем звук */
+                            $('#word_voice_button').off('click');
+                            $('#word_voice_button').on('click', function() {
+                                console.log('Играем звук слова');
+                            });
                         }
 
                         if (data.suspect.length == 1) {
@@ -148,15 +161,34 @@ function findWordAndTranslation(from, word, to) {
                             w2.val(data.translation);
                             setFieldReadOnly(w2, true);  // Запираем второе слово
 
+                            /* Опустошаем список подозреваемых */
+                            wl1.empty();
+                            if (data.suspect[0] != word) {
+                                wl1.append($('<option />').val(data.suspect[0]).text(data.suspect[0]));
+                            }
+
+
                             /* Добавляем кнопку загрузки звука перевода */
                             if (data.translationVoicePresent) {
-                                tsw.html('<button id="translation_voice_button" class="select_sound_button control_button"></button>');
+                                tsw.html('<button id="translation_voice_button" class="select_sound_button control_button" title="Произнести"></button>');
+
+                                /* todo Играем звук перевода*/
+                                $('#translation_voice_button').off('click');
+                                $('#translation_voice_button').on('click', function() {
+                                    console.log("Играем звук перевода");
+                                });
                             } else {
-                                tsw.html('<button id="translation_voice_button" class="load_voice_button control_button"></button>');
+                                tsw.html('<button id="translation_voice_button" class="load_voice_button control_button" title="Загрузить"></button>');
+
+                                /* todo Грузим звук перевода */
+                                $('#translation_voice_button').off('click');
+                                $('#translation_voice_button').on('click', function() {
+                                    console.log("Грузим звук перевода");
+                                });
                             }
                         } else if (data.suspect.length > 1) {
                             /* Надо заполнить список подозреваемых, если их больше 1 */
-                            console.log("suspect: " + JSON.stringify(data.suspect));
+                            console.log("Заполняем suspect: " + JSON.stringify(data.suspect));
                             wl1.empty();
                             for (let i = 0; i < data.suspect.length; i++) {
                                 wl1.append($('<option />').val(data.suspect[i]).text(data.suspect[i]));
