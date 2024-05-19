@@ -38,6 +38,7 @@
             <button id="swap_button" class="control_button" title="Поменять языки"></button>
         </div>
         <div class="dict_article">
+            <!-- Слово -->
             <div class="one_word">
                 <div class="lang_select">
                     <input id="lang1" type="text" list="lang_list_1" class="lang_select"/>
@@ -46,12 +47,13 @@
                 <input class="word_input" id="word1" type="text" list="word_list_1"/>
                 <datalist id="word_list_1"></datalist>
             </div>
+            <!-- Перевод -->
             <div class="one_word">
                 <div class="lang_select">
                     <input id="lang2" type="text" list="lang_list_2" class="lang_select"/>
                     <datalist id="lang_list_2"></datalist>
                 </div>
-                <input class="word_input" id="word2" type="text" list="word_list_2"/>
+                <input class="word_input" id="word2" type="text" list="word_list_2" readonly/>
                 <datalist id="word_list_2"></datalist>
             </div>
         </div>
