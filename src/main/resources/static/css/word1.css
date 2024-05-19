@@ -122,3 +122,7 @@ button.control_button:disabled {
 #delete_button {
     background-image: url("../img/delete_bw.png");
 }
+
+.readonly {
+    cursor: default;
+}
