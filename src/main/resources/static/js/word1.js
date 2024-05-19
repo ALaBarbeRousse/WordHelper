@@ -34,6 +34,10 @@ $(document).ready(function() {
         validateFields();
         findWordAndTranslation(l1.val(), w1.val(), l2.val());
     });
+    w2.on('input propertychange', function () {
+        validateFields();
+//        findWordAndTranslation(l1.val(), w1.val(), l2.val());
+    });
 });
 
 function loadLanguages() {
@@ -82,6 +86,7 @@ function swapLanguages() {
 }
 
 function validateFields() {
+    console.log("Это validateFields");
     if (l1.val() && l2.val() && w1.val() && w2.val()) {
         $('#ok_btn').prop("disabled", false);
     }
@@ -142,7 +147,7 @@ function findWordAndTranslation(from, word, to) {
                         w2.val(""); // Опустошаем второе слово
                         setFieldReadOnly(w2, false);  // Отпираем второе слово
                     } else {
-//                        console.log("WORD: " + word);
+                        console.log("WORD: " + word);
                         if (data.wordVoicePresent) {
                             /* Ставим для кнопки звука слова другой класс - select_sound_button */
                             $('#word_voice_button').removeClass("load_voice_button");
@@ -166,7 +171,6 @@ function findWordAndTranslation(from, word, to) {
                             if (data.suspect[0] != word) {
                                 wl1.append($('<option />').val(data.suspect[0]).text(data.suspect[0]));
                             }
-
 
                             /* Добавляем кнопку загрузки звука перевода */
                             if (data.translationVoicePresent) {
@@ -194,7 +198,12 @@ function findWordAndTranslation(from, word, to) {
                                 wl1.append($('<option />').val(data.suspect[i]).text(data.suspect[i]));
                             }
                             /* Опустошаем поле перевода */
-                            w2.val("");
+                            if (data.translation) {
+                                w2.val(data.translation);
+                            } else {
+                                w2.val("");
+                            }
+
                             /* Удаляем кнопку звука перевода */
                             tsw.empty();
                         }
@@ -225,4 +234,8 @@ function setFieldReadOnly(field, readOnly) {
         field.removeClass("readonly");
         d.attr("disabled", true);
     }
+}
+
+function checkSave(word, translation) {
+    console.log("Это checkSave, word: " + word + ", translation: " + translation);
 }
