@@ -75,6 +75,8 @@ function loadLanguages() {
 }
 
 function swapLanguages() {
+    playSound('../snd/switch-5.mp3');
+
     let temp = l1.val();
     l1.val(l2.val());
     l2.val(temp);
@@ -83,14 +85,10 @@ function swapLanguages() {
     w1.val("");
     w2.val("");
     validateFields();
-
-    /* Убираем звуковые кнопки */
-    wsw.empty();
-    tsw.empty();
 }
 
 function validateFields(translation, translationVoicePresent) {
-    console.log("Это validateFields, translation: " + translation + ", translationVoicePresent: " + translationVoicePresent);
+//    console.log("Это validateFields, translation: " + translation + ", translationVoicePresent: " + translationVoicePresent);
 
     if (l1.val().trim() && w1.val().trim() ) {
         if (translation) {
@@ -110,10 +108,11 @@ function validateFields(translation, translationVoicePresent) {
             } else {
                 tsw.html('<button id="translation_voice_button" class="load_voice_button control_button" title="Загрузить"></button>');
 
-                /* todo Грузим звук перевода */
+                /* Грузим звук перевода */
                 $('#translation_voice_button').off('click');
                 $('#translation_voice_button').on('click', function() {
-                    console.log("Грузим звук перевода");
+//                    console.log("Грузим звук перевода: " + w2.val());
+                    loadSound(w2.val());
                 });
             }
         } else {
@@ -139,10 +138,11 @@ function validateFields(translation, translationVoicePresent) {
         } else {
             tsw.html('<button id="translation_voice_button" class="load_voice_button control_button" title="Загрузить"></button>');
 
-            /* todo Грузим звук перевода */
+            /* Грузим звук перевода */
             $('#translation_voice_button').off('click');
             $('#translation_voice_button').on('click', function() {
-                console.log("Грузим звук перевода");
+//                console.log("Грузим звук перевода: " + w2.val());
+                loadSound(w2.val());
             });
         }
     } else {
@@ -204,10 +204,11 @@ function findWordAndTranslation(from, word, to) {
                 /* Что бы ни было получено, добавляем кнопку загрузки звука */
                 wsw.html('<button id="word_voice_button" class="load_voice_button control_button" title="Загрузить"></button');
 
-                /* todo Грузим звук */
+                /* Грузим звук слова */
                 $('#word_voice_button').off('click');
                 $('#word_voice_button').on('click', function() {
-                    console.log('Грузим звук слова');
+//                    console.log('Грузим звук слова: ' + w1.val());
+                    loadSound(w1.val());
                 });
 
                 if (data.suspect) {
@@ -216,7 +217,7 @@ function findWordAndTranslation(from, word, to) {
 
                         validateFields();
 //                        console.log("setFieldReadOnly 3");
-//                        setFieldReadOnly(w2, false);  // Отпираем второе слово
+//                        setFieldReadOnly(w2, false);  // Отпираем второе словоыцфз
                     } else {
 //                        console.log("WORD: " + word);
                         if (data.wordVoicePresent) {
@@ -225,7 +226,7 @@ function findWordAndTranslation(from, word, to) {
                             $('#word_voice_button').attr('title', 'Произнести');
                             $('#word_voice_button').addClass("select_sound_button");
 
-                            /* todo Играем звук */
+                            /* todo Играем звук слова */
                             $('#word_voice_button').off('click');
                             $('#word_voice_button').on('click', function() {
                                 console.log('Играем звук слова');
@@ -294,7 +295,7 @@ function setFieldReadOnly(field, readOnly) {
 }
 
 function collectAndSendData() {
-    console.log("Это collectAndSendData");
+//    console.log("Это collectAndSendData");
     if (l1.val() && l2.val() && w1.val() && w2.val()) {
         let data = {
             "lang1": l1.val(),
@@ -328,4 +329,8 @@ function collectAndSendData() {
             }
         });
     }
+}
+
+function loadSound(word) {
+    console.log("Грузим звук: " + word);
 }
