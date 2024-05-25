@@ -2,6 +2,7 @@ package helper.api.rest;
 
 import helper.api.service.LanguageService;
 import helper.api.service.SoundService;
+import helper.api.service.TranslationService;
 import helper.api.service.WordService;
 import helper.model.Language;
 import helper.model.Voice;
@@ -9,13 +10,8 @@ import helper.model.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,6 +23,7 @@ public class WordController {
     private final WordService wordService;
     private final LanguageService languageService;
     private final SoundService soundService;
+    private final TranslationService translationService;
 
     @PostMapping
     public void saveWordPair(@RequestBody WordArticleEditDTO dto) {
@@ -79,5 +76,10 @@ public class WordController {
             voice.getWord().getWriting(),
             voice.getSound()
         );
+    }
+
+    @DeleteMapping(path = "/translate")
+    public void deleteTranslation(@RequestBody WordArticleEditDTO dto) {
+        translationService.deleteTranslation(dto);
     }
 }
