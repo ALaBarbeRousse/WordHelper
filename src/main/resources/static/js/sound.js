@@ -1,8 +1,3 @@
-const kSampleRate = 44100;
-const kNumSamples = 16834;
-const kFrequency  = 440;
-const kPI_2       = Math.PI * 2;
-
 function playSound(file) {
     let audio = new Audio(file);
     audio.volume = 0.2;
