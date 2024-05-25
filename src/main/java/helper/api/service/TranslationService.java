@@ -6,6 +6,7 @@ import helper.model.Translation;
 import helper.model.Word;
 import helper.model.dto.DictionaryDTO;
 import helper.model.dto.LanguagePair;
+import helper.model.dto.WordArticleEditDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -180,7 +181,7 @@ public class TranslationService {
 
     /**
      * todo Получаем случайный (один) перевод, у которого хотя бы одно слово без озвучки.
-     *
+     *  Сделано неправильно - не включает переводы, у которых без озвучки только одно слово.
      * @return
      */
     public List<Translation> getRandomDeafTranslation(String lang1, String lang2, int amnt) {
@@ -190,5 +191,10 @@ public class TranslationService {
             return translationRepository.getRandomDeafTranslation(l1.get(), l2.get(), PageRequest.of(0, amnt));
         }
         return Collections.emptyList();
+    }
+
+    /* TODO Удаляем перевод */
+    public void deleteTranslation(WordArticleEditDTO dto) {
+        log.info("Удаляем перевод, dto: {}", dto);
     }
 }
