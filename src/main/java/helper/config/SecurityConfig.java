@@ -36,9 +36,10 @@ public class SecurityConfig {
             .antMatchers(HttpMethod.GET, "/api/student/data").hasAuthority("Admin")  // Edit student (set roles)
             .antMatchers(HttpMethod.PUT, "/api/student/data").hasAuthority("Admin")  // Edit student (set roles)
 
-            .antMatchers(HttpMethod.GET, "/word", "/css/word.css", "/css/word1.css", "/js/word*", "/js/sound.js", "/js/jquery-confirm.js", "/img/home*", "/img/swap*").hasAuthority("Editor") // Edit word page
+            .antMatchers(HttpMethod.GET, "/word", "/css/word.css", "/css/word1.css", "/js/word*", "/js/sound.js", "/img/home*", "/img/swap*").hasAuthority("Editor") // Edit word page
             .antMatchers(HttpMethod.GET, "/img/correct.png", "/snd/*").hasAuthority("Editor") // Edit word page
             .antMatchers(HttpMethod.POST, "/api/word", "/api/word/translate").hasAuthority("Editor") // Edit word page
+            .antMatchers(HttpMethod.DELETE, "/api/word/translate").hasAuthority("Editor") // Edit word page
             .antMatchers(HttpMethod.POST, "/api/word/voice/random").hasAuthority("Editor") // Edit word page
             .antMatchers(HttpMethod.GET, "/api/voice").hasAuthority("Editor") // Edit word page
 
