@@ -4,6 +4,10 @@ html, body {
     height: 100%;
 }
 
+h5, h3 {
+    text-align: center;
+}
+
 div.description_env {
     background-color: #d6d6cd;
 }
