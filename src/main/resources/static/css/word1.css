@@ -18,11 +18,11 @@ div.message_pane {
 }
 
 div.word_edit_main_panel {
-/*    border: 1px solid red;*/
+    border: 1px solid #c3c3c3;
     background: linear-gradient(to bottom right, rgb(255, 255, 255) 0%, rgb(216, 216, 208) 100%);
     width: 620px;
     margin: 12px auto;
-    box-shadow: 2px 4px 4px 1px rgb(141, 141, 136);
+/*    box-shadow: 2px 4px 4px 1px rgb(141, 141, 136);*/
 }
 
 fieldset.edit_panel {
