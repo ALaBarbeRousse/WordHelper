@@ -54,7 +54,7 @@ button.ok:active {
     background-color: #d6d6cd;
 }
 button.ok:disabled, button.ok[disabled] {
-    background-color: #d6d6cd;
+    background-color: #d6d6cd40;
     cursor: default;
 }
 
