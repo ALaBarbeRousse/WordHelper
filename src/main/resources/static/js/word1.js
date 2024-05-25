@@ -44,6 +44,10 @@ $(document).ready(function() {
     ok.on('click', function() {
         collectAndSendData();
     });
+
+    d.on('click', function() {
+        askForDeletion(l1.val(), w1.val(), l2.val(), w2.val());
+    });
 });
 
 function loadLanguages() {
@@ -333,4 +337,60 @@ function collectAndSendData() {
 
 function loadSound(word) {
     console.log("Грузим звук: " + word);
+}
+
+function askForDeletion(wordLang, word, translationLang, translation) {
+//    console.log("Это deleteTranslation, wordLang: " + wordLang + ", word " + word + ", translationLang: " + translationLang + ", translation: " + translation);
+    $('<div></div>').appendTo('body')
+        .html('<div><h5>Удаляется перевод</h5></div><div><h3>' + word + '&harr;' + translation + '</h3></div><div><h5>Продолжить?</h5></div>')
+        .dialog({
+            modal: true,
+            title: 'Удаление перевода',
+            zIndex: 10000,
+            autoOpen: true,
+            width: '560px',
+            resizable: false,
+            buttons: {
+                "Нет": function() {
+                    $(this).dialog("close");
+                },
+                "Да": function() {
+                    // $(obj).removeAttr('onclick');
+                    // $(obj).parents('.Parent').remove();
+                    sendDeletion(wordLang, word, translationLang, translation);
+                    $(this).dialog("close");
+                }
+            },
+            close: function(event, ui) {
+                $(this).remove();
+            }
+        });
+};
+
+function sendDeletion(wordLang, word, translationLang, translation) {
+    let data = {
+        "lang1": wordLang,
+        "word1": word,
+        "lang2": translationLang,
+        "word2": translation
+    }
+    console.log("Удаляется перевод: " + JSON.stringify(data));
+    $.ajax({
+        type: 'DELETE',
+        url: 'api/word/translate',
+        contentType:"application/json; charset=utf-8",
+        data: JSON.stringify(data),
+        success: function (data) {
+            console.log("Перевод удалён, data: " + JSON.stringify(data));
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            $("#message").text('Не удалось удалить перевод');
+            $("#message").fadeIn(10);
+            setTimeout(function() {
+                $('#message').fadeOut(5000, function() {
+                    $("#message").text('');
+                });
+            }, 5000);
+        }
+    });
 }
