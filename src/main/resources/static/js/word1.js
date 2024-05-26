@@ -101,6 +101,8 @@ function swapLanguages() {
     w1.val("");
     w2.val("");
     validateFields();
+
+    w1.focus();
 }
 
 function validateFields(translation, translationVoicePresent) {
