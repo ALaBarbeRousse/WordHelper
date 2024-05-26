@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -49,5 +48,10 @@ public class VoiceHandler {
     public Map<String,byte[]> getVoices(Language language, String word) {
         return voiceRepository.getVoices(word, language).stream()
             .collect(Collectors.toMap(voice -> voice.getSpeaker().getName(), Voice::getSound));
+    }
+
+    /* Удаляем все озвучки для данного слова */
+    public void deleteVoicesByWord(Word word) {
+        voiceRepository.deleteVoicesByWord(word);
     }
 }
