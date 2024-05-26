@@ -2,7 +2,6 @@ package helper.api.rest;
 
 import helper.api.service.LanguageService;
 import helper.api.service.SoundService;
-import helper.api.service.TranslationService;
 import helper.api.service.WordService;
 import helper.model.Language;
 import helper.model.Voice;
@@ -23,7 +22,6 @@ public class WordController {
     private final WordService wordService;
     private final LanguageService languageService;
     private final SoundService soundService;
-    private final TranslationService translationService;
 
     @PostMapping
     public void saveWordPair(@RequestBody WordArticleEditDTO dto) {
@@ -80,6 +78,6 @@ public class WordController {
 
     @DeleteMapping(path = "/translate")
     public void deleteTranslation(@RequestBody WordArticleEditDTO dto) {
-        translationService.deleteTranslation(dto);
+        wordService.deleteTranslation(dto);
     }
 }
