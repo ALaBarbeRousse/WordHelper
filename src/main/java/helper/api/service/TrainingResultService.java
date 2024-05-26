@@ -110,4 +110,14 @@ public class TrainingResultService {
     public List<TrainingResult> getAllTrainingResults(Training training) {
         return trainingResultRepository.findByTraining(training);
     }
+
+    /* Получаем все результаты тренировок, в которых присутствует указанный перевод */
+    public List<TrainingResult> getTrainingResultsByTranslation(Translation translation) {
+        return trainingResultRepository.findTrainingResultsByTranslation(translation);
+    }
+
+    /* Удаляем все указанные результаты тренировок */
+    public void deleteTrainingResults(List<TrainingResult> resultsToDelete) {
+        trainingResultRepository.deleteAll(resultsToDelete);
+    }
 }
