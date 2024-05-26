@@ -15,10 +15,10 @@ public interface TranslationRepository extends JpaRepository<Translation, Long> 
     Optional<Translation> findTranslationByWordLanguageAndTranslationLanguageAndWord(Language langFrom, Language langTo, Word word);
 
     Optional<Translation> findTranslationByWordLanguageAndWordAndTranslationLanguageAndTranslation(
-            Language wordLanguage,
-            Word word,
-            Language translationLanguage,
-            Word translation);
+        Language wordLanguage,
+        Word word,
+        Language translationLanguage,
+        Word translation);
 
     Optional<Translation> findTranslationByPhysicalId(UUID physicalId);
 
@@ -50,4 +50,8 @@ public interface TranslationRepository extends JpaRepository<Translation, Long> 
     @Query("SELECT t FROM Translation t LEFT JOIN Voice v ON (t.word = v.word OR t.translation = v.word)" +
         " WHERE t.wordLanguage = ?1 AND t.translationLanguage = ?2 AND v IS NULL ORDER BY RANDOM()")
     List<Translation> getRandomDeafTranslation(Language l1, Language l2, Pageable pageable);
+
+    /* Получаем все переводы, в которых присутствует данное слово */
+    @Query("SELECT t FROM Translation t WHERE t.word = ?1 OR t.translation = ?1")
+    List<Translation> findTranslationsByWord(Word w);
 }
