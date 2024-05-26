@@ -1,11 +1,7 @@
 package helper.api.service;
 
 import helper.api.jpa.WordRepository;
-import helper.model.Language;
-import helper.model.LanguageChoice;
-import helper.model.Student;
-import helper.model.Translation;
-import helper.model.Word;
+import helper.model.*;
 import helper.model.dto.LanguageCreateDTO;
 import helper.model.dto.WordArticleEditDTO;
 import lombok.RequiredArgsConstructor;
@@ -16,14 +12,21 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 public class WordService {
+    private final String CANNOT_FIND_LANGUAGE = "Не удалось найти язык \"%s\".";
+    private final String CANNOT_FIND_WORD = "Не удалось найти слово \"%s\".";
+
     private final LanguageService languageService;
-    private final WordRepository wordRepository;
     private final TranslationService translationService;
     private final LanguageChoiceService languageChoiceService;
+    private final TrainingResultService trainingResultService;
+    private final VoiceHandler voiceHandler;
+
+    private final WordRepository wordRepository;
 
     /**
      * Создаём новую словарную статью (для слова) или редактируем существующую.
@@ -88,5 +91,43 @@ public class WordService {
     public List<String> findSimilarWords(String word, Language language) {
         return wordRepository.findByWritingStartingWithAndLanguage(word, language).stream()
                 .map(Word::getWriting).collect(Collectors.toList());
+    }
+
+    /* Удаляем перевод */
+    @Transactional
+    public void deleteTranslation(WordArticleEditDTO dto) {
+        /* Итак, нужно через translationRepository вытащить перевод */
+        Word word1 = this.findWord(dto.getWord1())
+            .orElseThrow(() -> new RuntimeException(String.format(CANNOT_FIND_WORD, dto.getWord1())));
+        Word word2 = this.findWord(dto.getWord2())
+            .orElseThrow(() -> new RuntimeException(String.format(CANNOT_FIND_WORD, dto.getWord2())));
+        Language language1 = languageService.findLanguageByName(dto.getLang1())
+            .orElseThrow(() -> new RuntimeException(String.format(CANNOT_FIND_LANGUAGE, dto.getLang1())));
+        Language language2 = languageService.findLanguageByName(dto.getLang2())
+            .orElseThrow(() -> new RuntimeException(String.format(CANNOT_FIND_LANGUAGE, dto.getLang2())));
+
+        Translation found1 = translationService.findTranslationByWordsAndLanguages(word1, language1, word2, language2);
+        Translation found2 = translationService.findTranslationByWordsAndLanguages(word2, language2, word1, language1);
+
+        /* Перед удалением перевода надо удалить также все результаты тренировок с этим переводом */
+        trainingResultService.deleteTrainingResults(Stream.concat(
+                trainingResultService.getTrainingResultsByTranslation(found1).stream(),
+                trainingResultService.getTrainingResultsByTranslation(found2).stream()
+            )
+            .distinct()
+            .collect(Collectors.toList()));
+
+        List<Word> wordsToDelete = Stream.concat(
+                translationService.deleteTranslation(found1).stream(),
+                translationService.deleteTranslation(found2).stream()
+            )
+            .distinct()
+            .collect(Collectors.toList());
+
+        /* Перед удалением слов надо удалить все озвучки этих слов */
+        voiceHandler.deleteVoicesByWord(word1);
+        voiceHandler.deleteVoicesByWord(word2);
+
+        wordRepository.deleteAll(wordsToDelete);
     }
 }
