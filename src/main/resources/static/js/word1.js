@@ -374,23 +374,38 @@ function sendDeletion(wordLang, word, translationLang, translation) {
         "lang2": translationLang,
         "word2": translation
     }
-    console.log("Удаляется перевод: " + JSON.stringify(data));
+//    console.log("Удаляется перевод: " + JSON.stringify(data));
     $.ajax({
         type: 'DELETE',
         url: 'api/word/translate',
         contentType:"application/json; charset=utf-8",
         data: JSON.stringify(data),
         success: function (data) {
-            console.log("Перевод удалён, data: " + JSON.stringify(data));
+            flashMessage('Перевод удалён', 'green');
+            playSound('../snd/alert.mp3');
+            w1.val('');
+            wl1.empty();
+            w1.focus();
+            w2.val('');
+            wl2.empty();
+            validateFields();
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            $("#message").text('Не удалось удалить перевод');
-            $("#message").fadeIn(10);
-            setTimeout(function() {
-                $('#message').fadeOut(5000, function() {
-                    $("#message").text('');
-                });
-            }, 5000);
+            playSound('../snd/error.mp3');
+            flashMessage('Не удалось удалить перевод', 'red');
         }
     });
+}
+
+/* На некоторое время показываем сообщение в строке. При этом color - цвет текста. */
+function flashMessage(text, color) {
+    let m = $("#message");
+    m.attr('style', 'color: ' + color + ';');
+    m.text(text);
+    m.fadeIn(10);
+    setTimeout(function() {
+        m.fadeOut(1000, function() {
+            m.text('');
+        });
+    }, 2000);
 }
