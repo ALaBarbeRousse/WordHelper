@@ -17,4 +17,6 @@ public interface TrainingResultRepository extends JpaRepository<TrainingResult, 
     List<TrainingResult> findTrainingResultByTrainingAndTranslationIn(Training training, List<Translation> translations);
 
     List<TrainingResult> findTrainingResultByTrainingAndWeightIsLessThan(Training training, Float weight);
+
+    List<TrainingResult> findTrainingResultsByTranslation(Translation translation);
 }
