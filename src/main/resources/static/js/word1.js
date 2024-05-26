@@ -27,6 +27,8 @@ $(document).ready(function() {
 
     ok = $('#ok_btn');
 
+    w1.focus();
+
     loadLanguages();
 
     $('.dict_article').keydown(function(e) {
