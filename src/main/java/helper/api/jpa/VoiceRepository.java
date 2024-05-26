@@ -22,4 +22,6 @@ public interface VoiceRepository extends JpaRepository<Voice, Long> {
 
     @Query(value = "SELECT v FROM Voice v WHERE v.word.writing = ?1 AND v.word.language = ?2")
     List<Voice> getVoices(String word, Language language);
+
+    void deleteVoicesByWord(Word word);
 }
