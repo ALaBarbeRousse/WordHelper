@@ -6,7 +6,6 @@ import helper.model.Translation;
 import helper.model.Word;
 import helper.model.dto.DictionaryDTO;
 import helper.model.dto.LanguagePair;
-import helper.model.dto.WordArticleEditDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -193,8 +192,29 @@ public class TranslationService {
         return Collections.emptyList();
     }
 
-    /* TODO Удаляем перевод */
-    public void deleteTranslation(WordArticleEditDTO dto) {
-        log.info("Удаляем перевод, dto: {}", dto);
+    public Translation findTranslationByWordsAndLanguages(Word word1, Language language1, Word word2, Language language2) {
+        return translationRepository.findTranslationByWordLanguageAndWordAndTranslationLanguageAndTranslation(language1, word1, language2, word2)
+            .orElse(null);
+    }
+
+    /* Удаляем указанный перевод */
+    public List<Word> deleteTranslation(Translation translation) {
+        List<Word> toDelete = new ArrayList<>();
+
+        List<Translation> trw = translationRepository.findTranslationsByWord(translation.getWord());
+        trw.remove(translation);
+        if (trw.isEmpty()) {
+            toDelete.add(translation.getWord());
+        }
+
+        List<Translation> trt = translationRepository.findTranslationsByWord(translation.getTranslation());
+        trt.remove(translation);
+        if (trt.isEmpty()) {
+            toDelete.add(translation.getTranslation());
+        }
+
+        translationRepository.delete(translation);
+
+        return toDelete;
     }
 }
