@@ -29,6 +29,16 @@ $(document).ready(function() {
 
     loadLanguages();
 
+    $('.dict_article').keydown(function(e) {
+        if (e.ctrlKey && e.keyCode == 13) {
+            e.preventDefault();
+
+            if (!ok.attr('disabled')) {
+                collectAndSendData();
+            }
+        }
+    });
+
     $('#swap_button').on('click', function () {
         swapLanguages();
     });
