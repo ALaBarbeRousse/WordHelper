@@ -1,17 +1,88 @@
-/*fieldset {*/
-/*    min-height: 240px;*/
-/*}*/
+html, body {
+    background: linear-gradient(to bottom right, rgb(255, 255, 255) 0%, rgb(216, 216, 208) 100%);
+    margin: 0;
+    height: 100%;
+}
 
-.lang_select {
-    /*border: 1px solid red;*/
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: 5fr 1fr 5fr;
-    margin: 6px;
+h5, h3 {
     text-align: center;
 }
 
-.lang_select input {
+div.description_env {
+    background-color: #d6d6cd;
+}
+
+div.message_pane {
+/*    border: 1px solid orangered;*/
+    min-height: 24px;
+    margin: 0 auto;
+    font-size: smaller;
+    width: 50%;
+}
+
+div.word_edit_main_panel {
+    border: 1px solid #c3c3c3;
+    background: linear-gradient(to bottom right, rgb(255, 255, 255) 0%, rgb(216, 216, 208) 100%);
+    width: 620px;
+    margin: 12px auto;
+/*    box-shadow: 2px 4px 4px 1px rgb(141, 141, 136);*/
+}
+
+fieldset.edit_panel {
+    width: 90%;
+    margin: 12px auto;
+    border-radius: 6px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+}
+
+.options_pane {
+    width: 90%;
+    margin: 0 auto;
+    text-align: end;
+    padding: 6px 12px;
+    min-height: 24px;
+}
+
+div.dict_article {
+/*    border: 1px solid red;*/
+    display: grid;
+    grid-template-rows: 2fr;
+    grid-template-columns: 1fr;
+}
+
+label.word_label {
+/*    border: 1px solid blue;*/
+    margin: 2px auto;
+    font-weight: bold;
+}
+
+input.word_input {
+    margin: 0px auto;
+    width: 95%;
+}
+
+div.one_word {
+/*    border: 1px solid blue;*/
+    padding: 6px;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
+}
+
+div.lang_select {
+/*    border: 1px solid green;*/
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    margin: 0 auto;
+    text-align: center;
+}
+
+input[type="text"].lang_select {
+/*    border: 1px solid pink;*/
+    background: transparent;
+    border:none;
     margin: 2px auto;
     max-width: 120px;
     text-align: center;
@@ -19,160 +90,58 @@
     font-size: large;
 }
 
-div.message_pane {
-    /*border: 1px solid orangered;*/
-    min-height: 24px;
-    color: red;
-    margin: 0 auto;
-    font-size: smaller;
-    width: 50%;
-}
-#message {
-    display: none;
+div.controls {
+/*    border: 1px solid blue;*/
+    display: flex;
+    align-items: center;
 }
 
-div.dict_article {
-    /*border: 1px solid blueviolet;*/
-    /*min-height: 60px;*/
-    display: grid;
-    grid-template-rows: 1fr;
-    grid-template-columns: 5fr 1fr 5fr;
-}
-
-div.word_buttons_wrapper {
-    /*border: 1px solid blueviolet;*/
-    height: 24px;
-    display: grid;
-    grid-template-rows: 1fr;
-    grid-template-columns: 5fr 1fr 5fr;
-}
-div.word_buttons {  /* Это контейнер */
-    /*border: 1px solid red;*/
-    text-align: center;
-    display: block;
-    position: relative;
-    height: 28px;
-}
-div.voices_list {   /* А это список голосов */
-    border: 1px solid #a0a0a0;
-    width: fit-content;
-    position: relative;
-    z-index: 10;
-    background-color: #fafaf7;
-    max-height: 180px;
-    overflow-y: scroll;
-    margin: 0 auto;
-    padding: 0 4px;
-    border-radius: 4px;
-    box-shadow: 1px 1px 2px #8f8f89;
-    display: none;
-}
-
-div.buttons_delimiter {
-    /*border: 1px solid green;*/
-    /*height: 24px;*/
-}
-
-div.get_voice_btn {
-    border: 1px solid #484848ff;
-    border-radius: 13px;
+button.control_button {
+    background-repeat: no-repeat;
     width: 24px;
     height: 24px;
-    background: url("../img/wave.png") no-repeat center;
-    margin: auto auto;
-    cursor: pointer;
+    background-color: transparent;
+    margin: 2px 2px;
+    border-radius: 12px;
+    min-width: 0;
+    border: none;
 }
-div.get_voice_btn:hover {
-    border: 1px solid #606060ff;
-    box-shadow: 0 0 5px #606060ff;
+button.control_button:hover {
+    box-shadow: 0 0 5px gray;
 }
-div.get_voice_btn:active {
-    border: 1px solid #000000ff;
-    background: url("../img/wave_active.png") no-repeat center;
+button.control_button:active {
+    box-shadow: 0 0 5px black;
 }
-div.open_voices_btn {
-    border: 1px solid #484848ff;
-    border-radius: 13px;
-    width: 24px;
-    height: 24px;
-    background: url("../img/speaker.png") no-repeat center;
-    margin: auto auto;
-    cursor: pointer;
-    display: block;
-}
-div.open_voices_btn:hover {
-    border: 1px solid #606060ff;
-    box-shadow: 0 0 5px #606060ff;
-}
-div.open_voices_btn:active {
-    border: 1px solid #000000ff;
-}
-
-div.play_voice_btn {
-    border: 1px solid #484848ff;
-    border-radius: 13px;
-    width: 24px;
-    height: 24px;
-    background: url("../img/speaker.png") no-repeat center;
-    cursor: pointer;
-    margin: 8px auto;
-}
-div.play_voice_btn:hover {
-    border: 1px solid #606060ff;
-    box-shadow: 0 0 5px #606060ff;
-}
-div.play_voice_btn:active {
-    border: 1px solid #000000ff;
-}
-
-div.disabled {
-    pointer-events: none;
-    opacity: 0.25;
-}
-
-div.hidden {
-    pointer-events: none;
-    visibility: hidden;
-}
-
-.word_input {
-    margin: 6px;
-}
-
-.options_pane {
-    width: 50%;
-    margin: 0 auto;
-    text-align: end;
-    padding: 6px 12px;
-    min-height: 24px;
+button.control_button:disabled {
+    cursor: auto;
+    box-shadow: none;
+    opacity: 0.2;
 }
 
 #swap_button {
-    background-image: url("../img/swap.png");
-    background-repeat: no-repeat;
-    min-width: 12px;
-    width: 32px;
-    height: 21px;
-    border: none;
-    outline: none;
-    box-shadow: none;
-}
-#swap_button:hover {
-    box-shadow: 0 0 5px gray;
-}
-#swap_button:active {
-    box-shadow: 0 0 5px black;
-}
-#swap_button:disabled {
-    background-image: url("../img/swap_disabled.png");
-    pointer-events: none;
+    background-image: url("../img/swap_round.png");
 }
 
-.translation_exists {
-    box-shadow: 0 0 12px #fffbc7;
-    background-color: #fffbc7;
+#delete_button {
+    background-image: url("../img/delete_bw.png");
 }
 
-div.description_env {
-    background-color: #d6d6cd;
+.readonly {
+    cursor: default;
+    background-color: #f4f4f4;
+}
+
+div.voice_button_wrapper {
+    margin: auto;
+}
+
+button.load_voice_button {
+    background-image: url("../img/wave.png");
+    border: 1px solid black;
+    background-position: center;
+}
+button.select_sound_button {
+    background-image: url("../img/speaker.png");
+    border: 1px solid black;
+    background-position: center;
 }
