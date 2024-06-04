@@ -105,7 +105,7 @@ function swapLanguages() {
     w1.focus();
 }
 
-function validateFields(translation, translationVoicePresent) {
+function validateFields(translation, translationVoicePresent, translationSounds) {
 //    console.log("Это validateFields, translation: " + translation + ", translationVoicePresent: " + translationVoicePresent);
 
     if (l1.val().trim() && w1.val().trim() ) {
@@ -118,10 +118,10 @@ function validateFields(translation, translationVoicePresent) {
             if (translationVoicePresent) {
                 tsw.html('<button id="translation_voice_button" class="select_sound_button control_button" title="Произнести"></button>');
 
-                /* todo Играем звук перевода*/
+                /* Играем звук перевода*/
                 $('#translation_voice_button').off('click');
                 $('#translation_voice_button').on('click', function() {
-                    console.log("Играем звук перевода");
+                    sound(getRandomVoice(translationSounds));
                 });
             } else {
                 tsw.html('<button id="translation_voice_button" class="load_voice_button control_button" title="Загрузить"></button>');
@@ -148,10 +148,10 @@ function validateFields(translation, translationVoicePresent) {
         if (translationVoicePresent) {
             tsw.html('<button id="translation_voice_button" class="select_sound_button control_button" title="Произнести"></button>');
 
-            /* todo Играем звук перевода*/
+            /* Играем звук перевода*/
             $('#translation_voice_button').off('click');
             $('#translation_voice_button').on('click', function() {
-                console.log("Играем звук перевода");
+                sound(getRandomVoice(translationSounds));
             });
         } else {
             tsw.html('<button id="translation_voice_button" class="load_voice_button control_button" title="Загрузить"></button>');
@@ -217,7 +217,7 @@ function findWordAndTranslation(from, word, to) {
         contentType:"application/json; charset=utf-8",
         data: JSON.stringify(data),
         success: function(data) {
-//            console.log("SUCCESS: " + JSON.stringify(data));
+            console.log("SUCCESS: " + JSON.stringify(data));
             if (data) {
                 /* Что бы ни было получено, добавляем кнопку загрузки звука */
                 wsw.html('<button id="word_voice_button" class="load_voice_button control_button" title="Загрузить"></button');
@@ -244,17 +244,17 @@ function findWordAndTranslation(from, word, to) {
                             $('#word_voice_button').attr('title', 'Произнести');
                             $('#word_voice_button').addClass("select_sound_button");
 
-                            /* todo Играем звук слова */
+                            /* Играем звук слова */
                             $('#word_voice_button').off('click');
                             $('#word_voice_button').on('click', function() {
-                                console.log('Играем звук слова');
+                                sound(getRandomVoice(data.wordSounds));
                             });
                         }
 
                         if (data.suspect.length == 1) {
 //                            console.log("LENGTH 1 word: " + word + ", translation: " + data.translation + ", translationVoicePresent: " + data.translationVoicePresent);
                             w2.val(data.translation);
-                            validateFields(data.translation, data.translationVoicePresent);
+                            validateFields(data.translation, data.translationVoicePresent, data.translationSounds);
 //                            console.log("setFieldReadOnly 4");
 //                            setFieldReadOnly(w2, true);  // Запираем второе слово
 
@@ -275,7 +275,7 @@ function findWordAndTranslation(from, word, to) {
 //                                console.log("Ставим перевод, найденный из нескольких подозреваемых: " + data.translation);
                                 w2.val(data.translation);
                                 d.removeAttr("disabled");
-                                validateFields(data.translation, data.translationVoicePresent);
+                                validateFields(data.translation, data.translationVoicePresent, data.translationSounds);
                             } else {
 //                                console.log("Очищаем перевод");
                                 w2.val("");
@@ -422,4 +422,9 @@ function flashMessage(text, color) {
             m.text('');
         });
     }, 2000);
+}
+
+function getRandomVoice(sounds) {
+    var items = Object.keys(sounds);
+    return sounds[items[Math.floor(Math.random()*items.length)]];
 }
