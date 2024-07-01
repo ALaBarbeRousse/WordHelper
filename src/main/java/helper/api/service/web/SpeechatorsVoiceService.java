@@ -30,31 +30,6 @@ import java.util.stream.Collectors;
 public class SpeechatorsVoiceService extends VoiceService {
     private final String BASE_URL = "https://speechactors.com/text-to-speech/";
 
-    private final LanguageService languageService;
-
-    String downloadFilePath = new File("voices").getAbsolutePath();
-
-    private static final Map<String, String> LANGUAGE_TO_LINK = new HashMap<>() {{
-        this.put("english", "english-united-states");
-        this.put("русский", "russian-russia");
-        this.put("suomi", "finnish-finland");
-        this.put("deutsch", "german-germany");
-        this.put("français", "french-france");
-        this.put("español", "spanish-spain");
-        this.put("italiano", "italian-italy");
-    }};
-
-    private final ChromeOptions options = new ChromeOptions() {{
-        this.setPageLoadStrategy(PageLoadStrategy.EAGER);
-        this.addArguments("headless");
-        this.addArguments("--mute-audio");  // Глушим звуки
-        this.setExperimentalOption("prefs", new HashMap<>() {{
-            this.put("profile.default_content_settings.popups", 0);
-            this.put("download.default_directory", downloadFilePath);
-            this.put("profile.default_content_setting_values.automatic_downloads", 1);
-        }});
-    }};
-
     @Override
     public void getSound(String language, String word) {
         String url = BASE_URL + LANGUAGE_TO_LINK.get(language);
