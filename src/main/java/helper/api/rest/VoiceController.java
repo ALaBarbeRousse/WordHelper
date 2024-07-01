@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class VoiceController {
-    private final VoiceService speechatorsVoiceService;
+    private final VoiceService voiceService;
     private final TranslationService translationService;
 
     @GetMapping
@@ -23,7 +23,7 @@ public class VoiceController {
         /* Для начала просто отправим каким-то образом запрос на сайт и запишем ответ в виде mp3-файла. */
         log.info("Запрос на получение звука \"{}\" ({}).", word, language);
 
-        speechatorsVoiceService.getSound(language, word);
+        voiceService.getSound(language, word);
     }
 
     @GetMapping(value = "/random")
@@ -35,6 +35,6 @@ public class VoiceController {
     @PostMapping(value = "/voices")
     public void findVoices(@RequestBody List<SoundingRequestDTO> dtos) {
 //        log.info("Получен запрос на озвучку слов");
-        speechatorsVoiceService.fetchSounds(dtos);
+        voiceService.fetchSounds(dtos);
     }
 }
