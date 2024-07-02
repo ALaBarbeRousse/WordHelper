@@ -17,16 +17,6 @@ public abstract class VoiceService implements VoiceFetcher {
     @Autowired
     LanguageService languageService;
 
-    protected static final Map<String, String> LANGUAGE_TO_LINK = new HashMap<>() {{
-        this.put("english", "english-united-states");
-        this.put("русский", "russian-russia");
-        this.put("suomi", "finnish-finland");
-        this.put("deutsch", "german-germany");
-        this.put("français", "french-france");
-        this.put("español", "spanish-spain");
-        this.put("italiano", "italian-italy");
-    }};
-
     String downloadFilePath = new File("voices").getAbsolutePath();
 
     protected final ChromeOptions options = new ChromeOptions() {{
