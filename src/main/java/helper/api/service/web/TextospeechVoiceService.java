@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class TextospeechVoiceService extends VoiceService {
     private static final String BASE_URL = "https://textospeech.net/";
 
-    private static final Duration WAIT_DURATION = Duration.of(25, ChronoUnit.SECONDS);
+    private static final Duration WAIT_DURATION = Duration.of(30, ChronoUnit.SECONDS);
 
     private static final Map<String, String> LANGUAGE_TO_VALUE = new HashMap<>() {{
         this.put("english", "en-GB");
