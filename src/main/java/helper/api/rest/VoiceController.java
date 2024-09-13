@@ -29,7 +29,7 @@ public class VoiceController {
     @GetMapping(value = "/random")
     public List<Translation> getRandomDeafTranslation(@RequestParam(name = "lang1") String lang1, @RequestParam(name = "lang2") String lang2) {
 //        log.info("Получен запрос на получение случайного неозвученного перевода.");
-        return translationService.getRandomDeafTranslation(lang1, lang2, 20);
+        return translationService.getRandomDeafTranslation(lang1, lang2, 10);
     }
 
     @PostMapping(value = "/voices")
