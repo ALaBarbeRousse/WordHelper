@@ -26,8 +26,8 @@ public abstract class VoiceService implements VoiceFetcher {
 
     protected final ChromeOptions options = new ChromeOptions() {{
         this.setPageLoadStrategy(PageLoadStrategy.EAGER);
-//        this.addArguments("headless");
-//        this.addArguments("--mute-audio");  // Глушим звуки
+        this.addArguments("headless");
+        this.addArguments("--mute-audio");  // Глушим звуки
         this.setExperimentalOption("prefs", new HashMap<>() {{
             this.put("profile.default_content_settings.popups", 0);
             this.put("download.default_directory", downloadFilePath);
