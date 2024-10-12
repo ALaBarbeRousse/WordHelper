@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class TextospeechVoiceService extends VoiceService {
     }
 
     @Override
-    public void fetchSounds(List<SoundingRequestDTO> dtos) {
+    public void fetchSounds(List<SoundingRequestDTO> dtos) throws IOException {
         /* Надо разложить входящие данные по языкам */
         Map<String, List<String>> map = new HashMap<>();
         for (SoundingRequestDTO dto: dtos) {
@@ -144,6 +145,7 @@ public class TextospeechVoiceService extends VoiceService {
 
                         /* Забрать скачанный файл */
                         voicesByName.put(voice, FileHelper.getFileBytes(FileHelper.getTheOnlyFile(downloadFolder)));
+                        log.info("Взята озвучка для '{}', голос: {}.", word, voice);
                     }
                     FileHelper.emptyFolder(downloadFolder);
 
@@ -153,8 +155,10 @@ public class TextospeechVoiceService extends VoiceService {
             }
         } catch (TimeoutException e) {
             log.error("Таймаут при получении звука.");
+            throw e;
         } catch (Exception e) {
             log.error("Ошибка при получении звука: {}.", e.getMessage(), e);
+            throw e;
         } finally {
             driver.close();
         }

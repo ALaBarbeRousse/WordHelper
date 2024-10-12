@@ -249,6 +249,16 @@ function findWordAndTranslation(from, word, to) {
                             $('#word_voice_button').on('click', function() {
                                 sound(getRandomVoice(data.wordSounds));
                             });
+
+                            var timer;
+                            $('#word_voice_button').hover(function() {
+                                timer = setTimeout(function() {
+                                    console.log("mouseover");
+                                }, 2000);
+                            }, function() {
+                                console.log("Clearing");
+                                clearTimeout(timer);
+                            });
                         }
 
                         if (data.suspect.length == 1) {

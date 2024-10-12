@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -29,11 +30,11 @@ public class VoiceController {
     @GetMapping(value = "/random")
     public List<Translation> getRandomDeafTranslation(@RequestParam(name = "lang1") String lang1, @RequestParam(name = "lang2") String lang2) {
 //        log.info("Получен запрос на получение случайного неозвученного перевода.");
-        return translationService.getRandomDeafTranslation(lang1, lang2, 10);
+        return translationService.getRandomDeafTranslation(lang1, lang2, 5);
     }
 
     @PostMapping(value = "/voices")
-    public void findVoices(@RequestBody List<SoundingRequestDTO> dtos) {
+    public void findVoices(@RequestBody List<SoundingRequestDTO> dtos) throws IOException {
 //        log.info("Получен запрос на озвучку слов");
         voiceService.fetchSounds(dtos);
     }
