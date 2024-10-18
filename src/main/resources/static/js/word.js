@@ -339,7 +339,6 @@ function collectAndSendData() {
             contentType:"application/json; charset=utf-8",
             data: JSON.stringify(data),
             success: function (data) {
-                playSound('../snd/success.mp3');
                 /* Удалить слова из полей, передвинуть фокус на первое */
                 w1.val('');
                 wl1.empty();
@@ -347,6 +346,7 @@ function collectAndSendData() {
                 w2.val('');
                 wl2.empty();
                 validateFields();
+                playSound('../snd/success.mp3');
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 playSound('../snd/error.mp3');

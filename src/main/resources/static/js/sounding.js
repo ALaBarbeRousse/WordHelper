@@ -147,7 +147,7 @@ function loadRandomTranslation() {
             tl.empty();
             if(data.length > 0) {
                 for(var i = 0; i < data.length; i++) {
-                    tl.append("<div class='tl_item'>" + data[i].word.writing + " &rarr; " + data[i].translation.writing + "</div");
+                    tl.append("<div class='tl_item'>" + data[i].word.writing + " &harr; " + data[i].translation.writing + "</div");
                 }
                 tl.append("<div id='sound_fetch_btn' title='Найти озвучку'></>");
                 /* Установить слушатель */
