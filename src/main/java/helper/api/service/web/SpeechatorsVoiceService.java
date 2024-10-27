@@ -1,18 +1,14 @@
 package helper.api.service.web;
 
-import helper.api.service.LanguageService;
-import helper.api.service.SoundService;
 import helper.misc.FileHelper;
 import helper.model.Language;
 import helper.model.dto.SoundingRequestDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
-import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -41,7 +37,7 @@ public class SpeechatorsVoiceService extends VoiceService {
     }};
 
     @Override
-    public void getSound(String language, String word) {
+    public Map<String, byte[]> getSound(String language, String word) {
         String url = BASE_URL + LANGUAGE_TO_LINK.get(language);
 
         try {
@@ -94,6 +90,7 @@ public class SpeechatorsVoiceService extends VoiceService {
         } catch (Exception e) {
             log.error("Ошибка при получении звука: {}.", e.getMessage(), e);
         }
+        return null;
     }
 
     @Override

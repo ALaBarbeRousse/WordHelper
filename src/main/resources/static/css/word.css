@@ -145,3 +145,9 @@ button.select_sound_button {
     border: 1px solid black;
     background-position: center;
 }
+button.busy {
+    background: url("../img/spinner.gif") no-repeat center !important;
+    background-size: 18px !important;
+    pointer-events: none;
+    opacity: 0.25;
+}

@@ -124,13 +124,17 @@ function validateFields(translation, translationVoicePresent, translationSounds)
                     sound(getRandomVoice(translationSounds));
                 });
             } else {
-                tsw.html('<button id="translation_voice_button" class="load_voice_button control_button" title="Загрузить"></button>');
+                if(w2.val() && translation) {
+                    tsw.html('<button id="translation_voice_button" class="load_voice_button control_button" title="Загрузить"></button>');
+                } else {
+                    tsw.empty();
+                }
 
                 /* Грузим звук перевода */
                 $('#translation_voice_button').off('click');
                 $('#translation_voice_button').on('click', function() {
-//                    console.log("Грузим звук перевода: " + w2.val());
-                    loadSound(w2.val());
+//                    console.log("Грузим звук перевода: " + w2.val() + ', язык: ' + l2.val());
+                    loadSound(l2.val(), w2.val(), tsw);
                 });
             }
         } else {
@@ -146,6 +150,7 @@ function validateFields(translation, translationVoicePresent, translationSounds)
     if (l2.val().trim() && w2.val().trim()) {
 //        console.log("Есть второе слово");
         if (translationVoicePresent) {
+//            console.log('Есть озвучка перевода');
             tsw.html('<button id="translation_voice_button" class="select_sound_button control_button" title="Произнести"></button>');
 
             /* Играем звук перевода*/
@@ -154,13 +159,18 @@ function validateFields(translation, translationVoicePresent, translationSounds)
                 sound(getRandomVoice(translationSounds));
             });
         } else {
-            tsw.html('<button id="translation_voice_button" class="load_voice_button control_button" title="Загрузить"></button>');
+//            console.log('Пытаемся открыть кнопку загрузки озвучки перевода. Слово: ' + w1.val() + ", перевод: " + translation);
+            if(w1.val() && translation) {
+                tsw.html('<button id="translation_voice_button" class="load_voice_button control_button" title="Загрузить"></button>');
+            } else {
+                tsw.empty();
+            }
 
             /* Грузим звук перевода */
             $('#translation_voice_button').off('click');
             $('#translation_voice_button').on('click', function() {
-//                console.log("Грузим звук перевода: " + w2.val());
-                loadSound(w2.val());
+//                console.log("Грузим звук перевода 2: " + w2.val() + ", язык: " + l2.val());
+                var success = loadSound(l2.val(), w2.val(), tsw);
             });
         }
     } else {
@@ -217,16 +227,21 @@ function findWordAndTranslation(from, word, to) {
         contentType:"application/json; charset=utf-8",
         data: JSON.stringify(data),
         success: function(data) {
-            console.log("SUCCESS: " + JSON.stringify(data));
+//            console.log("SUCCESS: " + JSON.stringify(data));
             if (data) {
-                /* Что бы ни было получено, добавляем кнопку загрузки звука */
-                wsw.html('<button id="word_voice_button" class="load_voice_button control_button" title="Загрузить"></button');
+                /* Добавляем кнопку загрузки звука, только если присутствует и слово, и перевод */
+//                console.log("Слово: " + w1.val() + ", перевод: " + data.translation);
+                if(w1.val() && data.translation) {
+                    wsw.html('<button id="word_voice_button" class="load_voice_button control_button" title="Загрузить"></button');
+                } else {
+                    wsw.empty();
+                }
 
                 /* Грузим звук слова */
                 $('#word_voice_button').off('click');
                 $('#word_voice_button').on('click', function() {
 //                    console.log('Грузим звук слова: ' + w1.val());
-                    loadSound(w1.val());
+                    loadSound(l1.val(), w1.val(), wsw);
                 });
 
                 if (data.suspect) {
@@ -359,8 +374,43 @@ function collectAndSendData() {
     }
 }
 
-function loadSound(word) {
-    console.log("Грузим звук: " + word);
+function loadSound(lang, word, wrapper) {
+    console.log("Грузим звук: " + lang + "  " + word);
+
+    var b = $(wrapper.children('button')[0]);
+    b.removeClass('load_voice_button');
+    b.addClass('busy');
+
+    $.ajax({
+        type: 'GET',
+        url: 'api/voice',
+        data: {
+            lang: lang,
+            word: word
+        },
+        contentType:"application/json; charset=utf-8",
+        success: function (data) {
+//            console.log("Озвучивание слова успешно получено, data: " + JSON.stringify(data));
+            playSound('../snd/success.mp3');
+            /* Перегрузить картинку кнопки и переопределить поведение */
+            b.removeClass('busy');
+            b.addClass('select_sound_button');
+            b.attr('title', 'Произнести');
+            b.off('click');
+            b.on('click', function() {
+                sound(getRandomVoice(data));
+            });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            m.text('Не удалось озвучивание для слова ' + word + '.').fadeIn(10);
+            b.removeClass('busy').removeClass('disabled');
+            b.addClass('load_voice_button');
+            playSound('../snd/error.mp3');
+            setTimeout(function() {
+                m.fadeOut(3000);
+            }, 5000);
+        }
+    });
 }
 
 function askForDeletion(wordLang, word, translationLang, translation) {

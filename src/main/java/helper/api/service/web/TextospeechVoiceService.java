@@ -12,15 +12,13 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
@@ -44,8 +42,104 @@ public class TextospeechVoiceService extends VoiceService {
     }};
 
     @Override
-    public void getSound(String language, String word) {
-        return;
+    @Transactional
+    public Map<String, byte[]> getSound(String language, String word) {
+        Language lang = languageService.findLanguageByName(language).orElse(null);
+        if (Objects.isNull(lang)) {
+            throw new RuntimeException(String.format("Language by name '%s' not found.", language));
+        }
+
+        /* Проверить, нет ли озвучки для этого слова */
+        if (!soundService.getVoicesPresent(lang, word)) {
+            WebDriver driver = new ChromeDriver(options);
+            try {
+                /* Открываем базу */
+                driver.get(BASE_URL);
+                /* Дожидаемся открытия странички */
+                new WebDriverWait(driver, WAIT_DURATION)
+                    .until(webDriver -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete"));
+
+                /* Находим селектор языков */
+                By selectLanguageBy = By.id("languages");
+                Select languageSelect = new Select(driver.findElement(selectLanguageBy));
+
+                /* Находим селектор спикеров */
+                By speakersBy = By.id("voices");
+                Select speakersSelect = new Select(driver.findElement(speakersBy));
+
+                /* Находим текстовое поле */
+                By textAreaBy = By.xpath("//div[@class='col-12 sctioin2Bg']/textarea");
+                WebElement textArea = driver.findElement(textAreaBy);
+
+                /* Находим кнопку "Generate" */
+                By generateButtonBy = By.xpath("//div[@class='row-center-between mt-2']/button[@class='btn primary-btn bg-white mr-2']");
+                WebElement generateButton = driver.findElement(generateButtonBy);
+
+                /* Кнопка "Download" */
+                By downloadButtonBy = By.xpath("//button[@class='btn btn-xl primary-btn text-center mx-auto mt-5 p-3']");
+
+                /* Кнопка "Generate mare" */
+                By generateMoreLinkBy = By.xpath("//section/div[@class='container upgrade-section']/div/a");
+
+                File downloadFolder = new File(downloadFilePath);
+
+                /* Переключить язык на указанный */
+                languageSelect.selectByValue(LANGUAGE_TO_VALUE.get(lang.getName()));
+
+                /* Собрать голоса спикеров */
+                List<String> voices = speakersSelect.getOptions().stream()
+                    .map(element -> element.getAttribute("value"))
+                    .collect(Collectors.toList());
+
+                Map<String, byte[]> voicesByName = new HashMap<>();
+
+                /* Очищаем поле ввода и вставляем слово */
+                textArea.clear();
+                textArea.sendKeys(word);
+
+                /* Проходим по всем голосам */
+                for (String voice: voices) {
+                    /* Очищаем папку голосов */
+                    FileHelper.emptyFolder(downloadFolder);
+
+                    /* Выбираем голос */
+                    speakersSelect.selectByValue(voice);
+                    /* Запускаем генерацию */
+                    generateButton.click();
+
+                    /* Ждём появления кнопки "Download" и жмём её */
+                    new WebDriverWait(driver, WAIT_DURATION)
+                        .until(ExpectedConditions.visibilityOfElementLocated(downloadButtonBy));
+                    WebElement downloadButton = driver.findElement(downloadButtonBy);
+                    downloadButton.click();
+
+                    /* Жмём ссылку "Generate more" */
+                    WebElement generateMoreLink = driver.findElement(generateMoreLinkBy);
+                    generateMoreLink.click();
+                    /* Голоса загружены */
+
+                    /* Забрать скачанный файл */
+                    voicesByName.put(voice, FileHelper.getFileBytes(FileHelper.getTheOnlyFile(downloadFolder)));
+                    log.info("Взята озвучка для '{}', голос: {}.", word, voice);
+                }
+
+                FileHelper.emptyFolder(downloadFolder);
+
+                /* Записать забранное в БД */
+                soundService.saveVoices(language, word, voicesByName);
+
+                return voicesByName;
+            } catch (TimeoutException e) {
+                log.error("Таймаут при получении звука.");
+                throw e;
+            } catch (Exception e) {
+                log.error("Ошибка при получении звука: {}.", e.getMessage(), e);
+                throw new RuntimeException(e);
+            } finally {
+                driver.close();
+            }
+        }
+        return null;
     }
 
     @Override

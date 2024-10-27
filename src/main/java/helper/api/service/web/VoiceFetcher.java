@@ -4,9 +4,10 @@ import helper.model.dto.SoundingRequestDTO;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface VoiceFetcher {
-    void getSound(String language, String word);
+    Map<String, byte[]> getSound(String language, String word);
 
     void fetchSounds(List<SoundingRequestDTO> dtos) throws IOException;
 }

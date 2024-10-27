@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/voice")
@@ -20,11 +21,11 @@ public class VoiceController {
     private final TranslationService translationService;
 
     @GetMapping
-    public void getVoice(@RequestParam(name = "lang") String language, @RequestParam String word) {
+    public Map<String, byte[]> getVoice(@RequestParam(name = "lang") String language, @RequestParam String word) {
         /* Для начала просто отправим каким-то образом запрос на сайт и запишем ответ в виде mp3-файла. */
         log.info("Запрос на получение звука \"{}\" ({}).", word, language);
 
-        voiceService.getSound(language, word);
+        return voiceService.getSound(language, word);
     }
 
     @GetMapping(value = "/random")
