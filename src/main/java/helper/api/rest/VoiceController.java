@@ -3,6 +3,7 @@ package helper.api.rest;
 import helper.api.service.TranslationService;
 import helper.api.service.web.VoiceService;
 import helper.model.Translation;
+import helper.model.Word;
 import helper.model.dto.SoundingRequestDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,9 +35,13 @@ public class VoiceController {
         return translationService.getRandomDeafTranslation(lang1, lang2, 5);
     }
 
+    @GetMapping(value = "/random/word")
+    public List<Word> getRandomDeafWord() {
+        return translationService.getRandomDeafWord(5);
+    }
+
     @PostMapping(value = "/voices")
     public void findVoices(@RequestBody List<SoundingRequestDTO> dtos) throws IOException {
-//        log.info("Получен запрос на озвучку слов");
         voiceService.fetchSounds(dtos);
     }
 }

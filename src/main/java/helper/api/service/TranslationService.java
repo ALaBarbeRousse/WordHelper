@@ -179,9 +179,8 @@ public class TranslationService {
     }
 
     /**
-     * todo Получаем случайный (один) перевод, у которого хотя бы одно слово без озвучки.
-     *  Сделано неправильно - не включает переводы, у которых без озвучки только одно слово.
-     * @return
+     * Получаем несколько (amnt) случайных переводов, у которых хотя бы одно слово без озвучки.
+     * @return Список найденных переводов
      */
     public List<Translation> getRandomDeafTranslation(String lang1, String lang2, int amnt) {
         Optional<Language> l1 = languageService.findLanguageByName(lang1);
@@ -190,6 +189,16 @@ public class TranslationService {
             return translationRepository.getRandomDeafTranslation(l1.get(), l2.get(), PageRequest.of(0, amnt));
         }
         return Collections.emptyList();
+    }
+
+    /**
+     * Получаем несколько (amnt) случайных слов, для которых нет озвучки.
+     *
+     * @param amnt
+     * @return
+     */
+    public List<Word> getRandomDeafWord(int amnt) {
+        return translationRepository.getRandomDeafWord(PageRequest.of(0, amnt));
     }
 
     public Translation findTranslationByWordsAndLanguages(Word word1, Language language1, Word word2, Language language2) {

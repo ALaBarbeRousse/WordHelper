@@ -14,9 +14,14 @@ $(document).ready(function() {
 //    w2 = $('#word2');
     l1 = $('#lang1');
     l2 = $('#lang2');
-    lt = $('#translation_load_btn');
+
+    lt = $('#translation_load_btn');    // Кнопка для загрузки неозвученных переводов
+    tl = $('#translation_list');        // Список неозвученных переводов
+
+    wt = $('#word_load_btn');   // Кнопка для загрузки неозвученных слов
+    wl = $('#word_list');       // Список неозвученных слов
+
     m = $('#message');
-    tl = $('#translation_list');
 //    words_env = $('div.dict_article');
 //    r = $('#result_icon')
 //    wl1 = $('#word_list_1');
@@ -32,6 +37,10 @@ $(document).ready(function() {
 //    });
     lt.on('click', function() {
         loadRandomTranslation();
+    });
+
+    wt.on('click', function() {
+        loadRandomWord();
     });
 //    w1.on('input propertychange', function () {
 //        validateFields();
@@ -129,11 +138,47 @@ function loadLanguages() {
 //    });
 //}
 
+/* Загружаем пачку неозвученных слов */
+function loadRandomWord() {
+    $.ajax({
+        type: 'GET',
+        url: 'api/voice/random/word',
+        data: {},
+        contentType:"application/json; charset=utf-8",
+        success: function(data) {
+//            console.log('Слова для озвучки: ' + JSON.stringify(data));
+            wl.empty();
+            if(data.length > 0) {
+                for(var i = 0; i < data.length; i++) {
+                    wl.append("<div class='tl_item'>" + data[i].writing + " (" + data[i].language.name + ")</div");
+                }
+                wl.append("<div id='word_sound_fetch_btn' class='fetch_btn' title='Найти озвучку'></>");
+                /* Установить слушатель */
+                $('#word_sound_fetch_btn').click(function() {
+                    findWordSounding(data, $('#word_sound_fetch_btn'));
+                });
+            } else {
+                m.text('Неозвученных слов не найдено.').fadeIn(10);
+                setTimeout(function() {
+                    m.fadeOut(3000);
+                }, 3000);
+            }
+        },
+        error: function() {
+            m.text('Не удалось загрузить слово для озвучивания.').fadeIn(10);
+            playSound('../snd/error.mp3');
+            setTimeout(function() {
+                m.fadeOut(3000);
+            }, 5000);
+        }
+    });
+}
+
 function loadRandomTranslation() {
 //    m.text("Загружаем случайный перевод: " + l1.val() + "-" + l2.val()).fadeIn(10);
-    setTimeout(function() {
-        m.fadeOut(3000);
-    }, 5000);
+//    setTimeout(function() {
+//        m.fadeOut(3000);
+//    }, 5000);
     $.ajax({
         type: 'GET',
         url: 'api/voice/random',
@@ -149,7 +194,7 @@ function loadRandomTranslation() {
                 for(var i = 0; i < data.length; i++) {
                     tl.append("<div class='tl_item'>" + data[i].word.writing + " &harr; " + data[i].translation.writing + "</div");
                 }
-                tl.append("<div id='sound_fetch_btn' title='Найти озвучку'></>");
+                tl.append("<div id='sound_fetch_btn' class= 'fetch_btn' title='Найти озвучку'></>");
                 /* Установить слушатель */
                 $('#sound_fetch_btn').click(function() {
                     findSounding(data, $('#sound_fetch_btn'));
@@ -163,11 +208,51 @@ function loadRandomTranslation() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             m.text('Не удалось загрузить перевод для озвучивания.').fadeIn(10);
+            playSound('../snd/error.mp3');
             setTimeout(function() {
                 m.fadeOut(3000);
             }, 5000);
         }
     });
+}
+
+function findWordSounding(data, source) {
+//    console.log("Это findWordSounding, data: " + JSON.stringify(data));
+
+    source.addClass('disabled');
+    source.addClass('busy');
+    wt.addClass('disabled');
+
+    var array = [];
+    for(var i = 0; i < data.length; i++) {
+        array.push({"language": data[i].language.name, "word": data[i].writing});
+    }
+
+    $.ajax({
+            type: 'POST',
+            url: 'api/voice/voices',
+            data: JSON.stringify(array),
+            contentType:"application/json; charset=utf-8",
+            success: function (data) {
+                playSound('../snd/success.mp3');
+                m.text('Озвучка благополучно найдена.').fadeIn(10);
+                setTimeout(function() {
+                    m.fadeOut(1000);
+                }, 1000);
+                wt.removeClass('disabled');
+                wl.empty();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                m.text('Не удалось найти озвучивание.').fadeIn(10);
+                playSound('../snd/error.mp3');
+                setTimeout(function() {
+                    m.fadeOut(3000);
+                    wt.removeClass('disabled');
+                    $('#sound_fetch_btn').removeClass('busy');
+                    $('#sound_fetch_btn').removeClass('disabled');
+                }, 3000);
+            }
+        });
 }
 
 function findSounding(data, source) {

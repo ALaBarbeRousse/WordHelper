@@ -45,12 +45,12 @@ div.message_pane {
 }
 
 /* Оболочка кнопки загрузки случайного неозвученного перевода */
-#translation_load_envelope {
+.sound_load_envelope {
     /*border: 1px solid red;*/
     min-height: 24px;
 }
 /* Кнопка загрузки случайного неозвученного перевода */
-#translation_load_btn {
+.sound_load_btn {
     border: 1px solid gray;
     border-radius: 4px;
     min-height: 24px;
@@ -62,10 +62,10 @@ div.message_pane {
     user-select: none;
     padding-top: 6px;
 }
-#translation_load_btn:hover {
+.sound_load_btn:hover {
     background-color: #e3e3ee;
 }
-#translation_load_btn:active {
+.sound_load_btn:active {
     background-color: #d2d2dd;
 }
 .tl_item {
@@ -75,7 +75,7 @@ div.message_pane {
     font-weight: bold;
 }
 
-#sound_fetch_btn {
+.fetch_btn {
     border: 1px solid #484848ff;
     border-radius: 13px;
     width: 24px;
@@ -84,11 +84,11 @@ div.message_pane {
     margin: auto auto;
     cursor: pointer;
 }
-#sound_fetch_btn:hover {
+.fetch_btn:hover {
     border: 1px solid #606060ff;
     box-shadow: 0 0 5px #606060ff;
 }
-#sound_fetch_btn:active {
+.fetch_btn:active {
     border: 1px solid #000000ff;
     background: url("../img/wave_active.png") no-repeat center;
 }
