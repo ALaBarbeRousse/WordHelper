@@ -38,6 +38,12 @@ public class PageController {
         return "roles";
     }
 
+    @GetMapping("/settings")
+    public String getSettingsPage(Model model) {
+        setPersonalAttributes(model);
+        return "settings";
+    }
+
     @GetMapping("/newdict")
     public String getNewDictionaryPage(Model model) {
         setPersonalAttributes(model);

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Словесный помогатор</title>
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/settings.css">
+    <link rel="icon" type="image/png" href="/img/globe.png"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="/js/settings.js"></script>
+    <script src="/js/sound.js"></script>
+</head>
+<body>
+<div class="user_pane">
+    <div class="dropdown">
+        <button id="dropdown_btn" th:text="${student_name}"></button>
+        <div class="dropdown-content">
+            <!--            <a href="#">Мой профиль</a>-->
+            <a href="/logout">Выход</a>
+        </div>
+    </div>
+    <!--            <div>(Мой язык: <span th:text="${my_language}"></span>)</div>-->
+</div>
+<h1 class="caption">Словесный помогатор</h1>
+<div class="main_panel">
+    <div class="description_env">
+        <div>
+            <button id="home_btn" onclick="location.href='/main'"></button>
+        </div>
+        <div class="description">Редактирование настроек приложения</div>
+        <div></div>
+    </div>
+
+    <fieldset class="edit_panel">
+        <legend>Фоновая загрузка озвучки</legend>
+        <div id="bg_sound_settings" class="bg_settings">
+            <label for="allow_bg_sounding_cb">
+                <input type="checkbox" id="allow_bg_sounding_cb" value="allow_bg_sounding" class="settings_cb">
+                Фоновая загрузка озвучки
+            </label>
+            <div style="margin-top: 12px; margin-left: 24px; margin-right: 8px;">
+                <label for="check_amnt_value" id="check_amnt_value_label" class="disabled">
+                    Проверять неозвученные слова через интервал:
+                    <input id="check_amnt_value" type="number" min="1" value="1" class="setting_value"/>
+                    <select id="check_amnt_unit">
+                        <option value="s">сек.</option>
+                        <option value="m">мин.</option>
+                        <option value="h">ч.</option>
+                        <option value="d">дн.</option>
+                    </select>
+                </label>
+            </div>
+            <div class="options_pane">
+                <span id='message' class="message_box"></span>
+                <button class="ok" id="send_settings_btn" disabled>OK</button>
+                <button class="reset" id="reset_settings_btn">Отмена</button>
+            </div>
+        </div>
+    </fieldset>
+</div>
+</body>
+</html>

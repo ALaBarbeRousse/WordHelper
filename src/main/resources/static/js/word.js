@@ -91,7 +91,7 @@ function loadLanguages() {
 }
 
 function swapLanguages() {
-    playSound('../snd/switch-5.mp3');
+    playSound('../snd/switch-5.mp3', null);
 
     let temp = l1.val();
     l1.val(l2.val());
@@ -268,10 +268,10 @@ function findWordAndTranslation(from, word, to) {
                             var timer;
                             $('#word_voice_button').hover(function() {
                                 timer = setTimeout(function() {
-                                    console.log("mouseover");
+//                                    console.log("mouseover");
                                 }, 2000);
                             }, function() {
-                                console.log("Clearing");
+//                                console.log("Clearing");
                                 clearTimeout(timer);
                             });
                         }

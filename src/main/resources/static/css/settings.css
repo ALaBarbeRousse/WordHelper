@@ -1,0 +1,55 @@
+div.main_panel {
+    border: 1px solid #c3c3c3;
+    background: linear-gradient(to bottom right, rgb(255, 255, 255) 0%, rgb(216, 216, 208) 100%);
+    width: 800px;
+    margin: 12px auto;
+/*    box-shadow: 2px 4px 4px 1px rgb(141, 141, 136);*/
+}
+
+fieldset.edit_panel {
+    width: 85%;
+}
+
+div.description_env {
+    background-color: #C6C5A9;
+}
+
+input.settings_cb {
+    margin-right: 8px;
+}
+
+input.setting_value {
+    width: 48px;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+button#send_settings_btn {
+    float: right;
+    margin-right: 24px;
+}
+button#reset_settings_btn {
+    float: right;
+    margin-right: 18px;
+}
+
+label.disabled {
+    pointer-events: none;
+    color: #0000003d;
+    user-select: none;
+}
+div.options_pane {
+    /* border: 1px solid orange; */
+    padding: 6px;
+}
+
+span.message_box {
+    /* border: 1px solid red; */
+    font-size: 12px;
+}
+span.success {
+    color: green;
+}
+span.failure {
+    color: red;
+}

@@ -35,6 +35,7 @@ $(document).ready(function() {
 //    l2.on('input propertychange', function () {
 //        validateFields();
 //    });
+
     lt.on('click', function() {
         loadRandomTranslation();
     });

@@ -5,52 +5,59 @@
     <title>Словесный помогатор</title>
     <link rel="stylesheet" type="text/css" href="/css/common.css">
     <link rel="stylesheet" type="text/css" href="/css/main.css">
-    <link rel="icon" type="image/png" href="/img/globe.png" />
+    <link rel="icon" type="image/png" href="/img/globe.png"/>
     <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>-->
     <!--    <script src="js/main.js"></script>-->
 </head>
 <body>
-<div class="user_pane">
-    <div class="dropdown">
-        <button id="dropdown_btn" th:text="${student_name}"></button>
-        <div class="dropdown-content">
-<!--            <a href="#">Мой профиль</a>-->
-            <a href="/logout">Выход</a>
+    <div class="user_pane">
+        <div class="dropdown">
+            <button id="dropdown_btn" th:text="${student_name}"></button>
+            <div class="dropdown-content">
+                <!--            <a href="#">Мой профиль</a>-->
+                <a href="/logout">Выход</a>
+            </div>
         </div>
+        <!--    <div>(Мой язык: <span th:text="${my_language}"></span>)</div>-->
     </div>
-<!--    <div>(Мой язык: <span th:text="${my_language}"></span>)</div>-->
-</div>
-<h1 class="caption">Словесный помогатор</h1>
-<div class="description">Приложение, призванное помочь в изучении иностранных языков</div>
+    <h1 class="caption">Словесный помогатор</h1>
+    <div class="description">Приложение, призванное помочь в изучении иностранных языков</div>
 
-<fieldset class="link_panel" sec:authorize="hasAuthority('Student')">
-    <legend>Изучение</legend>
-    <div>
-        <a href="training">Тренировка</a>
-    </div>
-    <div>
-        <a href="collection">Подборка</a>
-    </div>
-</fieldset>
+    <fieldset class="link_panel" sec:authorize="hasAuthority('Student')">
+        <legend>Изучение</legend>
+        <div>
+            <a href="training">Тренировка</a>
+        </div>
+        <div>
+            <a href="collection">Подборка</a>
+        </div>
+    </fieldset>
 
-<fieldset class="link_panel" sec:authorize="hasAuthority('Editor')">
-    <legend>Словари</legend>
-    <div>
-        <a href="word">Слово</a>
-    </div>
-    <div>
-        <a href="sounding">Озвучка</a>
-    </div>
-    <div>
-        <a href="export">Экспорт-Импорт</a>
-    </div>
-</fieldset>
+    <fieldset class="link_panel" sec:authorize="hasAuthority('Editor')">
+        <legend>Словари</legend>
+        <div>
+            <a href="word">Слово</a>
+        </div>
+        <div>
+            <a href="sounding">Озвучка</a>
+        </div>
+        <div>
+            <a href="export">Экспорт-Импорт</a>
+        </div>
+    </fieldset>
 
-<fieldset class="link_panel" sec:authorize="hasAuthority('Admin')">
-    <legend>Пользователи</legend>
-    <div>
-        <a href="setroles">Редактирование ролей</a>
-    </div>
-</fieldset>
+    <fieldset class="link_panel" sec:authorize="hasAuthority('Admin')">
+        <legend>Пользователи</legend>
+        <div>
+            <a href="setroles">Редактирование ролей</a>
+        </div>
+    </fieldset>
+
+    <fieldset class="link_panel" sec:authorize="hasAuthority('Admin')">
+        <legend>Администрирование</legend>
+        <div>
+            <a href="settings">Настройки приложения</a>
+        </div>
+    </fieldset>
 </body>
 </html>

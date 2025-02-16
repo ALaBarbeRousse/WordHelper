@@ -36,6 +36,10 @@ public class SecurityConfig {
             .antMatchers(HttpMethod.GET, "/api/student/data").hasAuthority("Admin")  // Edit student (set roles)
             .antMatchers(HttpMethod.PUT, "/api/student/data").hasAuthority("Admin")  // Edit student (set roles)
 
+            .antMatchers(HttpMethod.GET, "/settings").hasAuthority("Admin") // Set settings page
+            .antMatchers(HttpMethod.POST, "/api/settings/background/sounding").hasAuthority("Admin") // Set settings page
+            .antMatchers(HttpMethod.GET, "/css/settings.css", "/js/settings.js").hasAuthority("Admin") // Edit application settings
+
             .antMatchers(HttpMethod.GET, "/word", "/css/word.css", "/js/word*", "/js/sound.js", "/img/home*", "/img/swap*").hasAuthority("Editor") // Edit word page
             .antMatchers(HttpMethod.GET, "/img/correct.png", "/snd/*").hasAuthority("Editor") // Edit word page
             .antMatchers(HttpMethod.POST, "/api/word", "/api/word/translate").hasAuthority("Editor") // Edit word page
@@ -43,10 +47,13 @@ public class SecurityConfig {
             .antMatchers(HttpMethod.POST, "/api/word/voice/random").hasAuthority("Editor") // Edit word page
             .antMatchers(HttpMethod.GET, "/api/voice").hasAuthority("Editor") // Edit word page
 
+            .antMatchers(HttpMethod.GET, "/api/voice/test").hasAuthority("Editor") // Edit word page
+
             .antMatchers(HttpMethod.GET, "/sounding", "/css/sounding.css", "/js/sounding.js").hasAuthority("Editor")   // Sounding page
             .antMatchers(HttpMethod.GET, "/api/voice/random").hasAuthority("Editor") // Sounding page
             .antMatchers(HttpMethod.GET, "/api/voice/random/word").hasAuthority("Editor") // Sounding page
             .antMatchers(HttpMethod.POST, "/api/voice/voices").hasAuthority("Editor") // Sounding page
+            .antMatchers(HttpMethod.GET, "/api/settings/background/sounding").hasAuthority("Editor") // Sounding page
 
             .antMatchers(HttpMethod.GET, "/training", "/css/training.css", "/css/language.css", "/js/training.js").hasAuthority("Student") // Training page
             .antMatchers(HttpMethod.GET, "/img/go.png", "/img/stop.png", "/img/send*", "/img/wrong.png").hasAuthority("Student") // Training page

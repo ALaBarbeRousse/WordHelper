@@ -4,6 +4,21 @@ function playSound(file) {
     audio.play().catch((e)=>{});
 }
 
+async function playRetardedSound(file, callback) {
+//    console.log('Это playRetardedSound');
+    const audio = new Audio(file);
+    audio.volume = 0.2;
+    await playAudio(audio);
+    callback();
+}
+
+function playAudio(audio) {
+    return new Promise(res=>{
+        audio.play();
+        audio.onended = res;
+    })
+}
+
 function sound(data) {
 //    console.log("Это sound, data: " + JSON.stringify(data));
     if(data) {
