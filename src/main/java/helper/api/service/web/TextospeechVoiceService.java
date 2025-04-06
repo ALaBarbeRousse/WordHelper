@@ -206,7 +206,7 @@ public class TextospeechVoiceService extends VoiceService {
                 List<String> speakers = new ArrayList<>();
                 while ((inputLine = in.readLine()) != null) {
                     /* Нужно найти все включения, начинающиеся с 'fi-FI-' и заключённые в кавычки */
-                    if (inputLine.trim().startsWith("voices") && inputLine.contains("fi-FI-")) {
+                    if (inputLine.trim().startsWith("voices") && inputLine.contains(locale + "-")) {
                         Matcher matcher = pattern.matcher(inputLine);
                         while (matcher.find()) {
                             speakers.add(matcher.group(1));
