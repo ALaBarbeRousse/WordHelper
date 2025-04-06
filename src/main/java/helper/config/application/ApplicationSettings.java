@@ -2,6 +2,8 @@ package helper.config.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import helper.api.jpa.SettingsRepository;
+import helper.api.service.TranslationService;
+import helper.api.service.web.VoiceService;
 import helper.scheduled.GetSoundBackgroundTask;
 import helper.model.application.Setting;
 import helper.model.dto.setting.BackgroundSoundingSettingDTO;
@@ -26,6 +28,9 @@ public class ApplicationSettings {
 
     private final SettingsRepository settingsRepository;
 
+    private final TranslationService translationService;
+    private final VoiceService voiceService;
+
     private Timer soundingTimer = new Timer();
 
     @PostConstruct
@@ -39,7 +44,7 @@ public class ApplicationSettings {
             BackgroundSoundingSettingDTO backgroundSoundingSetting = new ObjectMapper().readValue(settings.get("background.sounding"), BackgroundSoundingSettingDTO.class);
             if (backgroundSoundingSetting.isEnabled()) {
                 soundingTimer.scheduleAtFixedRate(
-                    new GetSoundBackgroundTask(),
+                    new GetSoundBackgroundTask(translationService, voiceService),
                     0,
                     backgroundSoundingSetting.getInterval()
                 );
@@ -68,7 +73,7 @@ public class ApplicationSettings {
                 soundingTimer = new Timer();
                 if (setting.isEnabled()) {
                     soundingTimer.scheduleAtFixedRate(
-                        new GetSoundBackgroundTask(),
+                        new GetSoundBackgroundTask(translationService, voiceService),
                         0,
                         setting.getInterval()
                     );

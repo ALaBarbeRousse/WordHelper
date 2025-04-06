@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,14 +41,14 @@ public class VoiceHandler {
     }
 
     /**
-     * todo Получаем все голоса для данного слова на данном языке
-     * @param language
-     * @param word
-     * @return
+     * Получаем все голоса для данного слова на данном языке
+     * @param language - язык
+     * @param word - слово
+     * @return - массив байт
      */
     public Map<String,byte[]> getVoices(Language language, String word) {
         return voiceRepository.getVoices(word, language).stream()
-            .collect(Collectors.toMap(voice -> voice.getSpeaker().getName(), Voice::getSound));
+            .collect(Collectors.toMap(voice -> voice.getSpeaker().getName(), voice -> Base64.getDecoder().decode(voice.getSound())));
     }
 
     /* Удаляем все озвучки для данного слова */
