@@ -32,11 +32,18 @@ public class VoiceHandler {
     }
 
     public Voice getRandomVoice(Word word) {
-        List<Voice> got = voiceRepository.getRandomVoice(word, PageRequest.of(0, 1));
-        if (got.isEmpty()) {
+        List<Voice> decoded = voiceRepository.getRandomVoice(word, PageRequest.of(0, 1)).stream()
+            .map(voice -> new Voice(
+                voice.getWord(),
+                voice.getSpeaker(),
+                Base64.getDecoder().decode(voice.getSound())
+            ))
+            .collect(Collectors.toList());
+
+        if (decoded.isEmpty()) {
             return null;
         } else {
-            return got.get(0);
+            return decoded.get(0);
         }
     }
 
