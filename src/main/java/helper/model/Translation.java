@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -25,7 +26,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name = "translation",
         uniqueConstraints = @UniqueConstraint(columnNames = {"word_language", "word", "translation_language", "translation"}))
-public class    Translation {
+public class Translation {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     @Id
@@ -52,11 +53,15 @@ public class    Translation {
     @JoinColumn(name = "translation")
     private Word translation;
 
-    public Translation(Language wordLanguage, Word word, Language translationLanguage, Word translation) {
+    @Column(name="inserted_on")
+    private Date insertDate;
+
+    public Translation(Language wordLanguage, Word word, Language translationLanguage, Word translation, Date insertDate) {
         this.wordLanguage = wordLanguage;
         this.word = word;
         this.translationLanguage = translationLanguage;
         this.translation = translation;
+        this.insertDate = insertDate;
     }
 
     public TranslationDTO toDTO() {

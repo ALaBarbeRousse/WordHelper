@@ -68,9 +68,10 @@ public class SecurityConfig {
             .antMatchers(HttpMethod.POST, "/api/collection").hasAuthority("Student")    // Send a collection
             .antMatchers(HttpMethod.GET, "/api/collection").hasAuthority("Student")    // Get collection content
 
-            .antMatchers(HttpMethod.GET, "/export", "/css/export.css", "/js/export.js", "/img/plus*").hasAuthority("Editor")  // export page
+            .antMatchers(HttpMethod.GET, "/export", "/css/export.css", "/js/export.js", "/js/import.js", "/img/plus*").hasAuthority("Editor")  // export-import page
             .antMatchers(HttpMethod.GET, "/api/translation/languages").hasAuthority("Editor")
             .antMatchers(HttpMethod.POST, "/api/translation/export").hasAuthority("Editor")
+            .antMatchers(HttpMethod.POST, "/api/translation/import").hasAuthority("Editor")
 
 //                .anyRequest().authenticated()
             .anyRequest().denyAll()

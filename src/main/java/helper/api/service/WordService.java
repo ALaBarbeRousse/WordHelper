@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,9 +38,9 @@ public class WordService {
     public List<Translation> saveWordPair(WordArticleEditDTO dto) {
         /* Проверяем для начала, все ли языки есть. Если нет - создаём */
         Language lang1 = languageService.findLanguageByName(dto.getLang1())
-                .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(dto.getLang1())));
+            .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(dto.getLang1())));
         Language lang2 = languageService.findLanguageByName(dto.getLang2())
-                .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(dto.getLang2())));
+            .orElseGet(() -> languageService.createLanguage(new LanguageCreateDTO(dto.getLang2())));
 
         Student student = (Student)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<LanguageChoice> languageChoice = languageChoiceService.findLanguageChoice(student);
@@ -57,15 +58,15 @@ public class WordService {
         /* Сохраняем сущности перевода (Translation) */
         /* todo Переводов может быть не один */
         Translation fwdTranslation = translationService.findTranslation(lang1, word1, lang2, word2)
-                .orElseGet(() -> new Translation(lang1, word1, lang2, word2));
+            .orElseGet(() -> new Translation(lang1, word1, lang2, word2, new Date()));
         Translation backTranslation = translationService.findTranslation(lang2, word2, lang1, word1)
-                .orElseGet(() -> new Translation(lang2, word2, lang1, word1));
+            .orElseGet(() -> new Translation(lang2, word2, lang1, word1, new Date()));
         return translationService.saveTranslations(List.of(fwdTranslation, backTranslation));
     }
 
     public Word getOrSaveWord(String writing, Language language) {
         return wordRepository.findWordByWriting(writing)
-                .orElseGet(() -> wordRepository.save(new Word(writing, language)));
+            .orElseGet(() -> wordRepository.save(new Word(writing, language)));
     }
 
     public Optional<Word> findWord(String word) {
@@ -90,7 +91,7 @@ public class WordService {
 
     public List<String> findSimilarWords(String word, Language language) {
         return wordRepository.findByWritingStartingWithAndLanguage(word, language).stream()
-                .map(Word::getWriting).collect(Collectors.toList());
+            .map(Word::getWriting).collect(Collectors.toList());
     }
 
     /* Удаляем перевод */

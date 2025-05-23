@@ -1,13 +1,14 @@
 package helper.api.rest;
 
+import helper.api.service.ImportService;
 import helper.api.service.TranslationService;
 import helper.model.dto.DictionaryDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,8 +16,10 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/translation")
 @RequiredArgsConstructor
+@Slf4j
 public class TranslationController {
     private final TranslationService translationService;
+    private final ImportService importService;
 
     @GetMapping("/languages")
     public List<String[]> getExportLanguages() {
@@ -33,5 +36,20 @@ public class TranslationController {
     @PostMapping("/export")
     public List<DictionaryDTO> getExportedDictionaries(@RequestBody List<List<String>> dictionaries) {
         return translationService.findTranslations(dictionaries);
+    }
+
+    /**
+     * Загружаем ранее экспортированный словарь
+     */
+    @PostMapping("/import")
+    public ResponseEntity<String> importSavedDictionaries(@RequestBody MultipartFile file) {
+        try {
+            importService.handleFile(file);
+
+            return ResponseEntity.ok("Словарь успешно импортирован.");
+        } catch (Exception e) {
+            log.error("Ошибка при импорте словаря", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка при импорте словаря");
+        }
     }
 }

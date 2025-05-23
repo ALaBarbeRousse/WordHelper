@@ -94,3 +94,11 @@ button#export_btn, button#import_btn {
 span#import_message {
     /*border: 1px solid green;*/
 }
+
+.error_message {
+    color: red;
+}
+
+.success_message {
+    color: blue;
+}
