@@ -250,7 +250,7 @@ function findWordAndTranslation(from, word, to) {
 
                         validateFields();
 //                        console.log("setFieldReadOnly 3");
-//                        setFieldReadOnly(w2, false);  // Отпираем второе словоыцфз
+//                        setFieldReadOnly(w2, false);  // Отпираем второе слово
                     } else {
 //                        console.log("WORD: " + word);
                         if (data.wordVoicePresent) {
