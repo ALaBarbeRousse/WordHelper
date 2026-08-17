@@ -1,78 +1,78 @@
-hr.caption_line {
-    color: black;
+/* ============================================================
+   WordHelper — главная страница (редизайн)
+   Заменяет static/css/main.css. Разметка main.html не меняется,
+   весь облик достигается стилями ниже.
+   ============================================================ */
+
+fieldset.link_panel {
+  width: min(560px, 92%);
+  position: relative;
+  counter-reset: linkrow;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+fieldset.link_panel:hover {
+  transform: translateY(-3px);
+  box-shadow: 8px 10px 0 rgba(20, 35, 28, 0.18);
 }
 
-/*div.lang_pane {*/
-/*    !*border: 1px solid lightgrey;*!*/
-/*    !*width: 60%;*!*/
-/*    margin: 12px auto;*/
-/*    display: block ruby;*/
-/*    text-align: center;*/
-/*}*/
-/*div.select_lang_pane {*/
-/*    margin: 12px 60px;*/
-/*    !*border: 1px solid red;*!*/
-/*}*/
-/*.selected_lang {*/
-/*    font-size: large;*/
-/*    cursor: pointer;*/
-/*}*/
+/* номер раздела — декоративная цифра в углу */
+fieldset.link_panel::before {
+  counter-increment: panel;
+  content: counter(panel, decimal-leading-zero);
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  font-family: var(--font-display);
+  font-size: 30px;
+  line-height: 1;
+  color: rgba(20, 35, 28, 0.12);
+}
+body { counter-reset: panel; }
 
-div.content {
-    border-top: 1px solid black;
-    margin: 0 auto;
-    width: 80%;
-    padding: 12px;
-}
+/* ссылки-строки */
+fieldset.link_panel div { margin: 0; }
 
-a.nav {
-    color: #30302e;
-    border: 1px solid #8f8f89;
-    margin: 12px;
-    background-color: #eeeee4;
-    padding: 4px;
-    text-decoration: none;
-    border-radius: 4px;
+fieldset.link_panel a {
+  counter-increment: linkrow;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 13px 14px;
+  margin: 8px 0;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  transition: background-color .18s ease, border-color .18s ease, transform .18s ease;
 }
-a.nav:hover {
-    background-color: #d6d6cd;
+fieldset.link_panel a::before {
+  content: counter(linkrow, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--moss);
+  background: var(--paper-2);
+  border-radius: 6px;
+  padding: 3px 7px;
+  flex: none;
 }
-a.nav:active {
-    background-color: #bebeb6;
+fieldset.link_panel a::after {
+  content: "→";
+  margin-left: auto;
+  color: var(--moss);
+  font-weight: 700;
+  transition: transform .18s ease;
 }
+fieldset.link_panel a:hover {
+  background-color: rgba(242, 193, 78, 0.28);
+  border-color: var(--ink);
+  transform: translateX(3px);
+}
+fieldset.link_panel a:hover::after { transform: translateX(4px); }
 
-div.nav_bar {
-    /*border: 1px solid red;*/
-}
-
-div.action_pane {
-    border: 1px solid #d3d3d3;
-    height: 28px;
-    margin: 48px;
-    display: block ruby;
-    text-align: right;
-    vertical-align: center;
-    border-radius: 4px;
-}
-
-div.button {
-    border: 1px solid black;
-    border-radius: 4px;
-    height: 24px;
-    width: 76px;
-    margin: 2px 12px;
-    font-size: smaller;
-    text-align: center;
-    background-color: #eeeee4;
-    cursor: pointer;
-}
-div.button:hover {
-    background-color: #d6d6cd;
-}
-div.button:active {
-    background-color: #bebeb6;
-}
-
-#user_label {
-    cursor: pointer;
+/* подпись под заголовком */
+h1.caption + div.description {
+  max-width: 480px;
 }

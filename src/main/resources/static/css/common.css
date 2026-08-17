@@ -1,129 +1,256 @@
-body {
-    background-color: #fafaf7;
-    font-family: sans-serif;
-    color: black;
+/* ============================================================
+   WordHelper · Словесный помогатор — базовый слой (редизайн)
+   Заменяет static/css/common.css. Все исходные селекторы и id
+   сохранены, чтобы jQuery и разметка продолжали работать.
+   ============================================================ */
+
+:root {
+  --ink: #14231c;          /* чернильная хвоя */
+  --pine: #1b3a2d;         /* глубокая сосна */
+  --pine-deep: #0e211a;    /* почти чёрный хвойный */
+  --moss: #2f6b4f;         /* мох */
+  --leaf: #2f9e63;         /* лист */
+  --mint: #a9d9bc;         /* мята */
+  --paper: #f4f1e6;        /* тёплая бумага */
+  --paper-2: #eae5d3;      /* бумага темнее */
+  --line: #d8d1ba;         /* линовка */
+  --butter: #f2c14e;       /* сливочное масло — акцент */
+  --coral: #e4573d;        /* коралл — ошибки */
+
+  --font-display: "Prata", Georgia, serif;
+  --font-caption: "Unbounded", "Golos Text", sans-serif;
+  --font-body: "Golos Text", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --shadow-hard: 6px 6px 0 rgba(20, 35, 28, 0.16);
+  --radius: 14px;
 }
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px, transparent 33px,
+    rgba(20, 35, 28, 0.05) 33px, rgba(20, 35, 28, 0.05) 34px
+  );
+  font-family: var(--font-body);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+::selection { background: var(--butter); color: var(--ink); }
+
+/* ---------- верхняя панель пользователя ---------- */
 
 div.user_pane {
-    /*border: 1px solid red;*/
-    height: 24px;
-    margin-top: 36px;
-    text-align: right;
-    padding: 6px 72px;
-    display: block ruby;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 14px 28px;
+  height: auto;
 }
+
+/* ---------- заголовки ---------- */
 
 h1.caption {
-    margin-top: 4px;
-    text-align: center;
+  font-family: var(--font-caption);
+  font-weight: 600;
+  font-size: clamp(22px, 3.4vw, 30px);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  text-align: center;
+  margin: 10px 0 6px;
 }
 
-input:focus {
-    outline: none;
-    box-shadow: 0 0 6px #8f8f89;
+div.description {
+  text-align: center;
+  color: rgba(20, 35, 28, 0.6);
+  font-size: 15px;
+  margin: 2px auto 22px;
 }
+
+/* ---------- ввод ---------- */
+
+input {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--ink);
+  background: #fffdf6;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+input:focus {
+  border-color: var(--leaf);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(47, 158, 99, 0.15);
+}
+input::placeholder { color: rgba(20, 35, 28, 0.32); }
+
+/* ---------- кнопки ---------- */
 
 button {
-    border: 1px solid #8f8f89;
-    border-radius: 4px;
-    padding: 2px 2px;
-    min-width: 72px;
-    height: 28px;
-    background-color: #fafaf7;
-    font-size: medium;
-    margin-left: 12px;
-    cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  background-color: #fffdf6;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  min-width: 84px;
+  height: 40px;
+  padding: 0 16px;
+  margin-left: 10px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 rgba(20, 35, 28, 0.9);
+  transition: transform .15s ease, box-shadow .15s ease, background-color .2s ease;
 }
-button:focus {
-    outline: none;
-    box-shadow: 0 0 6px #8f8f89;
-}
-button:hover {
-    background-color: #eeeee4;
-}
+button:hover { background-color: var(--butter); }
 button:active {
-    background-color: #fafaf7;
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 rgba(20, 35, 28, 0.9);
 }
+button:focus { outline: none; box-shadow: 4px 4px 0 rgba(20, 35, 28, 0.9), 0 0 0 3px rgba(242, 193, 78, .5); }
+
 button.ok {
-    background-color: #d6d6cd;
+  background-color: var(--pine);
+  border-color: var(--pine-deep);
+  color: var(--butter);
+  box-shadow: 4px 4px 0 rgba(20, 35, 28, 0.9);
 }
-button.ok:hover {
-    background-color: #bebeb6;
-}
-button.ok:active {
-    background-color: #d6d6cd;
-}
+button.ok:hover { background-color: var(--moss); }
+button.ok:active { background-color: var(--pine); }
 button.ok:disabled, button.ok[disabled] {
-    background-color: #d6d6cd40;
-    cursor: default;
+  background-color: rgba(27, 58, 45, 0.25);
+  color: rgba(244, 241, 230, 0.5);
+  border-color: rgba(20, 35, 28, 0.2);
+  box-shadow: none;
+  cursor: default;
+  transform: none;
 }
 
-/*drop-down menu*/
-/* Dropdown Button */
+/* ---------- выпадающее меню пользователя ---------- */
+
 #dropdown_btn {
-    color: black;
-    border: none;
-    border-bottom: 1px dashed #8f8f89;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--butter);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  height: 34px;
+  min-width: 0;
+  padding: 0 16px;
+  margin-left: 0;
+  box-shadow: 3px 3px 0 rgba(20, 35, 28, 0.9);
 }
-/* The container <div> - needed to position the dropdown content */
-div.dropdown {
-    position: relative;
-    display: inline-block;
-}
-/* Dropdown Content (Hidden by Default) */
+
+div.dropdown { position: relative; display: inline-block; }
+
 .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    z-index: 1;
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background-color: #fffdf6;
+  min-width: 170px;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: var(--shadow-hard);
+  overflow: hidden;
+  z-index: 20;
 }
-/* Links inside the dropdown */
 .dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
+  color: var(--ink);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background-color .15s ease, color .15s ease;
 }
+.dropdown-content a:hover { background-color: var(--coral); color: #fffdf6; }
+.dropdown:hover .dropdown-content { display: block; }
 
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {
-    background-color: #eeeee4;
-}
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-    display: block;
-}
+/* ---------- панели (fieldset) ---------- */
 
 fieldset {
-    width: 50%;
-    margin: 12px auto;
-    border-radius: 6px;
+  width: min(560px, 92%);
+  margin: 16px auto;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: #fffdf6;
+  box-shadow: var(--shadow-hard);
+  padding: 18px 20px 20px;
 }
+
+fieldset legend {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--mint);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 4px 14px;
+}
+
+/* ---------- кнопка "домой" ---------- */
 
 #home_btn {
-    background: url("../img/home.png") no-repeat center;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    margin: 2px;
-    cursor: pointer;
+  background: url("../img/home.png") no-repeat center;
+  background-color: #fffdf6;
+  width: 44px;
+  min-width: 44px;
+  height: 40px;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  box-shadow: 4px 4px 0 rgba(20, 35, 28, 0.9);
+  margin: 2px;
+  cursor: pointer;
 }
-#home_btn:hover {
-    background: url("../img/home_hover.png") no-repeat center;
-}
-#home_btn:active {
-    background: url("../img/home_active.png") no-repeat center;
-}
+#home_btn:hover { background: url("../img/home_hover.png") no-repeat center; background-color: var(--butter); }
+#home_btn:active { background: url("../img/home_active.png") no-repeat center; transform: translate(2px, 2px); box-shadow: 1px 1px 0 rgba(20,35,28,.9); }
+
+/* ---------- служебные блоки ---------- */
 
 div.description_env {
-    display: grid;
-    grid-template-rows: 1fr;
-    grid-template-columns: 1fr 40fr 1fr;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 40fr 1fr;
+  align-items: center;
+  width: min(560px, 92%);
+  margin: 0 auto;
 }
-div.description {
-    text-align: center;
-    margin: auto;
+div.description_env div.description { margin: auto; }
+
+.message_pane, #collection_message, #train_message, #lang_message, #word_message, span#message {
+  color: var(--coral);
+  font-size: 13px;
+  font-weight: 600;
+  min-height: 18px;
+}
+
+.options_pane { text-align: center; margin-top: 14px; }
+
+.hidden { visibility: hidden; }
+
+.dropdown::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 8px;
 }

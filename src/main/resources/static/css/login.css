@@ -1,26 +1,109 @@
-form.form-signin {
-    border: 1px solid #bebeb6;
-    width: 420px;
-    margin: 24px auto;
+/* ============================================================
+   WordHelper — страница входа (редизайн)
+   В стиле главной страницы: тетрадные линейки фона (из common.css)
+   и панель-форма, как fieldset-блоки на main.
+   Разметка login.html не меняется.
+   ============================================================ */
+
+/* Фон — тетрадные линейки из common.css; здесь только центрирование.
+   Нижний отступ больше верхнего — панель посажена чуть выше центра. */
+body {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 56px 16px 18vh;
 }
 
-div.form_row {
-    padding: 12px;
-    display: grid;
+.container {
+  width: min(480px, 100%);
+  animation: login-rise .55s cubic-bezier(.22, 1, .36, 1) both;
 }
 
-div.options_pane {
-    display: block ruby;
-    text-align: center;
-    padding: 6px 36px;
+h1.caption {
+  font-size: 26px;
+  margin-bottom: 4px;
 }
 
-div.message_pane {
-    min-height: 24px;
-    color: red;
-    margin: 0 12px;
-    font-size: smaller;
+.container .description {
+  margin-bottom: 30px;
 }
-#message {
-    display: none;
+
+/* ---------- панель формы (в стиле полевых панелей главной) ---------- */
+
+.form-signin {
+  position: relative;
+  background: #fffdf6;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hard);
+  padding: 32px 28px 24px;
+}
+
+/* Ярлык-«легенда», как у fieldset на главной */
+.form-signin::before {
+  content: "Вход в аккаунт";
+  position: absolute;
+  top: -14px;
+  left: 22px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--mint);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 4px 14px;
+}
+
+.form_row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form_row label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--moss);
+}
+
+.form_row input {
+  width: 100%;
+  padding: 11px 14px;
+  font-size: 15px;
+}
+
+.message_pane { min-height: 20px; margin: 4px 0; }
+
+.options_pane { margin-top: 10px; }
+/* Кнопка «Войти» — в цвет пунктов меню на главной странице */
+.options_pane button.ok {
+  width: 100%;
+  height: 46px;
+  font-size: 15px;
+  margin-left: 0;
+  background-color: rgba(242, 193, 78, 0.28);
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.options_pane button.ok:hover {
+  background-color: rgba(242, 193, 78, 0.55);
+}
+.options_pane button.ok:active {
+  background-color: rgba(242, 193, 78, 0.7);
+}
+
+@keyframes login-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .container { animation: none; }
 }

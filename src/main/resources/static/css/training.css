@@ -1,174 +1,159 @@
-body {
-    background-color: #EDFFD1;
-    font-family: sans-serif;
-    color: black;
-}
+/* ============================================================
+   WordHelper — экран тренировки (редизайн)
+   Заменяет static/css/training.css. Все id и изображения сохранены.
+   ============================================================ */
 
-button {
-    background-color: #EDFFD1;
-}
-button:hover {
-    background-color: #C1D5AF;
-}
-
-.dropdown-content {
-    background-color: #E6FFD1;
-}
-.dropdown-content a:hover {
-    background-color: #C1D5AF;
-}
-
+/* панель с коллекцией */
 div.collection_pane {
-    min-height: 24px;
-    text-align: center;
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: 1fr;
-    padding-bottom: 24px;
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  text-align: center;
+  margin: 4px 0 14px;
 }
 #collection {
-    width: 50%;
-    margin: 0 auto;
-    text-align: center;
-    font-size: large;
-    font-weight: bold;
+  width: min(320px, 80%);
+  margin: 0 auto;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
 }
 
+/* зона старт/стоп */
 div.go_stop_pane {
-    text-align: center;
-    padding: 6px;
+  text-align: center;
+  padding: 10px 6px 4px;
 }
 #go_stop_btn {
-    background-image: url("../img/go.png");
-    background-repeat: no-repeat;
-    min-width: 40px;
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    vertical-align: middle;
+  background-image: url("../img/go.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: var(--butter);
+  width: 56px;
+  min-width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  box-shadow: 5px 5px 0 rgba(20, 35, 28, 0.9);
+  vertical-align: middle;
+  margin-left: 0;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
-#go_stop_btn:hover {
-    box-shadow: 0 0 5px gray;
-}
-#go_stop_btn:focus {
-    box-shadow: 0 0 15px gray;
-}
-#go_stop_btn:active {
-    border: none;
-    outline: none;
-    box-shadow: 0 0 5px black;
-}
+#go_stop_btn:hover { box-shadow: 0 0 0 5px rgba(242, 193, 78, 0.35), 5px 5px 0 rgba(20,35,28,.9); }
+#go_stop_btn:focus { box-shadow: 0 0 0 6px rgba(242, 193, 78, 0.4); }
+#go_stop_btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 rgba(20,35,28,.9); }
 #go_stop_btn:disabled {
-    background-image: url("../img/go_disabled.png");
-    box-shadow: none;
-    pointer-events: none;
+  background-image: url("../img/go_disabled.png");
+  background-color: var(--paper-2);
+  box-shadow: none;
+  pointer-events: none;
 }
 #train_message {
-    color: red;
-    height: 40px;
-    display: inline-block;
-    vertical-align: middle;
+  color: var(--coral);
+  font-weight: 600;
+  height: auto;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 12px;
 }
+
+/* ---------- разметка тренировки ---------- */
 
 #train_markup {
-    width: 50%;
-    min-height: 12px;
-    margin: 12px auto;
-    text-align: center;
-    visibility: hidden;
-    display: grid;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
-    grid-template-columns: 1fr 2fr 1fr;
-}
-#to_translate {
-    /*border: 1px solid red;*/
-    border-radius: 8px;
-    font-size: 150%;
-    font-weight: bold;
-    margin: 0 auto;
-    min-height: 24px;
-    cursor: url('../img/speaker.png'), auto;
-    padding: 6px;
-}
-#to_translate:hover {
-    box-shadow: 0 0 5px gray;
-}
-#to_translate:active {
-    box-shadow: 0 0 5px black;
-}
-
-#translation {
-    margin: 6px auto;
-    width: 95%;
-    text-align: center;
-    font-size: 120%;
-}
-#check_btn {
-    background-image: url("../img/send.png");
-    background-repeat: no-repeat;
-    margin: 6px auto;
-    min-width: 75px;
-    width: 75px;
-    height: 30px;
-    border-radius: 6px;
-    border: none;
-    outline: none;
-    box-shadow: none;
-}
-#check_btn:hover {
-    box-shadow: 0 0 5px gray;
-}
-#check_btn:active {
-    box-shadow: 0 0 5px black;
-}
-#check_btn:disabled {
-    background-image: url("../img/send_disabled.png");
-    box-shadow: none;
-    pointer-events: none;
-}
-
-#lang_message {
-    color: red;
-}
-
-#word_message {
-    color: red;
-}
-
-#check_result {
-    background-repeat: no-repeat;
-    margin: auto 12px;
-    height: 32px;
-}
-
-#word_message_wrapper {
-
-}
-
-div.description_env {
-    background-color: #D4F69E;
+  width: min(620px, 94%);
+  margin: 18px auto;
+  text-align: center;
+  visibility: hidden;
+  display: grid;
+  grid-template-rows: auto auto auto auto auto;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 10px 8px;
+  align-items: center;
+  background: var(--pine-deep);
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: 8px 10px 0 rgba(20, 35, 28, 0.25);
+  padding: 22px 18px;
 }
 
 div.word_amnt {
-    /*border: 1px solid red;*/
-    font-size: 175%;
-    font-weight: bold;
-    margin: auto;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--butter);
+  margin: auto;
 }
+
 div.incorrect {
-    /*border: 1px solid red;*/
-    color: red;
-    font-size: 125%;
-    font-weight: bold;
-    margin: auto;
+  font-family: var(--font-mono);
+  color: var(--coral);
+  font-size: 19px;
+  font-weight: 700;
+  margin: auto;
 }
 div.correct {
-    /*border: 1px solid green;*/
-    font-size: 125%;
-    color: green;
-    font-weight: bold;
-    margin: auto;
+  font-family: var(--font-mono);
+  color: var(--leaf);
+  font-size: 19px;
+  font-weight: 700;
+  margin: auto;
 }
+
+#to_translate {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5vw, 44px);
+  line-height: 1.15;
+  color: var(--paper);
+  border-radius: 12px;
+  margin: 0 auto;
+  min-height: 34px;
+  padding: 8px 10px;
+  cursor: url('../img/speaker.png'), auto;
+  transition: color .2s ease;
+}
+#to_translate:hover { color: var(--butter); }
+#to_translate:active { color: var(--mint); }
+
+#translation {
+  width: 96%;
+  margin: 4px auto;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 600;
+  background: #fffdf6;
+  border-color: rgba(169, 217, 188, 0.4);
+}
+#translation:focus { border-color: var(--butter); box-shadow: 0 0 0 4px rgba(242,193,78,.25); }
+
+#check_btn {
+  background-image: url("../img/send.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: var(--butter);
+  margin: 4px auto;
+  width: 92px;
+  min-width: 92px;
+  height: 42px;
+  border-radius: 10px;
+  border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.4);
+}
+#check_btn:hover { box-shadow: 0 0 0 4px rgba(242,193,78,.3), 4px 4px 0 rgba(0,0,0,.4); }
+#check_btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.4); }
+#check_btn:disabled {
+  background-image: url("../img/send_disabled.png");
+  background-color: var(--paper-2);
+  box-shadow: none;
+  pointer-events: none;
+}
+
+#check_result {
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: auto 12px;
+  height: 32px;
+}
+
+#word_message_wrapper { min-height: 20px; }
+#word_message { color: var(--butter); font-weight: 600; }
